@@ -121,7 +121,8 @@ fileName = getFileScreen.file_uploader("Browse for or drag and drop the name of 
 
 st.markdown('___')
 
-@st.experimental_memo(show_spinner=False)
+# @st.experimental_memo(show_spinner=False)
+
 def getData(fileName):
 
     with st.spinner(text = 'Loading your Neighburwoods data, please wait...'):
@@ -129,9 +130,13 @@ def getData(fileName):
         if fileName is not None:
             df = pd.read_excel(fileName, sheet_name = "summary", header = 1)
 
+            st.write(df.astype(str))
+
     # speciesFile = currentDir + 'NWspecies041121.csv'
     speciesFile = 'NWspecies041121.csv'
     speciesTable = pd.read_csv(speciesFile)
+
+    st.write(speciesTable.astype(np.str_))
 
     # codesFile = currentDir + 'NWcodes180321.csv'
     # codesFile = 'NWcodes180321.csv'
