@@ -1,0 +1,301 @@
+ID,species_code,family,genus,species,scientific_name,native,invasivity,seRegion,Max DBH,diversity_level,persistence,native-range,form,species_rating,shade_factor
+1,aldeur,Betulaceae,Alder,European Alder,Alnus glutinosa,no,invasive,introduced,30,species,decidous,"Europe, North Africa, Western Asia, Siberia",T,0.6,0.79
+4,aldwhi,Betulaceae,Alder,European White Alder,Alnus incana,no,non-invasive,introduced,,species,decidous,"Europe, Caucasus",T,0.6,0.79
+2,aldspe,Betulaceae,Alder,Speckled Alder,Alnus rugosa,yes,non-invasive,native,12,species,decidous,"Canada, Northern U.S.A",T,0.6,0.79
+3,aldspp,Betulaceae,Alder,Alder species,Alnus spp,n/a,n/a,n/a,,genus,decidous,,T,,0.79
+6,appcom,Rosaceae,Apple,Common Apple,Malus domestica,no,non-invasive,introduced,,species,decidous,Europe and Western Asia,T,,
+8,appspp,Rosaceae,Apple,Apple species,Malus spp,n/a,n/a,n/a,45,genus,decidous,,T,,
+65,crawil,Rosaceae,Apple/Crabapple,Wild Crab,Malus coronaria,yes,non-invasive,introduced,,species,decidous,"Southern Ontario, Eastern U.S.A.",T,0.5,0.85
+7,appcra,Rosaceae,Apple/Crabapple,Crabapple,Malus hybrids,n/a,non-invasive,introduced,30,species,decidous,Various,T,0.5,0.85
+64,crajap,Rosaceae,Apple/Crabapple,Japanese Crabapple(s),Malus x floribunda,no,non-invasive,introduced,30,species,decidous,,T,0.5,0.85
+282,aprico,Rosaceae,Apricot,Apricot,Prunus armeniaca,no,non-invasive,introduced,50,species,decidous,Europe,T,,
+15,ashwhi,Oleaceae,Ash,White Ash,Fraxinus americana,yes,non-invasive,native,45,species,decidous,North-East US,T,0.72,0.84
+11,asheur,Oleaceae,Ash,Europen Ash,Fraxinus excelsior,no,non-invasive,introduced,50,species,decidous,"Europe, SW Asia",T,0.6,0.85
+13,ashman,Oleaceae,Ash,Manchurian Ash,Fraxinus mandshurica,no,non-invasive,introduced,,species,decidous,,T,0.5,0.84
+9,ashbla,Oleaceae,Ash,Black Ash,Fraxinus nigra,yes,non-invasive,native,20,species,decidous,"Southeastern Ontario, Northeastern USA",T,0.57,0.84
+12,ashgre,Oleaceae,Ash,Green Ash,Fraxinus pennsylvanica,yes,non-invasive,native,,species,decidous,Great Lakes-St. Lawrence and Acadian Forest region and the South-Western prairies,T,0.67,0.83
+10,ashblu,Oleaceae,Ash,Blue Ash,Fraxinus quadrangulata,no,non-invasive,introduced,90,species,decidous,"Michigan, Arkansas, Tennessee",T,0.6,0.84
+14,ashspp,Oleaceae,Ash,Ash species,Fraxinus spp,n/a,n/a,n/a,75,genus,decidous,,T,,0.84
+19,beeame,Fagaceae,Beech,American Beech,Fagus grandifolia,yes,non-invasive,native,45,species,decidous,Eastern North America,T,0.7,0.88
+22,beespp,Fagaceae,Beech,Beech species,Fagus spp,n/a,n/a,n/a,80,genus,decidous,,T,,0.88
+21,beeeur,Fagaceae,Beech,European Beech,Fagus sylvatica,no,non-invasive,introduced,60,species,decidous,Europe,T,0.83,0.88
+26,birhim,Betulaceae,Birch,Whitebarked Himalayan,Betula  jacquemontii,no,non-invasive,introduced,,species,decidous,"NW Himalayas, Nepal",T,0.55,0.82
+30,biryel,Betulaceae,Birch,Yellow Birch,Betula alleghaniensis,yes,non-invasive,native,25,species,decidous,"SE Canada, NE U.S.A.",T,0.64,0.82
+23,birche,Betulaceae,Birch,Cherry Birch,Betula lenta,yes,non-invasive,introduced,100,species,decidous,Eastern U.S.A.,T,0.55,0.82
+312,birala,Betulaceae,Birch,Alaskan Birch,Betula neoalaskana,no,non-invasive,introduced,15,species,decidous,North America: Across Canada,T,,0.82
+27,birriv,Betulaceae,Birch,River Birch,Betula occidentalis,no,non-invasive,introduced,30,species,decidous,,T,0.7,0.82
+29,birwhi,Betulaceae,Birch,White Birch,Betula papyrifera,yes,non-invasive,native,20,species,decidous,North America: Across Canada,T,0.5,0.82
+24,bireur,Betulaceae,Birch,European White Birch,Betula pendula,no,invasive,introduced,,species,decidous,"Europe, SW Asia, N. Africa",T,0.5,0.82
+25,birgra,Betulaceae,Birch,Gray Birch,Betula populifolia,yes,non-invasive,native,15,species,decidous,SE Canada,T,0.55,0.82
+28,birspp,Betulaceae,Birch,Birch species,Betula spp,n/a,n/a,n/a,15,genus,decidous,,T,,0.82
+142,locbla,Fabaceae,Black Locust,Black Locust,Robinia pseudoacacia,no,invasive,introduced,,species,decidous,Eastern US,T,0.56,0.79
+319,bucyel,Hippocastanaceae,Buckeye/Horsechestnut,Yellow Buckeye,Aesculus flava,no,non-invasive,introduced,,species,decidous,Eastern USA,T,0.65,0.88
+32,bucohi,Hippocastanaceae,Buckeye/Horsechestnut,Ohio Buckeye,Aesculus glabra,yes,non-invasive,introduced,45,species,decidous,"Southern Tip of Ontario, USA",T,0.65,0.88
+119,horcom,Hippocastanaceae,Buckeye/Horsechestnut,Common Horsechestnut,Aesculus hippocastanum,no,non-invasive,introduced,60,species,decidous,Balkan Peninsula in Southeastern Europe,T,0.63,0.88
+35,bucswe,Hippocastanaceae,Buckeye/Horsechestnut,Sweet Buckeye,Aesculus octandra,no,non-invasive,introduced,15,species,decidous,"Pennsylvania to Tennessee and norhtern Georgia, west to Ohio and Illinois",T,0.65,0.88
+33,bucred,Hippocastanaceae,Buckeye/Horsechestnut,Red Buckeye,Aesculus pavia,no,non-invasive,introduced,80,species,decidous,Southeastern USA,T,0.65,0.88
+121,horred,Hippocastanaceae,Buckeye/Horsechestnut,Red Horsechestnut,Aesculus x carnea,no,non-invasive,introduced,,species,decidous,Hybrid origin,T,0.65,0.88
+320,buhspp,Hippocastanaceae,Buckeye/Horsechestnut,Buckeye spp,Aesulus spp,n/a,n/a,n/a,,genus,decidous,,T,,
+31,buceur,Rhamnaceae,Buckthorn,Alder Buckthorn,Rhamnus cathartica,no,invasive,introduced,,species,decidous,"Europe, Western and Northern Asia",T,0.4,0.79
+34,bucspp,Rhamnaceae,Buckthorn,Buckthorn,Rhamnus spp,n/a,n/a,n/a,100,genus,decidous,,T,,0.7
+39,catsou,Bignoniaceae,Catalpa,Southern Catalpa,Catalpa bignonioides,no,non-invasive,introduced,60,species,decidous,Southern U.S.A.,T,0.61,0.76
+37,catchi,Bignoniaceae,Catalpa,Chinese Catalpa,Catalpa ovata,no,non-invasive,introduced,75,species,decidous,China,T,0.6,0.76
+38,catnor,Bignoniaceae,Catalpa,Northern Catalpa,Catalpa speciosa,no,non-invasive,introduced,,species,decidous,Central Mississippi Valley,T,0.49,0.76
+40,catspp,Bignoniaceae,Catalpa,Catalpa species,Catalpa spp,n/a,n/a,n/a,60,genus,decidous,,T,,0.76
+45,cedwhi,Cupressaceae,Cedar (Thuja),Eastern White Cedar,Thuja occidentalis,yes,non-invasive,native,60,species,evergreen,South-Eastern Canada,T,0.71,0.79
+42,cedori,Cupressaceae,Cedar (Thuja),Oriental Cedar,Thuja orientalis,no,non-invasive,introduced,,species,evergreen,,T,0.7,0.79
+307,cedwes,Cupressaceae,Cedar (Thuja),Western Red Cedar,Thuja plicata,no,non-invasive,introduced,,species,evergreen,Pacific Coast,T,,
+44,cedspp,Cupressaceae,Cedar (Thuja),Cedar (Thuja),Thuja spp,n/a,n/a,n/a,,genus,evergreen,,T,,0.7
+287,poorce,Chamaecyparis,Chamaecyparis,Port Orford Cedar,Chamaecyparis lawsoniana,no,non-invasive,introduced,,species,evergreen,,T,,
+214,pluame,Rosaceae,Cherry/Plum,American Plum,Prunus americana,yes,non-invasive,introduced,20,species,decidous,Central North America,T,0.5,0.79
+52,chefru,Rosaceae,Cherry/Plum,Cherry (Fruit),Prunus avium,no,non-invasive,introduced,100,species,decidous,"Europe, Western Asia",T,0.55,0.79
+216,plumyr,Rosaceae,Cherry/Plum,Myrobalan Plum,Prunus cersifera,no,non-invasive,introduced,,species,decidous,,T,0.55,0.79
+215,plucan,Rosaceae,Cherry/Plum,Canada Plum,Prunus nigra,yes,non-invasive,introduced,20,species,decidous,"SE Canada, NE U.S.A.",T,0.55,0.79
+51,cheeur,Rosaceae,Cherry/Plum,European Bird Cherry,Prunus padus,no,non-invasive,introduced,75,species,decidous,Europe and Northwest Asia,T,0.5,0.79
+55,chepin,Rosaceae,Cherry/Plum,Pin Cherry,Prunus pennsylvanica,yes,non-invasive,native,15,species,decidous,"Canada, NE U.S.A.",T,0.52,0.79
+57,chesar,Rosaceae,Cherry/Plum,Sargent Cherry,Prunus sargentii,no,non-invasive,introduced,50,species,decidous,,T,0.55,0.79
+48,chebla,Rosaceae,Cherry/Plum,Black Cherry,Prunus serotina,yes,non-invasive,native,100,species,decidous,North-Eastern US,T,0.63,0.79
+54,cheori,Rosaceae,Cherry/Plum,Oriental Cherry,Prunus serrulata,no,non-invasive,introduced,,species,decidous,"China, Japan",T,0.65,0.79
+58,chespp,Rosaceae,Cherry/Plum,Cherry species,Prunus spp,n/a,n/a,n/a,,genus,decidous,,T,,
+222,pruspp,Rosaceae,Cherry/Plum,Cherry/Plum species,Prunus spp,n/a,n/a,n/a,,genus,decidous,,,,0.79
+94,flodou,Rosaceae,Cherry/Plum,Double Flowering Plum,Prunus triloba,no,non-invasive,introduced,40,species,decidous,,T,0.55,0.79
+50,checho,Rosaceae,Cherry/Plum,Choke Cherry,Prunus virginiana,yes,non-invasive,native,50,species,decidous,North America,T,0.6,0.79
+56,chepur,Rosaceae,Cherry/Plum,Purpleleaf Sand Cherry,Prunus x cistena,no,non-invasive,introduced,15,species,decidous,Hybrid origin,T,0.63,0.79
+53,chehug,Rosaceae,Cherry/Plum,Hugan Cherry,Prunus x subhitrella,no,non-invasive,introduced,60,species,decidous,,T,0.55,0.79
+47,cheame,Fagaceae,Chestnut,American Chestnut,Castanea dentata,yes,non-invasive,native,,species,decidous,"Southern Ontario, Eastern U.S.A.",T,0.65,0.79
+49,chechi,Fagaceae,Chestnut,Chinese Chestnut,Castanea mollissima,no,non-invasive,introduced,50,species,decidous,"China, Korea",T,0.65,0.79
+59,cnutspp,Fagaceae,Chestnut,Chestnut species,Castanea spp,n/a,n/a,n/a,40,genus,decidous,,T,,0.79
+60,cofken,Fabaceae,Coffetree,Kentucky Coffetree,Gymnocladus dioicus,yes,non-invasive,introduced,100,species,decidous,North America: Carolinian and surrounding areas,T,0.79,0.86
+41,cedjap,Taxodiaceae,Cryptomeria,Japanise Ceder,Cryptomeria japonica,no,non-invasive,introduced,30,species,evergreen,Japan,T,0.6,0.79
+67,dead,dead,dead,dead tree,dead,n/a,n/a,n/a,,other,,,,,
+69,dogalt,Cornaceae,Dogwood,Alternate-Leaf Dogwood,Cornus alternifolia,yes,non-invasive,native,45,species,decidous,North-Eastern US,T,0.7,0.79
+71,dogflo,Cornaceae,Dogwood,Eastern Flowering Dogwood,Cornus florida,no,non-invasive,introduced,15,species,decidous,"Southern Ontario, Eastern U.S.A.",T,0.72,0.79
+70,dogchi,Cornaceae,Dogwood,Chinese Dogwood,Cornus kousa,no,non-invasive,introduced,,species,decidous,Eastern Asia,T,0.7,0.79
+289,dogcor,Cornaceae,Dogwood,Cornelian cherry dogwood,Cornus mas,no,non-invasive,introduced,10,species,decidous,,T,,
+72,doggra,Cornaceae,Dogwood,Gray Dogwood,Cornus racemosa,yes,non-invasive,introduced,,species,decidous,"Southern Ontario, Eastern U.S.A.",T,0.7,0.79
+73,dogspp,Cornaceae,Dogwood,Dogwood species,Cornus spp,n/a,n/a,n/a,20,genus,decidous,,T,,0.79
+313,dogred,Cornaceae,Dogwood,Red Osier Dogwood,Cornus stolonifera,yes,non-invasive,native,,species,decidous,"Southern Ontario, Eastern U.S.A.",T,,
+89,firdou,Pinaceae,Douglas Fir,Douglas Fir,Pseudotsuga menziesii,no,non-invasive,introduced,,species,evergreen,Weatern North America,T,0.7,0.79
+76,elmame,Ulmaceae,Elm,American Elm,Ulmus americana,yes,non-invasive,native,5,species,decidous,Eastern North America,T,0.59,0.87
+80,elmjer,Ulmaceae,Elm,Jersey Elm,Ulmus carpinifolia,no,non-invasive,introduced,,species,decidous,"Europe, North Africa and Southwest Asia",T,0.55,0.86
+82,elmsco,Ulmaceae,Elm,Scotch Elm,Ulmus glabra,no,non-invasive,introduced,90,species,decidous,"Europe, Western Asia",T,0.55,0.86
+314,elmchi,Ulmaceae,Elm,Chinese Elm,Ulmus parvifolia,no,non-invasive,introduced,,species,decidous,Asia,T,0.35,
+79,elmeng,Ulmaceae,Elm,English Elm,Ulmus procera,no,non-invasive,introduced,,species,decidous,"Great Britain, Western Europe",T,0.55,0.86
+83,elmsib,Ulmaceae,Elm,Siberian Elm,Ulmus pumila,no,non-invasive,introduced,80,species,decidous,Northeastern Asia,T,0.39,0.85
+84,elmsli,Ulmaceae,Elm,Slippery Elm,Ulmus rubra,yes,non-invasive,introduced,75,species,decidous,"Southern Ontario & Quebec, Central -Eastern U.S.A.",T,0.6,0.86
+85,elmspp,Ulmaceae,Elm,Elm species,Ulmus spp,n/a,n/a,n/a,75,genus,decidous,,T,,0.86
+81,elmroc,Ulmaceae,Elm,Rock Elm,Ulmus thomasii,yes,non-invasive,native,150,species,decidous,"Southern Ontario, Central U.S.A.",T,0.55,0.86
+78,elmdut,Ulmaceae,Elm,Dutch Elm,Ulmus x holandica,no,non-invasive,introduced,100,species,decidous,,T,0.55,0.86
+77,elmcam,Ulmaceae,Elm,Camperdown Elm,Ulmus x vegata,no,non-invasive,introduced,,species,decidous,,T,0.55,0.86
+46,cedyel,Cupressaceae,False Cypress,Yellow Cedar,Chamaecyparis nootkatensis,no,non-invasive,introduced,70,species,evergreen,Pacific Coast,T,0.76,0.79
+88,firbal,Pinaceae,Fir,Balsam Fir,Abies balsamea,yes,non-invasive,native,60,species,evergreen,Central and Eastern Canada,T,0.48,0.79
+93,firwhi,Pinaceae,Fir,White Fir,Abies concolor,no,non-invasive,introduced,,species,evergreen,"Western USA, Northern Mexico",T,0.76,0.79
+90,firfra,Pinaceae,Fir,Fraser Fir,Abies fraseri,no,non-invasive,introduced,,species,evergreen,"North America: West Virginia, Tennessee, and North Carolina",T,0.7,0.79
+91,firgra,Pinaceae,Fir,Grand Fir,Abies grandis,no,non-invasive,introduced,,species,evergreen,"North America: Coastal and interior forests of Southern British Columbia,  Coastal and interior forest of Western  USA",T,0.65,0.79
+92,firspp,Pinaceae,Fir,Fir species,Abies spp,n/a,n/a,n/a,,genus,evergreen,,T,,0.79
+95,forest,forest,forest,forest,forest,n/a,n/a,n/a,,other,,,,,
+96,ginkgo,Ginkgoaceae,Ginkgo,Ginkgo,Ginkgo biloba,no,non-invasive,introduced,,species,decidous,China,T,0.65,0.81
+223,raintr,Sapindaceae,Goldenrain Tree,Goldenrain Tree,Koelreuteria paniculata,no,non-invasive,introduced,90,species,decidous,Southern Europe,T,0.6,0.81
+98,gumbla,Nyssaceae,Gum,Black Gum,Nyssa sylvatica,yes,non-invasive,introduced,,species,decidous,Eeastern North America,T,0.7,0.79
+99,hacber,Ulmaceae,Hackberry,Hackberry,Celtis occidentalis,yes,non-invasive,native,40,species,decidous,"Southern Ontario, Quebec, USA",T,0.66,0.88
+103,hawlav,Rosaceae,Hawthorn,Lavalle Hawthorn,Crataegus  x  lavallei,no,non-invasive,introduced,,species,decidous,,T,0.6,0.89
+290,hawsca,Rosaceae,Hawthorn,Scarlet Hawthorn,Crataegus coccinea,no,non-invasive,introduced,,species,decidous,,T,,
+100,hawcoc,Rosaceae,Hawthorn,Cockspur Hawthorn,Crataegus crus-galli,yes,invasive,introduced,,species,decidous,"Southern Quebec, Ontario, Eastern USA",T,0.6,0.88
+101,hawdow,Rosaceae,Hawthorn,Downy Hawthorn,Crataegus molis,no,non-invasive,introduced,,species,decidous,Central USA,T,0.6,0.88
+104,hawsin,Rosaceae,Hawthorn,Singleseed Hawthorne,Crataegus monogyna,no,non-invasive,introduced,50,species,decidous,Europe,T,0.6,0.88
+102,haweng,Rosaceae,Hawthorn,English Hawthorn,Crataegus oxyacantha,no,non-invasive,introduced,80,species,decidous,Europe,T,0.6,0.86
+105,hawspp,Rosaceae,Hawthorn,Hawthorn species,Crataegus spp,n/a,n/a,n/a,,genus,decidous,,T,,0.88
+106,haznut,Betulaceae,Hazel,Hazel Nuts,Corylus americana,yes,non-invasive,introduced,,species,decidous,"Eastern North America: Canada, USA",T,0.8,0.79
+107,haztur,Betulaceae,Hazel,Turkish Hazelnut,Corylus colurna,no,non-invasive,introduced,30,species,decidous,"Southeastern Europe, Western Asis",T,0.75,0.79
+109,hedge,hedge,hedge,hedge,hedge,n/a,n/a,n/a,,other,,,,,
+110,hemeas,Pinaceae,Hemlock,Eastern Hemlock,Tsuga canadensis,yes,non-invasive,native,,species,evergreen,Eastern Canada,T,0.69,0.79
+111,hicbit,Juglandaceae,Hickory,Bitternut Hickory,Carya cordiformis,yes,non-invasive,native,,species,decidous,"southern Ontario & Quebec, Central-Eastern USA",T,0.75,0.77
+112,hicpig,Juglandaceae,Hickory,Pignut Hickory,Carya glabra,yes,non-invasive,introduced,,species,decidous,"Maine to Southern Ontario, South to Florida, Alabama and Mississippi",T,0.75,0.77
+114,hicshe,Juglandaceae,Hickory,Big Shellbark Hickory,Carya laciniosa,yes,non-invasive,introduced,30,species,decidous,"Southern Tip of Ontario, Central USA",T,0.75,0.77
+113,hicsha,Juglandaceae,Hickory,Shagbark Hickory,Carya ovata,yes,non-invasive,native,30,species,decidous,"Southern Ontario along the St. Lawrence River to Quebec, USA",T,0.75,0.77
+115,hicspp,Juglandaceae,Hickory,Hickory species,Carya spp,n/a,n/a,n/a,15,genus,decidous,,T,,0.77
+116,holly,Aquifoliaceae,holly,holly,Ilex spp,n/a,non-invasive,introduced,,species,,,T,,
+143,lochon,Fabaceae,Honey Locust,Honey Locust,Gleditsia triacanthos,no,non-invasive,introduced,100,species,decidous,North America: Carolinian and surrounding areas,T,0.66,0.67
+300,honfly,Caprifoliaceae,Honeysuckle,Fly Honeysuckle,Lonicera canadensis,yes,non-invasive,introduced,50,species,decidous,,T,,
+118,hoptre,Rutaceae,Hop,Hope Tree,Ptelea trifoliata,yes,non-invasive,introduced,50,species,decidous,"Southwestern Ontario, USA",T,0.6,0.79
+124,ironwo,Betulaceae,Ironwood,Ironwood,Ostrya virginiana,yes,non-invasive,native,60,species,decidous,North-Eastern US,T,0.62,0.79
+120,horeur,Betulaceae,Ironwood-Hornbeam,European Hornbeam,Carpinus betulus,no,non-invasive,introduced,,species,decidous,"Europe, Asia Minor, Southeast of England",T,0.7,0.79
+20,beeblu,Betulaceae,Ironwood-Hornbeam,Blue Beech,Carpinus caroliniana,yes,non-invasive,native,90,species,decidous,Eastern U.S.A.,T,0.7,0.79
+122,horspp,Betulaceae,Ironwood-Hornbeam,Hornbeam Species,Carpinus spp,n/a,n/a,n/a,,genus,decidous,,T,,
+127,junspp,Cupressaceae,Juniper,Juniper species,Juniper spp,n/a,n/a,n/a,45,genus,evergreen,,,,0.79
+125,junchi,Cupressaceae,Juniper,Chinese Juniper,Juniperus chinensis,no,non-invasive,introduced,,species,evergreen,China,T,0.6,0.79
+301,juncom,Cupressaceae,Juniper,Common juniper,Juniperus communis,no,non-invasive,introduced,,species,evergreen,,T,,
+302,juncre,Cupressaceae,Juniper,Creeping Juniper,Juniperus horizontalis,no,non-invasive,introduced,70,species,evergreen,,T,,
+126,junsav,Cupressaceae,Juniper,Savin Juniper,Juniperus sabina,no,non-invasive,introduced,50,species,evergreen,,T,0.6,0.79
+43,cedred,Cupressaceae,Juniper,Red Cedar,Juniperus virginiana,yes,non-invasive,native,,species,evergreen,South-Eastern Ontario,T,0.6,0.79
+128,kalopa,Araliaceae,Kalopanax,Kalopanax,Kalopanax pictus,no,non-invasive,introduced,,species,decidous,"China, Manchuria, and Japan",T,0.7,0.79
+129,katsur,Cercidiphyllaceae,Katsura,Katsura Tree,Cercidiphyllum japonicum,no,non-invasive,introduced,30,species,decidous,"China, Japan",T,0.73,0.79
+97,golcha,Fabaceae,Laburnum,Goldenchain Tree,Laburnum anagyroides,no,non-invasive,introduced,30,species,decidous,,T,0.65,0.79
+130,lareuo,Pinaceae,Larch,Euopean Larch,Larix decidua,no,non-invasive,introduced,,species,decidous,Europe,T,0.7,0.79
+250,tamara,Pinaceae,Larch,Tamarack,Larix laricina,yes,non-invasive,native,,species,decidous,"Across Canada, North-Eastern US",T,0.7,0.79
+131,larjap,Pinaceae,Larch,Japanese Larch,Larix leptolepis,no,non-invasive,introduced,,species,decidous,,T,0.7,0.79
+132,larspp,Pinaceae,Larch,Larch species,Larix spp,n/a,n/a,n/a,,genus,decidous,,,,0.79
+134,liljap,Oleaceae,Lilac,Japanese Tree Lilac,Syringa reticulata,no,non-invasive,introduced,,species,decidous,Japan,T,0.81,0.79
+135,lilspp,Oleaceae,Lilac,Lilac species,Syringa spp,n/a,n/a,n/a,,genus,decidous,,,,0.79
+133,lilcom,Oleaceae,Lilac,Common Lilac,Syringa vulgaris,no,non-invasive,introduced,,species,decidous,Southeast Europe,T,0.8,0.79
+18,basswo,Tiliaceae,Linden-Basswood,Basswood,Tilia americana,yes,non-invasive,native,,species,decidous,Eastern North America,T,0.63,0.88
+139,linlit,Tiliaceae,Linden-Basswood,Little-Leaf Linden,Tilia cordata,no,non-invasive,introduced,10,species,decidous,Europe,T,0.7,0.88
+136,linbig,Tiliaceae,Linden-Basswood,Bigleaf Linden,Tilia platyphyllos,no,non-invasive,introduced,80,species,decidous,Europe,T,0.6,0.88
+141,linspp,Tiliaceae,Linden-Basswood,Linden species,Tilia spp,n/a,n/a,n/a,,genus,decidous,,,,0.88
+140,linsil,Tiliaceae,Linden-Basswood,Silver Linden,Tilia tomentosa,no,non-invasive,introduced,20,species,decidous,"Southeast Asia, Asia",T,0.6,0.88
+137,lineur,Tiliaceae,Linden-Basswood,European Linden,Tilia x europaea,no,non-invasive,introduced,,species,decidous,,T,0.6,0.88
+138,linhyb,Tiliaceae,Linden-Basswood,Hybrid Little-Leaf Linden,Tilia x flavescens,no,non-invasive,introduced,,species,decidous,,T,0.6,0.88
+117,honspp,Caprifoliaceae,Lonicera,Honeysuckle species,Lonicera spp,n/a,invasive,n/a,,genus,decidous,,T,,
+318,amumak,Fabaceae,Maakia,Amur Maackia,Maackia amurensis,no,non-invasive,introduced,,species,decidous,Asia,T,,
+144,magsau,Magnoliaceae,Magnolia,Saucer Magnolia,Magnolia  x  soulangeana,no,non-invasive,introduced,60,species,decidous,,T,0.7,0.79
+66,cucumb,Magnoliaceae,Magnolia,Cucumber Tree,Magnolia acuminata,yes,non-invasive,introduced,,species,decidous,North America,T,0.7,0.79
+145,magspp,Magnoliaceae,Magnolia,Magnolia species,Magnolia spp,n/a,n/a,n/a,,genus,decidous,,,,0.79
+146,magsta,Magnoliaceae,Magnolia,Star Magnolia,Magnolia stellata,no,non-invasive,introduced,,species,decidous,,T,0.7,0.79
+147,magumb,Magnoliaceae,Magnolia,Umbrella Magnolia,Magnolia tripetala,no,non-invasive,introduced,60,species,decidous,Pennsylvania to Alabama and Mississippi,T,0.7,0.79
+151,maphed,Aceraceae,Maple,Hedge Maple,Acer campestre,no,non-invasive,introduced,,species,decidous,"Europe, Northern Turkey, Caucasus, Northern Iran",T,0.68,0.86
+148,mapamu,Aceraceae,Maple,Amur Maple,Acer ginnala,no,non-invasive,introduced,80,species,decidous,Eastern Asia,T,0.63,0.91
+303,mappap,Aceraceae,Maple,Paperbark Maple,Acer griseum,no,non-invasive,introduced,,species,decidous,,T,0.65,
+153,mapman,Aceraceae,Maple,Manitoba Maple,Acer negundo,no,invasive,introduced,20,species,decidous,Naturalized beyond  its natural range.,T,0.38,0.86
+152,mapjap,Aceraceae,Maple,Japanese Maple,Acer palmatum,no,non-invasive,introduced,,species,decidous,Eastern Asia,T,0.77,0.86
+159,mapstr,Aceraceae,Maple,Striped Maple,Acer pensylvanicum,yes,non-invasive,native,60,species,decidous,"Quebec to Wisconsin, South to Northern Georgia; United States",T,0.4,0.86
+155,mapnor,Aceraceae,Maple,Norway Maple,Acer platanoides,no,invasive,introduced,40,species,decidous,Europe,T,0.68,0.88
+161,mapsyc,Aceraceae,Maple,Sycamore Maple,Acer pseudoplatanus,no,non-invasive,introduced,60,species,decidous,Europe to Western Asia,T,0.68,0.86
+156,mapred,Aceraceae,Maple,Red Maple,Acer rubrum,yes,non-invasive,native,20,species,decidous,South-Eastern US,T,0.65,0.83
+157,mapsil,Aceraceae,Maple,Silver Maple,Acer saccharinum,yes,non-invasive,native,70,species,decidous,North America,T,0.61,0.83
+160,mapsug,Aceraceae,Maple,Sugar Maple,Acer saccharum,yes,non-invasive,native,,species,decidous,"Maritime provinces, Southern Ontario and Quebec.",T,0.78,0.84
+149,mapbla,Aceraceae,Maple,Black Maple,Acer saccharum ssppnigrum,yes,non-invasive,introduced,,species,decidous,,T,0.85,0.86
+154,mapmou,Aceraceae,Maple,Mountain Maple,Acer spicatum,yes,non-invasive,introduced,90,species,decidous,"New Foundland South to Northern Georgia, West to East Saskatchewan, Northeast to Minnesota",T,0.65,0.86
+158,mapspp,Aceraceae,Maple,Maple species,Acer spp,n/a,n/a,n/a,15,genus,decidous,,,,0.86
+162,maptat,Aceraceae,Maple,Tatarian Maple,Acer tatricum,no,non-invasive,introduced,100,species,decidous,,T,0.65,0.86
+150,mapfre,Aceraceae,Maple,Freman Maple,Acer x freemanii,yes,non-invasive,native,,species,decidous,hybrid,T,0.8,0.86
+168,moukor,Rosaceae,Mountin Ash/Whitebeam,Korean Mountainash,Sorbus alnifolia,no,non-invasive,introduced,40,species,decidous,East Asia,T,0.4,0.79
+163,mouame,Rosaceae,Mountin Ash/Whitebeam,American Mountainash,Sorbus americana,yes,non-invasive,native,,species,decidous,North America,T,0.4,0.79
+171,mouwhi,Rosaceae,Mountin Ash/Whitebeam,Whitebeam Mountainash,Sorbus aria,no,non-invasive,introduced,40,species,decidous,,T,0.4,0.79
+166,moueur,Rosaceae,Mountin Ash/Whitebeam,European Mountainash,Sorbus aucuparia,no,non-invasive,introduced,60,species,decidous,Europe,T,0.4,0.79
+169,mousho,Rosaceae,Mountin Ash/Whitebeam,Showy Mountainash,Sorbus decora,yes,non-invasive,introduced,,species,decidous,,T,0.4,0.79
+259,whiswe,Rosaceae,Mountin Ash/Whitebeam,Swedish White Beam,Sorbus intermedia,no,non-invasive,introduced,40,species,decidous,,T,0.4,0.79
+164,mouchi,Rosaceae,Mountin Ash/Whitebeam,Chinese Mountainash,Sorbus pohuashanensis,no,non-invasive,introduced,,species,decidous,,T,0.4,0.79
+170,mouspp,Rosaceae,Mountin Ash/Whitebeam,Mountin-Ash species,Sorbus spp,n/a,n/a,n/a,40,genus,decidous,,,,0.79
+167,mouhyb,Rosaceae,Mountin Ash/Whitebeam,Finnish Whitebeam,Sorbus x hybrida,no,non-invasive,introduced,,species,decidous,,T,0.4,0.79
+165,moucut,Rosaceae,Mountin Ash/Whitebeam,Cutleaf Mountainash,Sorbus x thuringiaca,no,non-invasive,introduced,90,species,decidous,,T,0.4,0.79
+175,mulwhi,Moraceae,Mulberry,White Mulberry,Morus alba,no,invasive,introduced,,species,decidous,China,T,0.6,0.79
+172,mulbla,Moraceae,Mulberry,Black Mulberry,Morus nigra,no,non-invasive,introduced,,species,decidous,,T,0.8,0.79
+173,mulred,Moraceae,Mulberry,Red Mulberry,Morus rubra,yes,non-invasive,introduced,30,species,decidous,,T,0.6,0.79
+174,mulspp,Moraceae,Mulberry,Mulberry species,Morus spp,n/a,n/a,n/a,,genus,decidous,,,,0.79
+283,stump,n/a,n/a,stump,stump,n/a,n/a,n/a,,other,,,,,
+190,oakwhi,Fagaceae,Oak,White Oak,Quercus alba,yes,non-invasive,native,60,species,decidous,North-Eastern US,T,0.79,0.75
+189,oakswa,Fagaceae,Oak,Swamp White Oak,Quercus bicolor,yes,non-invasive,native,70,species,decidous,North America,T,0.7,0.79
+185,oaksca,Fagaceae,Oak,Scarlet Oak,Quercus coccinea,no,non-invasive,introduced,,species,decidous,North America,T,0.6,0.79
+284,oakmou,Fagaceae,Oak,Mountain Oak/Blue Oak,Quercus douglasii,no,non-invasive,introduced,60,species,decidous,,T,,
+182,oakhil,Fagaceae,Oak,Hill's Oak,Quercus ellipsoidallis,yes,non-invasive,introduced,70,species,decidous,,T,0.7,0.79
+181,oakgar,Fagaceae,Oak,Garry Oak,Quercus garryana,no,non-invasive,introduced,90,species,decidous,British Colombia to California; United States,T,0.7,0.79
+186,oakshi,Fagaceae,Oak,Shingle Oak,Quercus imbricaria,no,non-invasive,introduced,,species,decidous,North America,T,0.7,0.79
+178,oakbur,Fagaceae,Oak,Bur Oak,Quercus macrocarpa,yes,non-invasive,native,,species,decidous,North-Eastern US,T,0.76,0.79
+179,oakchi,Fagaceae,Oak,Chinkapin Oak,Quercus muehlenbergii,yes,non-invasive,introduced,40,species,decidous,North America,T,0.7,0.79
+183,oakpin,Fagaceae,Oak,Pin Oak,Quercus palustris,yes,non-invasive,native,70,species,decidous,North-Eastern US,T,0.69,0.77
+180,oakeng,Fagaceae,Oak,English Oak,Quercus robur,no,non-invasive,introduced,15,species,decidous,Europe,T,0.79,0.81
+184,oakred,Fagaceae,Oak,Red Oak,Quercus rubra,yes,non-invasive,native,80,species,decidous,"Great Lake, St. Lawrence, Carolinian, North-Eastern US",T,0.81,0.81
+187,oakshu,Fagaceae,Oak,Shumard Oak,Quercus shumardii,yes,non-invasive,introduced,60,species,decidous,North America,T,0.7,0.79
+188,oakspp,Fagaceae,Oak,Oak species,Quercus spp,n/a,n/a,n/a,90,genus,decidous,,,,0.79
+177,oakbla,Fagaceae,Oak,Black Oak,Quercus velutina,yes,non-invasive,native,40,species,decidous,North America,T,0.68,0.79
+192,oraosa,Moraceae,Osage,Osage Orange,Maclura pomifera,no,non-invasive,introduced,60,species,decidous,North America,T,0.5,0.79
+308,paulon,Paulowniaceae,Paulonia,Paulonia / Princcess Tree,Paulownia tomentosa,no,non-invasive,introduced,,species,decidous,,T,,
+193,pawpaw,Annonaceae,Pawpaw,Pawpaw,Asminia triloba,yes,non-invasive,introduced,90,species,decidous,,T,0.7,0.79
+281,peachs,Rosaceae,Peach,peach,Prunus persica,no,non-invasive,introduced,100,species,decidous,,T,,
+195,peaflo,Rosaceae,Pear/Flowering Pear,Flowering Pear,Pyrus calleryana,no,non-invasive,introduced,,species,decidous,,T,0.74,0.8
+194,peacom,Rosaceae,Pear/Flowering Pear,Common Pear,Pyrus communis,no,non-invasive,introduced,50,species,decidous,,T,0.5,0.8
+197,peapea,Rosaceae,Pear/Flowering Pear,Pear/Flowering Pear species,Pyrus spp,n/a,non-invasive,introduced,,species,decidous,,T,0.5,0.8
+196,peahar,Rosaceae,Pear/Flowering Pear,Harbin Pear,Pyrus ussuriensis,no,non-invasive,introduced,,species,decidous,Northeast Asia,T,0.5,0.8
+198,peawee,Fabaceae,Peashrub,Weeping Peashrub,Caragana arborescens,no,invasive,introduced,,species,decidous,"Siberia, Manchuria",T,0.6,0.79
+199,persim,Ebenaceae,Persimmon,Persimmon,Diospyros virginiana,no,non-invasive,introduced,30,species,decidous,North America,T,0.7,0.79
+61,coramu,Rutaceae,Phellodendron,Amur Corktree,Phellodendron amurense,no,non-invasive,introduced,,species,decidous,"China, Japan",T,0.71,0.79
+201,pinbri,Pinaceae,Pine,Bristlecone Pine,Pinus aristata,no,non-invasive,introduced,30,species,evergreen,"Mountains, California to Colorado; United States",T,0.6,0.79
+202,pinjac,Pinaceae,Pine,Jack Pine,Pinus banksiana,yes,non-invasive,native,,species,evergreen,North America: Nova Scotia to New York and Minnesota; United States,T,0.53,0.79
+311,pinwes,Pinaceae,Pine,Western White Pine,Pinus monticola,no,non-invasive,introduced,80,species,evergreen,Pacific Northwest,T,,0.79
+203,pinmug,Pinaceae,Pine,Mugo Pine,Pinus mugo,no,non-invasive,introduced,,species,evergreen,Europe,T,0.6,0.79
+200,pinaus,Pinaceae,Pine,Austrian Pine,Pinus nigra,no,non-invasive,introduced,50,species,evergreen,Southern Europe,T,0.63,0.79
+205,pinpon,Pinaceae,Pine,Ponderosa Pine,Pinus ponderosa,no,non-invasive,introduced,30,species,evergreen,North America,T,0.6,0.79
+206,pinred,Pinaceae,Pine,Red Pine,Pinus resinosa,yes,non-invasive,native,,species,evergreen,New Foundland to Pennsylvania and Minnesota; United States,T,0.7,0.79
+204,pinpit,Pinaceae,Pine,Pitch Pine,Pinus rigida,yes,non-invasive,native,,species,evergreen,North Amerika: New Brunswick to Kentucky and California,T,0.6,0.79
+209,pinspp,Pinaceae,Pine,Pine species,Pinus spp,n/a,n/a,n/a,30,genus,evergreen,,,,0.79
+210,pinwhi,Pinaceae,Pine,White Pine,Pinus strobus,yes,non-invasive,native,75,species,evergreen,"South-Eastern Canada, North-Eastern US",T,0.75,0.79
+208,pinsco,Pinaceae,Pine,Scot's Pine,Pinus sylvestris,no,invasive,introduced,15,species,evergreen,Eurasia,T,0.53,0.79
+306,pinlob,Pinaceae,Pine,Loblolly Pine,Pinus taeda,no,non-invasive,introduced,50,species,evergreen,,T,,
+305,pinhim,Pinaceae,Pine,Himalayan Pine,Pinus wallichiana,no,non-invasive,introduced,30,species,evergreen,,T,,
+249,sycame,Platanaceae,Plane-Sycamore,Sycamore,Platanus occidentalis,yes,non-invasive,introduced,100,species,decidous,North America,T,0.69,0.86
+213,plaspp,Platanaceae,Plane-Sycamore,Plane-Sycamore species,Platanus spp,n/a,n/a,n/a,,genus,decidous,,,,0.86
+211,plalon,Platanaceae,Plane-Sycamore,London Plane,Platanus x acerifolia,no,non-invasive,introduced,50,species,decidous,,T,0.68,0.86
+212,x,plantable spot,plantable spot,plantable spot,plantable spot,n/a,n/a,n/a,,other,,,,,
+221,popwhi,Salicaceae,Poplar,European White Poplar,Populus alba,no,non-invasive,introduced,90,species,decidous,"Wurope, N africa, West-Central Asia",T,0.45,0.8
+217,popbal,Salicaceae,Poplar,Balsam Poplar,Populus balsamifera,yes,non-invasive,native,30,species,decidous,Across Canada,T,0.3,0.8
+62,coteas,Salicaceae,Poplar,Eastern Cottonwood,Populus deltoides,yes,non-invasive,introduced,,species,decidous,"Central U.S.A., South Eastern Border of Canada",T,0.35,0.85
+16,asplar,Salicaceae,Poplar,Largetooth Aspen,Populus grandidentata,yes,non-invasive,native,75,species,decidous,"Quebec to Ontario, Eastern United States",T,0.35,0.8
+218,popbla,Salicaceae,Poplar,Black Poplar,Populus nigra,no,non-invasive,introduced,,species,decidous,"Wurope, N africa, West-Central Asia",T,0.4,0.8
+220,popspp,Salicaceae,Poplar,Poplar species,Populus spp,n/a,n/a,n/a,60,genus,decidous,,,,0.8
+17,asptre,Salicaceae,Poplar,Trembling Aspen,Populus tremuloides,yes,non-invasive,native,,species,decidous,North America: Across Canada and Southern US,T,0.48,0.74
+219,popcar,Salicaceae,Poplar,Carolina Poplar,Populus x canadensis,yes,non-invasive,introduced,,species,decidous,,T,0.35,0.8
+123,hybpop,Salicaceae,Poplar,Poplar hybrid,Populus x hybida,n/a,non-invasive,introduced,30,species,decidous,,T,0.3,0.8
+224,redbud,Fabaceae,Redbud,Redbud,Cercis canadensis,yes,non-invasive,introduced,80,species,decidous,"Eastern North America from Mexico north, Pelee Island",T,0.69,0.79
+225,reddaw,Taxodiaceae,Redwood,Dawn Redwood,Metasequoia glyptostroboides,no,non-invasive,introduced,,species,evergreen,"Szechwan, China",T,0.87,0.79
+227,rose,Rosaceae,Rose,rose,Rosa spp,n/a,non-invasive,introduced,60,species,decidous,,T,,
+228,rossha,Malvaceae,Rose-of-Sharon,Rose-of-Sharon,Hibiscus syriacus,no,non-invasive,introduced,,species,decidous,,T,,
+191,olirus,Elaeagnaceae,Russian Olive,Russian Olive,Elaeagnus angustifolia,no,invasive,introduced,,species,decidous,Europe and Western Asia,T,0.56,0.87
+75,eldspp,Sambucaceae,Sambucus sp.,Elder species,Sambucus spp,n/a,n/a,n/a,25,genus,decidous,,T,,0.7
+229,sassaf,Lauraceae,Sassafras,Sassafras,Sassafras albidum,yes,non-invasive,introduced,90,species,decidous,North America,T,0.69,0.79
+286,redwoo,Taxodiaceae,Sequoia,Redwood,Sequoia sempervirens,no,non-invasive,introduced,,species,evergreen,California,T,,
+231,serdow,Rosaceae,Serviceberry,Downy Serviceberry,Amelanchier arborea,no,non-invasive,introduced,,species,decidous,North America,T,0.8,0.77
+230,servic,Rosaceae,Serviceberry,Serviceberry,Amelanchier canadensis,yes,non-invasive,native,15,species,decidous,North America,T,0.8,0.77
+232,sersmo,Rosaceae,Serviceberry,Smooth-Leaved Serviceberry,Amelanchier laevis,yes,non-invasive,introduced,10,species,decidous,North America,T,0.8,0.77
+233,serspp,Rosaceae,Serviceberry,Serviceberry species,Serviceberry spp,n/a,n/a,n/a,40,genus,decidous,,,,0.77
+234,silcar,Styracaceae,Silverbell,Carolina Silverbell,Halesia carolina,no,non-invasive,introduced,30,species,decidous,North America,T,0.5,0.79
+235,smotre,Anacardiaceae,Smoketree,Smoketree,Cotinus coggygria,no,non-invasive,introduced,,species,decidous,Southern Europe to Asia,T,0.6,0.79
+236,snag,snag,snag,snag,snag,n/a,n/a,n/a,,other,,,,,
+304,jappag,Fabaceae,Sophora,Japanese Pagoda Tree,Sophora japonica,no,non-invasive,introduced,,species,decidous,,T,,
+86,euoeur,Celastraceae,Spindletree,European Euonymus,Euonymus europaeus,no,non-invasive,introduced,15,species,decidous,Europe,T,0.5,0.79
+87,euospp,Celastraceae,Spindletree sp.,Euonymus species,Euonymus spp,n/a,n/a,n/a,,genus,decidous,,T,,0.7
+240,sprnor,Pinaceae,Spruce,Norway Spruce,Picea abies,no,non-invasive,introduced,70,species,evergreen,Europe and Asia,T,0.71,0.79
+239,spreng,Pinaceae,Spruce,Engleman Spruce,Picea englemannii,no,non-invasive,introduced,50,species,evergreen,Western North America,T,0.75,0.79
+244,sprwhi,Pinaceae,Spruce,White Spruce,Picea glauca,yes,non-invasive,native,60,species,evergreen,North America: Across Canada,T,0.72,0.79
+237,sprbla,Pinaceae,Spruce,Black Spruce,Picea mariana,yes,non-invasive,native,30,species,evergreen,"North America: Alaska and Northern States to mountains of Virginia,  Across Canada",T,0.58,0.79
+242,sprser,Pinaceae,Spruce,Serbian Spruce,Picea omrika,no,non-invasive,introduced,50,species,evergreen,,T,0.78,0.79
+238,sprblu,Pinaceae,Spruce,Blue Spruce,Picea pungens,no,non-invasive,introduced,60,species,evergreen,US Rocky Mountains,T,0.77,0.79
+241,sprred,Pinaceae,Spruce,Red Spruce,Picea rubens,yes,non-invasive,native,60,species,evergreen,,T,0.75,0.79
+243,sprspp,Pinaceae,Spruce,Spruce species,Picea spp,n/a,n/a,n/a,,genus,evergreen,,,,0.79
+247,sumspp,Anacardiaceae,Sumac,Sumac sp,Rhus spp,n/a,n/a,n/a,20,genus,decidous,,,,0.7
+246,sumacs,Anacardiaceae,Sumac,Sumac,Rhus typhina,yes,non-invasive,native,,species,decidous,North shore of Lake Superior east to Nova Scotia,T,0.8,0.79
+248,sweetg,Hamamelidaceae,Sweetgum,Sweetgum,Liquidambar styraciflua,no,non-invasive,introduced,,species,decidous,North America,T,0.45,0.82
+226,werece,Cupressaceae,Thuja (Cedar),Western Red Cedar,Thuja plicata,no,non-invasive,introduced,90,species,evergreen,,T,0.7,0.7
+252,treeof,Simaroubaceae,Tree of Heaven,Tree of Heaven,Ailanthus altissima,no,invasive,introduced,40,species,decidous,China,T,0.49,0.79
+253,tulipt,Magnoliaceae,Tulip-Tree,Tulip Tree,Liriodendron tulipifera,yes,non-invasive,introduced,,species,decidous,North America,T,0.77,0.9
+254,unknow,unknown,unknown,unknown species,unknown species,n/a,n/a,n/a,,other,,,,,
+285,wayfar,Rutaceae,Viburnum,Wayfaring Tree,Viburnum lantana,no,non-invasive,introduced,,species,decidous,,T,,
+176,nannyb,Rutaceae,Viburnum,Nannyberry,Viburnum lentago,yes,non-invasive,introduced,100,species,decidous,"Hudson Bay, South to Georgia and Mississippi; United States",T,0.6,0.79
+255,vibspp,Rutaceae,Viburnum,Nannyberry,Viburnum spp,n/a,n/a,n/a,,genus,decidous,,,,0.7
+68,devils,Araliaceae,Walkingstick,Devils-walkingstick,Aralia spinosa,no,invasive,introduced,100,species,decidous,South Eastern U.S.A.,T,0.7,0.79
+36,butter,Juglandaceae,Walnut/Butternut,Butternut,Juglans cinerea,yes,non-invasive,native,70,species,decidous,Eastern North America,T,0.63,0.91
+310,walman,Juglandaceae,Walnut/Butternut,Manchrurian Walnut,Juglans mandshurica,no,non-invasive,introduced,10,species,decidous,Eastern Asia,T,,
+256,walbla,Juglandaceae,Walnut/Butternut,Black Walnut,Juglans nigra,yes,non-invasive,native,,species,decidous,"Southern Ontario, North Eastern US",T,0.67,0.91
+257,waleng,Juglandaceae,Walnut/Butternut,English Walnut,Juglans regia,no,non-invasive,introduced,,species,decidous,"Southeast Europe, Western Asia; United States",T,0.7,0.91
+258,walspp,Juglandaceae,Walnut/Butternut,Walnut/Butternut species,Juglans spp,n/a,n/a,n/a,90,genus,decidous,,,,0.91
+271,wilwhi,Salicaceae,Willow,White Willow,Salix alba,no,non-invasive,introduced,100,species,decidous,Europe,T,0.45,0.79
+265,wilpea,Salicaceae,Willow,Peach Leaf Willow,Salix amygdaloides,no,non-invasive,native,,species,decidous,,T,0.35,0.79
+270,wilwee,Salicaceae,Willow,Golden Weeping Willow,Salix babylonica,no,non-invasive,introduced,,species,decidous,,T,0.35,0.79
+315,wilbeb,Salicaceae,Willow,Bebb's Willow,Salix bebbiana,yes,non-invasive,introduced,,species,decidous,North America,T,,
+264,wilgoa,Salicaceae,Willow,Goat Willow,Salix caprea,no,non-invasive,introduced,,species,decidous,,T,0.45,0.79
+266,wilpus,Salicaceae,Willow,Pussy Willow,Salix discolor,yes,non-invasive,native,,species,decidous,"Across Canada's provinces, North-Eastern US",T,0.4,0.79
+263,wilcra,Salicaceae,Willow,Crack Willow,Salix fragilis,no,non-invasive,introduced,,species,decidous,,T,0.35,0.79
+260,wilbay,Salicaceae,Willow,Bay (leaved) Willow,Salix laurifolia,no,non-invasive,introduced,,species,decidous,,T,0.35,0.79
+267,wilshi,Salicaceae,Willow,Shining Willow,Salix lucida,yes,non-invasive,introduced,5,species,decidous,,T,0.35,0.79
+262,wilcor,Salicaceae,Willow,Corkscrew Willow,Salix matsudana,no,non-invasive,introduced,100,species,decidous,North Asia,T,0.54,0.79
+261,wilbla,Salicaceae,Willow,Black Willow,Salix nigra,yes,non-invasive,native,,species,decidous,,T,0.47,0.79
+317,wilfal,Salicaceae,Willow,False mountain willow,Salix pseudomonticola,yes,non-invasive,introduced,100,species,decidous,North America,T,,
+316,wilarc,Salicaceae,Willow,Arctic Willow,Salix purpurea,no,non-invasive,introduced,,species,decidous,North America,T,,
+269,wilspp,Salicaceae,Willow,Willow species,Salix spp,n/a,n/a,n/a,,genus,decidous,,,,0.79
+272,wingnu,Juglandaceae,Wingnut,Wingnut,Pterocarya fraxinifolia,no,non-invasive,introduced,100,species,decidous,,T,0.6,0.79
+108,hazwit,Hamamelidaceae,Witch hazel,Witch hazel,Hamamelis virginiana,yes,non-invasive,introduced,,species,decidous,North America,T,0.7,0.79
+274,yellow,Fabaceae,Yellowood,American Yellowood,Cladrastis lutea,no,non-invasive,introduced,15,species,decidous,,T,0.7,0.79
+276,yeweur,Taxaceae,Yew,European Yew,Taxus baccata,no,non-invasive,introduced,25,species,evergreen,,T,0.6,0.79
+275,yewcom,Taxaceae,Yew,Common Yew,Taxus canadensis,yes,non-invasive,introduced,25,species,evergreen,,T,0.7,0.79
+277,yewjap,Taxaceae,Yew,Upright Japanese Yew,Taxus cuspidata,no,non-invasive,introduced,25,species,evergreen,Japan,T,0.71,0.79
+278,yewspp,Taxaceae,Yew,Yew species,Yew spp,n/a,n/a,n/a,,genus,evergreen,,,,0.79
+309,zeljap,Ulmaceae,Zelkova,Japanese zelkova,Zelkova serrata,no,non-invasive,introduced,,species,decidous,Asia,T,,
