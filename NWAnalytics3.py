@@ -44,7 +44,7 @@ st.set_page_config(layout="wide")
 st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
 # currentDir = "https://raw.githubusercontent.com/WAKenney/Neighbourwoods/main/"
-currentDir ='https://github.com/WAKenney/NWAnalytics'
+# currentDir ='https://github.com/WAKenney/NWAnalytics'
 # currentDir = "C:\Users\HP\OneDrive\Neighbourwoods\NWAnalytics\"
 
 colTitles=['tree_name', 'species', 'genus', 'family', 'street', 'address', 'location_code', 'ownership_code', 'number_of_stems', 'dbh',
@@ -74,8 +74,8 @@ CondcolorOrder = {'defects' : ['No major defects', 'Major health defect', 'Major
 
 
 titleCol1, titleCol2, titleCol3 =st.columns((1,4,1))
-title = currentDir + 'NWAnalyticsTitle.jpg'
-# title = 'NWAnalyticsTitle.jpg'
+# title = currentDir + 'NWAnalyticsTitle.jpg'
+title = 'NWAnalyticsTitle.jpg'
 titleCol2.image(title, use_column_width=True)
 
 with st.expander("Click here for help in getting started.", expanded=False):
@@ -129,7 +129,8 @@ def getData(fileName):
         if fileName is not None:
             df = pd.read_excel(fileName, sheet_name = "summary", header = 1)
 
-    speciesFile = currentDir + 'NWspecies041121.csv'
+    # speciesFile = currentDir + 'NWspecies041121.csv'
+    speciesFile = 'NWspecies041121.csv'
     speciesTable = pd.read_csv(speciesFile)
 
     # codesFile = currentDir + 'NWcodes180321.csv'
