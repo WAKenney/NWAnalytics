@@ -43,11 +43,7 @@ st.set_page_config(layout="wide")
 
 st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
-# currentDir = "https://raw.githubusercontent.com/WAKenney/Neighbourwoods/main/"
 currentDir = "https://raw.githubusercontent.com/WAKenney/NWAnalytics/main/"
-# currentDir ='https://github.com/WAKenney/NWAnalytics'
-# currentDir = "C:\Users\HP\OneDrive\Neighbourwoods\NWAnalytics\"
-# currentDir = 'https://github.com//WAKenney//NWAnalytics//'
 
 colTitles=['tree_name', 'species', 'genus', 'family', 'street', 'address', 'location_code', 'ownership_code', 'number_of_stems', 'dbh',
     'hard_surface', 'crown_width', 'height_to_crown_base', 'total_height', 'reduced_crown', 'unbalanced_crown', 'defoliation',
