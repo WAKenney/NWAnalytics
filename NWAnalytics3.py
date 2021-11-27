@@ -32,14 +32,14 @@ from typing_extensions import ParamSpec
 
 st.set_page_config(layout="wide")
 
-hide_st_style = """
-            <style>
-            #MainMenu {visibility: hidden;}
-            footer {visibility: hidden;}
-            header {visibility: hidden;}
-            </style>
-            """
-st.markdown(hide_st_style, unsafe_allow_html=True)
+# hide_st_style = """
+#             <style>
+#             #MainMenu {visibility: hidden;}
+#             footer {visibility: hidden;}
+#             header {visibility: hidden;}
+#             </style>
+#             """
+# st.markdown(hide_st_style, unsafe_allow_html=True)
 
 st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
@@ -128,89 +128,89 @@ def getData(fileName):
         if fileName is not None:
             df = pd.read_excel(fileName, sheet_name = "summary", header = 1)
 
-    speciesFile = currentDir + 'NWspecies041121.csv'
-    # speciesFile = 'NWspecies041121.csv'
-    speciesTable = pd.read_csv(speciesFile)
+        speciesFile = currentDir + 'NWspecies041121.csv'
+        # speciesFile = 'NWspecies041121.csv'
+        speciesTable = pd.read_csv(speciesFile)
 
-    # codesFile = currentDir + 'NWcodes180321.csv'
-    # codesFile = 'NWcodes180321.csv'
-    # codesTable = pd.read_csv(codesFile,encoding='cp1252')
+        # codesFile = currentDir + 'NWcodes180321.csv'
+        # codesFile = 'NWcodes180321.csv'
+        # codesTable = pd.read_csv(codesFile,encoding='cp1252')
 
-    # Standardize column names to lower case and hyphenated (no spaces).
-    df=df.rename(columns = {'Tree Name':'tree_name','Description':'description','Longitude':'longitude',
-                                'Latitude':'latitude','Date':'date','Block ID':'block','Tree Number':'tree_number',
-                                'Species':'species','Genus':'genus','Family':'family','Street':'street',
-                                'Address':'address','Location Code':'location_code','Ownership Code':'ownership_code',
-                                'Crown Width':'crown_width','Number of Stems':'number_of_stems','DBH':'dbh',
-                                'Hard Surface':'hard_surface','Ht to Crown Base':'height_to_crown_base',
-                                'Total Height':'total_height','Reduced Crown':'reduced_crown','Unbalanced Crown':'unbalanced_crown',
-                                'Defoliation':'defoliation','Weak or Yellowing Foliage':'weak_or_yellow_foliage',
-                                'Dead or Broken Branch':'dead_or_broken_branch','Lean':'lean','Poor Branch Attachment':'poor_branch_attachment',
-                                'Branch Scars':'branch_scars','Trunk Scars':'trunk_scars','Conks':'conks','Rot or Cavity - Branch':'branch_rot_or_cavity',
-                                'Rot or Cavity - Trunk':'trunk_rot_or_cavity','Confined Space':'confined_space',
-                                'Crack':'crack','Girdling Roots':'girdling_roots', 'Exposed Roots': 'exposed_roots', 'Recent Trenching':'recent_trenching',
-                                'Cable or Brace':'cable_or_brace','Conflict with Wires':'wire_conflict',
-                                'Conflict with Sidewalk':'sidewalk_conflict','Conflict with Structure':'structure_conflict',
-                                'Conflict with Another Tree':'tree_conflict','Conflict with Traffic Sign':'sign_conflict',
-                                'Comments':'comments', 'Total Demerits':'demerits','Simple Rating':'simple_rating',
-                                'Crown Projection Area (CPA)':'cpa', 'Relative DBH':'rdbh','Relative DBH Class':'rdbh_class',
-                                'DBH class':'dbh_class','Native':'native','Species Suitability':'suitability','Structural Defect':'structural', 
-                                'Health Defect':'health'})
+        # Standardize column names to lower case and hyphenated (no spaces).
+        df=df.rename(columns = {'Tree Name':'tree_name','Description':'description','Longitude':'longitude',
+                                    'Latitude':'latitude','Date':'date','Block ID':'block','Tree Number':'tree_number',
+                                    'Species':'species','Genus':'genus','Family':'family','Street':'street',
+                                    'Address':'address','Location Code':'location_code','Ownership Code':'ownership_code',
+                                    'Crown Width':'crown_width','Number of Stems':'number_of_stems','DBH':'dbh',
+                                    'Hard Surface':'hard_surface','Ht to Crown Base':'height_to_crown_base',
+                                    'Total Height':'total_height','Reduced Crown':'reduced_crown','Unbalanced Crown':'unbalanced_crown',
+                                    'Defoliation':'defoliation','Weak or Yellowing Foliage':'weak_or_yellow_foliage',
+                                    'Dead or Broken Branch':'dead_or_broken_branch','Lean':'lean','Poor Branch Attachment':'poor_branch_attachment',
+                                    'Branch Scars':'branch_scars','Trunk Scars':'trunk_scars','Conks':'conks','Rot or Cavity - Branch':'branch_rot_or_cavity',
+                                    'Rot or Cavity - Trunk':'trunk_rot_or_cavity','Confined Space':'confined_space',
+                                    'Crack':'crack','Girdling Roots':'girdling_roots', 'Exposed Roots': 'exposed_roots', 'Recent Trenching':'recent_trenching',
+                                    'Cable or Brace':'cable_or_brace','Conflict with Wires':'wire_conflict',
+                                    'Conflict with Sidewalk':'sidewalk_conflict','Conflict with Structure':'structure_conflict',
+                                    'Conflict with Another Tree':'tree_conflict','Conflict with Traffic Sign':'sign_conflict',
+                                    'Comments':'comments', 'Total Demerits':'demerits','Simple Rating':'simple_rating',
+                                    'Crown Projection Area (CPA)':'cpa', 'Relative DBH':'rdbh','Relative DBH Class':'rdbh_class',
+                                    'DBH class':'dbh_class','Native':'native','Species Suitability':'suitability','Structural Defect':'structural', 
+                                    'Health Defect':'health'})
+                
+        
+        def defect_setup(df):
+            """
+            This def adds a column to the dataframe containing text descriptions for the level of defects based on the yes or no 
+            respones in the structural and health columns of the input data.
+            """
+        
+            if ((df['structural'] == 'no') & (df['health'] =='no')):
+                return 'No major defects'
+            elif ((df['structural'] == 'yes') & (df['health'] =='no')):
+                return 'Major structural defect(s)'
+            elif ((df['structural'] == 'no') & (df['health'] =='yes')):
+                return 'Major health defect(s)'
+            elif ((df['structural'] == 'yes') & (df['health'] =='yes')):
+                return 'Major structural AND health defect(s)'
+            else:
+                return 'Condition was not assessed'
+
+        df['defects'] = df.apply(defect_setup, axis = 1)
+        
+        def setDefectColour(df):
+            ''' sets a colour name in column defectColour based on the value in column defects'''
             
-    
-    def defect_setup(df):
-        """
-        This def adds a column to the dataframe containing text descriptions for the level of defects based on the yes or no 
-        respones in the structural and health columns of the input data.
-        """
-    
-        if ((df['structural'] == 'no') & (df['health'] =='no')):
-            return 'No major defects'
-        elif ((df['structural'] == 'yes') & (df['health'] =='no')):
-            return 'Major structural defect(s)'
-        elif ((df['structural'] == 'no') & (df['health'] =='yes')):
-            return 'Major health defect(s)'
-        elif ((df['structural'] == 'yes') & (df['health'] =='yes')):
-            return 'Major structural AND health defect(s)'
-        else:
-            return 'Condition was not assessed'
+            if df['defects'] == 'No major defects':
+                return 'darkgreen'
 
-    df['defects'] = df.apply(defect_setup, axis = 1)
-    
-    def setDefectColour(df):
-        ''' sets a colour name in column defectColour based on the value in column defects'''
-        
-        if df['defects'] == 'No major defects':
-            return 'darkgreen'
+            elif df['defects'] == 'Major structural defect(s)':
+                return 'yellow'
+            
+            elif df['defects'] == 'Major health defect(s)':
+                return 'greenyellow'
 
-        elif df['defects'] == 'Major structural defect(s)':
-            return 'yellow'
-        
-        elif df['defects'] == 'Major health defect(s)':
-            return 'greenyellow'
+            elif df['defects'] == 'Major structural AND health defect(s)':
+                return 'red'
+            
+            else:
+                return 'gray'
 
-        elif df['defects'] == 'Major structural AND health defect(s)':
-            return 'red'
-        
-        else:
-            return 'gray'
+        df['defectColour'] = df.apply(setDefectColour, axis = 1)
 
-    df['defectColour'] = df.apply(setDefectColour, axis = 1)
+        df = pd.merge(df, speciesTable[['species', 'diversity_level', 'invasivity']], on="species", how="left", sort=False)
+        df = pd.merge(df, speciesTable[['species', 'seRegion']], on="species", how="left", sort=False)
 
-    df = pd.merge(df, speciesTable[['species', 'diversity_level', 'invasivity']], on="species", how="left", sort=False)
-    df = pd.merge(df, speciesTable[['species', 'seRegion']], on="species", how="left", sort=False)
+        df.loc[(df.invasivity =='invasive'), 'suitability'] = 'Very Poor'
 
-    df.loc[(df.invasivity =='invasive'), 'suitability'] = 'Very Poor'
+        df.merge(speciesTable, how = 'left', on = 'species', sort = False )
 
-    df.merge(speciesTable, how = 'left', on = 'species', sort = False )
+        df = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.longitude, df.latitude)).copy()
 
-    df = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.longitude, df.latitude)).copy()
+        df = df.set_crs('epsg:4326') # set coordinate reference system to WGS84
+        # df['date'] = df['date'].dt.strftime('%Y-%m-%d %H:%M:%S')  #Save the inventory dates as a string.  Otherwise and error is thrown when mapping
+        df['date'] = df['date'].astype(str)
 
-    df = df.set_crs('epsg:4326') # set coordinate reference system to WGS84
-    # df['date'] = df['date'].dt.strftime('%Y-%m-%d %H:%M:%S')  #Save the inventory dates as a string.  Otherwise and error is thrown when mapping
-    df['date'] = df['date'].astype(str)
-
-    return df
+        return df
 
 if fileName is not None:
     getFileScreen = st.empty()
@@ -223,7 +223,7 @@ def setupSidebar(df):
     
     selectFunctionForm = st.sidebar.form(key = 'selectFunction')
     selectFunctionForm.header('Select the function(s) you want to display ')
-    selectFunction = selectFunctionForm.multiselect('',['Show Data', 'Map Trees', 'Tree Diversity', 'Species Origin', 'Tree Condition', 'Ralative DBH', 'Species Suitability'])
+    selectFunction = selectFunctionForm.multiselect('',['Show Data', 'Map Trees', 'Tree Diversity', 'Species Origin', 'Tree Condition', 'Ralative DBH', 'Suitability & Invasivity'])
     selectFunctionForm.form_submit_button("Submit")
 
     st.sidebar.header("Do you want to FILTER the tree data?")
@@ -270,7 +270,7 @@ def setupSidebar(df):
     if 'Ralative DBH' in selectFunction:
         relativeDBH(select_df)
 
-    if 'Species Suitability' in selectFunction:
+    if 'Suitability & Invasivity' in selectFunction:
         speciesSuitablity(select_df)
 
 def simpleFilter(data):
@@ -387,13 +387,22 @@ def twoParameterFilter(data):
     
 ##################################################### Show data table ##########################################
 def showTable(data):
-    """
-    This function displays the data, either filtered or not filtered, as a Plotly table.  The user can add columns to the default
+
+    '''This function displays the data, either filtered or not filtered, as a Plotly table. The user can add columns to the default
     Description and Tree Name columns, and chnge the width of the columns using a Streamlit slider.  The user can also send the data, 
     as it is filtered (or not) to an Excel worksheet.  The exported worksheet will have ALL the columns regardless of which columns were added
     to the Plotly table.  The original data included a defectsClour column, native column and the geometery column.  These are dropped
     from the Data dataframe before sending to the xlsx file.
-    """
+                '''
+    
+    with st.expander("Click here to read an explanation of the Show Data function.", expanded=False):
+        
+            st.markdown('''This function displays the Neighbourwoods inventory data, either filtered or not filtered, as a table. You can add columns to 
+            the default _Description_ and _Tree Name_ columns, and change the width of the columns using a slider.  You can also save the data as an Excel file which you can 
+            read and manipulate as you want in your favourite spreadsheet software.  The exported worksheet will have ALL the columns regardless of which 
+            columns were added to the NWAnalytics table.  If you have filtered the data in NWAnalytics, only the filtered data will be exported.
+                '''
+            )
         
     data_columns = data.columns.values.tolist()
 
@@ -498,139 +507,142 @@ def mapItFolium(mapData):
     
 #####################################################
 def mapIt(mapData):
-    
-    if mapData.empty:
-        st.warning("Be sure to finish selecting the filtering values in the sidebar to the left.")
-        
-    avLat = mapData['latitude'].mean()  #calculate the average Latitude value and average Longitude value to use to centre the map
-    avLon = mapData['longitude'].mean()
-    
-    mapData['condColor'] = mapData['defects'].map(codes) # create a column called conColor and map the color values based on 
-                                                                #the condition code in the dictionary called condColor
-    
-    map_df = mapData[mapData['latitude'].notna()]
 
-    mapData['description'] = mapData['description'].str.wrap(10) 
-    
-    fig = px.scatter_mapbox(data_frame = map_df, lat="latitude", lon="longitude", 
-                            hover_name='tree_name',
-                            hover_data={"tree_name": False,
-                                        "description": False,
-                                        'address': True,
-                                        'location_code': False,
-                                        'ownership_code': False,
-                                        'species': True,
-                                        'dbh' : True,
-                                        'defects': True,
-                                        'latitude': False,
-                                        'longitude': False     
-                                        }, 
-                            color=map_df.defects,
-                            color_discrete_map  = codes,
-                            category_orders = CondcolorOrder,
-                            center=dict(lat=avLat, lon=avLon), 
-                            zoom=16, height=300,
-                            text =map_df['tree_name'],
-                            title = 'My Map')
-    
-    fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
-    fig.update_layout(autosize=False, width=1200, height=600)
-    
-    mapCol1, mapCol2, mapCol3 = st.columns(3)
-    
-    with mapCol1:
 
-        base_map_type = st.radio('Select the type of basemap', options= ['Map', 'Satellite Image'])
-        
-        if base_map_type == 'Map':       
-            fig.update_layout(mapbox_style = 'open-street-map')
-        else:
-            # useSatellite(fig)
-            st.write('To use Google satelite images you will need a free Google Maps API Key.  Go to https://elfsight.com/blog/2018/06/how-to-get-google-maps-api-key-guide/ ')
-            mapToken = st.text_input('Enter your Google Maps API Key')
-            try:
-                fig.update_layout(mapbox_style = 'satellite', mapbox_accesstoken = mapToken )
-            except:
-                st.warning('Enter your Google Maps token in the box  and press return.')
+    with st.spinner(text = 'Please wait while your map is set up...'):
+
+        if mapData.empty:
+            st.warning("Be sure to finish selecting the filtering values in the sidebar to the left.")
             
-    fig.layout.width=1500
-    fig.layout.height=1500
-    
-    fig.update_layout(legend=dict(yanchor="top",
-                                  y=0.99,
-                                  xanchor="left",
-                                  x=0.01
-                                  ))
-    
-    with mapCol2:
-        pointSizeSlider = st.slider('Move the slider to adjust the point size', min_value = 2, max_value = 20, value =10)
-        fig.update_traces(marker_size = pointSizeSlider)
+        avLat = mapData['latitude'].mean()  #calculate the average Latitude value and average Longitude value to use to centre the map
+        avLon = mapData['longitude'].mean()
+        
+        mapData['condColor'] = mapData['defects'].map(codes) # create a column called conColor and map the color values based on 
+                                                                    #the condition code in the dictionary called condColor
+        
+        map_df = mapData[mapData['latitude'].notna()]
 
-    with mapCol3:
+        mapData['description'] = mapData['description'].str.wrap(10) 
+        
+        fig = px.scatter_mapbox(data_frame = map_df, lat="latitude", lon="longitude", 
+                                hover_name='tree_name',
+                                hover_data={"tree_name": False,
+                                            "description": False,
+                                            'address': True,
+                                            'location_code': False,
+                                            'ownership_code': False,
+                                            'species': True,
+                                            'dbh' : True,
+                                            'defects': True,
+                                            'latitude': False,
+                                            'longitude': False     
+                                            }, 
+                                color=map_df.defects,
+                                color_discrete_map  = codes,
+                                category_orders = CondcolorOrder,
+                                center=dict(lat=avLat, lon=avLon), 
+                                zoom=16, height=300,
+                                text =map_df['tree_name'],
+                                title = 'My Map')
+        
+        fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+        fig.update_layout(autosize=False, width=1200, height=600)
+        
+        mapCol1, mapCol2, mapCol3 = st.columns(3)
+        
+        with mapCol1:
 
-        st.subheader("An option to save the map to your hard drive as a static HTML is coming soon..... ")
-
-        # def download_link(object_to_download, download_filename, download_link_text):
-        #     """
-        #     Generates a link to download the given object_to_download.
-
-        #     object_to_download (str, pd.DataFrame):  The object to be downloaded.
-        #     download_filename (str): filename and extension of file. e.g. mydata.csv, some_txt_output.txt
-        #     download_link_text (str): Text to display for download link.
-
-        #     Examples:
-        #     download_link(YOUR_DF, 'YOUR_DF.csv', 'Click here to download data!')
-        #     download_link(YOUR_STRING, 'YOUR_STRING.txt', 'Click here to download your text!')
-
-        #     """
-        #     if isinstance(object_to_download,pd.DataFrame):
-        #         object_to_download = object_to_download.to_csv(index=False)
-
-        #     # some strings <-> bytes conversions necessary here
-        #     b64 = base64.b64encode(object_to_download.encode()).decode()
-
-        #     return f'<a href="data:file/txt;base64,{b64}" download="{download_filename}">{download_link_text}</a>'
-
-        # download_link()
-
-
-
-        # towrite = io.BytesIO()
-        # downloaded_file = data.to_excel(towrite, encoding='utf-8', index=False, header=True)
-        # towrite.seek(0)  # reset pointer
-        # b64 = base64.b64encode(towrite.read()).decode()  # some strings
-        # linko= f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="myfilename.xlsx">Download your data as an Excel file</a>'
-        # st.markdown(linko, unsafe_allow_html=True)
-
-    #     size_slider = st.slider('Select the size of the marker on the map', min_value = 5, max_value = 20, value = 10)
-    #     fig.update_traces(marker_size = size_slider)
-
-    # with mapCol3:
-
-    #     with st.form(key = 'saveMapFormKey', clear_on_submit=True):
-    #         mapName = st.text_input("To save the map, enter a file name and press submit. The map will be saved as an HTML.")
-    #         saveMapSubmit = st.form_submit_button('Submit')
+            base_map_type = st.radio('Select the type of basemap', options= ['Map', 'Satellite Image'])
             
-    #         if saveMapSubmit:
+            if base_map_type == 'Map':       
+                fig.update_layout(mapbox_style = 'open-street-map')
+            else:
+                # useSatellite(fig)
+                st.write('To use Google satelite images you will need a free Google Maps API Key.  Go to https://elfsight.com/blog/2018/06/how-to-get-google-maps-api-key-guide/ ')
+                mapToken = st.text_input('Enter your Google Maps API Key')
+                try:
+                    fig.update_layout(mapbox_style = 'satellite', mapbox_accesstoken = mapToken )
+                except:
+                    st.warning('Enter your Google Maps token in the box  and press return.')
+                
+        fig.layout.width=1500
+        fig.layout.height=1500
+        
+        fig.update_layout(legend=dict(yanchor="top",
+                                    y=0.99,
+                                    xanchor="left",
+                                    x=0.01
+                                    ))
+        
+        with mapCol2:
+            pointSizeSlider = st.slider('Move the slider to adjust the point size', min_value = 2, max_value = 20, value =10)
+            fig.update_traces(marker_size = pointSizeSlider)
 
-    #             if mapName == '':
-    #                 mapName = "map.html"
-    #             elif len(mapName) < 5:
-    #                 mapName = mapName + '.html'
-    #             elif mapName[-5] != '.html':
-    #                 mapName = mapName + '.html'
+        with mapCol3:
 
-    #             saveMapPath = os.path.join(st.session_state.pathNameKey, mapName)
-    #             saveMapPath = saveMapPath.replace('"', '')
-    #             st.write(saveMapPath)
+            st.subheader("An option to save the map to your hard drive as a static HTML is coming soon..... ")
 
-    #             plotly.offline.plot(fig, filename = saveMapPath)
-    
-    st.markdown('___')
-    
-    st.plotly_chart(fig)
-    
-    return fig
+            # def download_link(object_to_download, download_filename, download_link_text):
+            #     """
+            #     Generates a link to download the given object_to_download.
+
+            #     object_to_download (str, pd.DataFrame):  The object to be downloaded.
+            #     download_filename (str): filename and extension of file. e.g. mydata.csv, some_txt_output.txt
+            #     download_link_text (str): Text to display for download link.
+
+            #     Examples:
+            #     download_link(YOUR_DF, 'YOUR_DF.csv', 'Click here to download data!')
+            #     download_link(YOUR_STRING, 'YOUR_STRING.txt', 'Click here to download your text!')
+
+            #     """
+            #     if isinstance(object_to_download,pd.DataFrame):
+            #         object_to_download = object_to_download.to_csv(index=False)
+
+            #     # some strings <-> bytes conversions necessary here
+            #     b64 = base64.b64encode(object_to_download.encode()).decode()
+
+            #     return f'<a href="data:file/txt;base64,{b64}" download="{download_filename}">{download_link_text}</a>'
+
+            # download_link()
+
+
+
+            # towrite = io.BytesIO()
+            # downloaded_file = data.to_excel(towrite, encoding='utf-8', index=False, header=True)
+            # towrite.seek(0)  # reset pointer
+            # b64 = base64.b64encode(towrite.read()).decode()  # some strings
+            # linko= f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="myfilename.xlsx">Download your data as an Excel file</a>'
+            # st.markdown(linko, unsafe_allow_html=True)
+
+        #     size_slider = st.slider('Select the size of the marker on the map', min_value = 5, max_value = 20, value = 10)
+        #     fig.update_traces(marker_size = size_slider)
+
+        # with mapCol3:
+
+        #     with st.form(key = 'saveMapFormKey', clear_on_submit=True):
+        #         mapName = st.text_input("To save the map, enter a file name and press submit. The map will be saved as an HTML.")
+        #         saveMapSubmit = st.form_submit_button('Submit')
+                
+        #         if saveMapSubmit:
+
+        #             if mapName == '':
+        #                 mapName = "map.html"
+        #             elif len(mapName) < 5:
+        #                 mapName = mapName + '.html'
+        #             elif mapName[-5] != '.html':
+        #                 mapName = mapName + '.html'
+
+        #             saveMapPath = os.path.join(st.session_state.pathNameKey, mapName)
+        #             saveMapPath = saveMapPath.replace('"', '')
+        #             st.write(saveMapPath)
+
+        #             plotly.offline.plot(fig, filename = saveMapPath)
+        
+        st.markdown('___')
+        
+        st.plotly_chart(fig)
+        
+        return fig
 
 # ########################################## Diversity ############################################
     
