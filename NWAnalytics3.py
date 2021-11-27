@@ -935,7 +935,7 @@ def speciesSuitablity(data):
         
         st.header('Tree Species Invasivity Summary')
         
-        with st.expander("Click heree to read about species invasivity", expanded=False):
+        with st.expander("Click here to read about species invasivity", expanded=False):
             st.markdown('''The tree species indicated as invasive are based on data shown in https://www.eddmaps.org/ontario/species/''')
 
         st.plotly_chart(invasivityPie)
