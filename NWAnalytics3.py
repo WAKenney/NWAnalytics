@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Re-Created on November 26 2021
+Re-Created on November 28 202
 
 @author: W.A. Kenney
 """
@@ -126,11 +126,12 @@ def getData(fileName):
     with st.spinner(text = 'Loading your Neighburwoods data, please wait...'):
 
         if fileName is not None:
+
+            
             df = pd.read_excel(fileName, sheet_name = "summary", header = 1)
 
         speciesFile = currentDir + 'NWspecies041121.csv'
         speciesTable = pd.read_csv(speciesFile)
-
 
         # Standardize column names to lower case and hyphenated (no spaces).
         df=df.rename(columns = {'Tree Name':'tree_name','Description':'description','Longitude':'longitude',
