@@ -110,7 +110,7 @@ mainScreen =st.empty()
 filterResultHeader = st.empty()
 getFileScreen = st.sidebar.empty()
 
-fileName = "empty"
+fileName ='empty'
 
 df = pd.DataFrame()
 
@@ -129,12 +129,8 @@ def getData(fileName):
             df = pd.read_excel(fileName, sheet_name = "summary", header = 1)
 
         speciesFile = currentDir + 'NWspecies041121.csv'
-        # speciesFile = 'NWspecies041121.csv'
         speciesTable = pd.read_csv(speciesFile)
 
-        # codesFile = currentDir + 'NWcodes180321.csv'
-        # codesFile = 'NWcodes180321.csv'
-        # codesTable = pd.read_csv(codesFile,encoding='cp1252')
 
         # Standardize column names to lower case and hyphenated (no spaces).
         df=df.rename(columns = {'Tree Name':'tree_name','Description':'description','Longitude':'longitude',
@@ -218,7 +214,7 @@ if fileName is not None:
 
 def setupSidebar(df):
     """
-    This def sets up the Sttreamlit sidebar
+    This def sets up the Streamlit sidebar
     """ 
     
     selectFunctionForm = st.sidebar.form(key = 'selectFunction')
