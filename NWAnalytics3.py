@@ -29,15 +29,14 @@ from typing_extensions import ParamSpec
 
 st.set_page_config(layout="wide")
 
-# hide_st_style = """
-#             <style>
-#             #MainMenu {visibility: hidden;}
-#             footer {visibility: hidden;}
-#             header {visibility: hidden;}
-#             </style>
-#             """
-# st.markdown(hide_st_style, unsafe_allow_html=True)
-
+hide_st_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_st_style, unsafe_allow_html=True)
 st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
 currentDir = "https://raw.githubusercontent.com/WAKenney/NWAnalytics/main/"
@@ -222,7 +221,7 @@ def setupSidebar(df):
     
     selectFunctionForm = st.sidebar.form(key = 'selectFunction')
     selectFunctionForm.header('Select the function(s) you want to display ')
-    selectFunction = selectFunctionForm.multiselect('',['Show Data', 'Map Trees', 'Tree Diversity', 'Species Origin', 'Tree Condition', 'Ralative DBH', 'Suitability & Invasivity'])
+    selectFunction = selectFunctionForm.multiselect('',['Show Data', 'Map Trees', 'Tree Diversity', 'Species Origin', 'Tree Condition', 'Relative DBH', 'Suitability & Invasivity'])
     selectFunctionForm.form_submit_button("Submit")
 
     st.sidebar.header("Do you want to FILTER the tree data?")
