@@ -266,7 +266,7 @@ def setupSidebar(df):
     if 'Tree Condition' in selectFunction:
         treeCondition(select_df)
         
-    if 'Ralative DBH' in selectFunction:
+    if 'Relative DBH' in selectFunction:
         relativeDBH(select_df)
 
     if 'Suitability & Invasivity' in selectFunction:
