@@ -29,14 +29,14 @@ from typing_extensions import ParamSpec
 
 st.set_page_config(layout="wide")
 
-hide_st_style = """
-            <style>
-            #MainMenu {visibility: hidden;}
-            footer {visibility: hidden;}
-            header {visibility: hidden;}
-            </style>
-            """
-st.markdown(hide_st_style, unsafe_allow_html=True)
+# hide_st_style = """
+#             <style>
+#             #MainMenu {visibility: hidden;}
+#             footer {visibility: hidden;}
+#             header {visibility: hidden;}
+#             </style>
+#             """
+# st.markdown(hide_st_style, unsafe_allow_html=True)
 
 st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
@@ -127,8 +127,13 @@ def getData(fileName):
             
             df = pd.read_excel(fileName, sheet_name = "summary", header = 1)
 
+        # speciesFile = currentDir + 'NWspecies041121.csv'
+        # speciesTable = pd.read_csv(speciesFile)
+
         speciesFile = currentDir + 'NWspecies050122.xlsx'
-        speciesTable = pd.read_excel(speciesFile,sheet_name = "species", header = 1)
+        speciesTable = pd.read_excel(speciesFile,sheet_name = "species")
+
+        speciesTable.head()
 
         # Standardize column names to lower case and hyphenated (no spaces).
         df=df.rename(columns = {'Tree Name':'tree_name','Description':'description','Longitude':'longitude',
