@@ -22,24 +22,21 @@ import plotly.graph_objects as go
 import streamlit as st
 from branca.element import MacroElement, Template
 from folium.plugins import FloatImage
-# import dash
-# import dash_table
 from PIL import Image
-# import os
 from streamlit.state.session_state import SessionState
 from streamlit_folium import folium_static
 from typing_extensions import ParamSpec
 
 st.set_page_config(layout="wide")
 
-# hide_st_style = """
-#             <style>
-#             #MainMenu {visibility: hidden;}
-#             footer {visibility: hidden;}
-#             header {visibility: hidden;}
-#             </style>
-#             """
-# st.markdown(hide_st_style, unsafe_allow_html=True)
+hide_st_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_st_style, unsafe_allow_html=True)
 
 st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
@@ -96,7 +93,7 @@ with st.expander("Click here for help in getting started.", expanded=False):
             but now select AND from the logical operator dropdown list and then select the parameter, comparison methods and value as done before. In this case all of the selected functions will be performed on all the silver maple with a dbh greater than 50 cm.
 
             You can select a value from the drop down box by scrolling up or down but you can also type the first few letters of the value you want and this should 
-            bring you close to thee value in the list where you can click on it to select.
+            bring you close to the value in the list where you can click on a value to select it.
 
             In various places you will have opportunities to click on a box for more information, just as you are reading this text.  To close these boxes, 
             simply click on the header button again.
@@ -130,8 +127,8 @@ def getData(fileName):
             
             df = pd.read_excel(fileName, sheet_name = "summary", header = 1)
 
-        speciesFile = currentDir + 'NWspecies041121.csv'
-        speciesTable = pd.read_csv(speciesFile)
+        speciesFile = currentDir + 'NWspecies050122.xlsx'
+        speciesTable = pd.read_excel(speciesFile,sheet_name = "species", header = 1)
 
         # Standardize column names to lower case and hyphenated (no spaces).
         df=df.rename(columns = {'Tree Name':'tree_name','Description':'description','Longitude':'longitude',
@@ -449,7 +446,7 @@ def mapItFolium(mapData):
     points are coloured according to theirdefect description
     '''
     mapCol1, mapCol2, mapCol3 = st.columns(3)
-    pointSizeSlider = mapCol2.slider('Move the slider to adjust the point size', min_value = 2, max_value = 20, value =10)
+    pointSizeSlider = mapCol2.slider('Move the slider to adjust the point size', min_value = 2, max_value = 20, value =4)
         
     
     if mapData.empty:
@@ -479,7 +476,7 @@ def mapItFolium(mapData):
 
     treeMap.fit_bounds([[minLat,minLon], [maxLat,maxLon]])
 
-    # mapData.apply(lambda mapData:folium.Circle(location=[mapData["latitude"], mapData["longitude"]], 
+      # mapData.apply(lambda mapData:folium.Circle(location=[mapData["latitude"], mapData["longitude"]], 
     #     color=mapData['defectColour'], 
     #     radius= (mapData['crown_width']/2), 
     #     popup = folium.Popup(mapData["description"], 
@@ -487,13 +484,28 @@ def mapItFolium(mapData):
     #     min_width=300)).add_to(treeMap), 
     #     axis=1)
 
+    # mapData.apply(lambda mapData:folium.CircleMarker(location=[mapData["latitude"], mapData["longitude"]], 
+    #     color=mapData['defectColour'], 
+    #     fill = True,
+    #     radius= pointSizeSlider,
+    #     popup = folium.Popup(mapData["description"], 
+    #     max_width=450, 
+    #     min_width=300)).add_to(treeMap), 
+    #     axis=1)
+
     mapData.apply(lambda mapData:folium.CircleMarker(location=[mapData["latitude"], mapData["longitude"]], 
-        color=mapData['defectColour'], 
+        fill_color=mapData['defectColour'], 
+        # fill = True,
         radius= pointSizeSlider,
         popup = folium.Popup(mapData["description"], 
         max_width=450, 
         min_width=300)).add_to(treeMap), 
         axis=1)
+
+
+
+
+    folium.LayerControl().add_to(treeMap)
 
 
     mapCol1, mapCol2 = st.columns(2)
