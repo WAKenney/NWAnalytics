@@ -9,3 +9,5 @@ streamlit_folium==0.4.0
 Pillow==8.4.0
 typing_extensions==4.0.0
 openpyxl==3.0.9
+ee==0.1.295
+geehydro==0.2.0
