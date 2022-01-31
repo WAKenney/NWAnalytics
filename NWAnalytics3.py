@@ -5,13 +5,11 @@ Re-Created on November 28 202
 @author: W.A. Kenney
 """
 
-# import time
 import base64
 import io
 from logging import _STYLES
 from math import isnan
-from types import GetSetDescriptorType
-
+# from types import GetSetDescriptorType
 import folium
 import geopandas as gpd
 # import numpy as np
@@ -27,17 +25,21 @@ from streamlit.state.session_state import SessionState
 from streamlit_folium import folium_static
 from typing_extensions import ParamSpec
 
+
+import ee
+import geehydro
+
 st.set_page_config(layout="wide")
 
-hide_st_style = """
-            <style>
-            #MainMenu {visibility: hidden;}
-            footer {visibility: hidden;}
-            header {visibility: hidden;}
-            </style>
-            """
-st.markdown(hide_st_style, unsafe_allow_html=True)
-st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
+# hide_st_style = """
+#             <style>
+#             #MainMenu {visibility: hidden;}
+#             footer {visibility: hidden;}
+#             header {visibility: hidden;}
+#             </style>
+#             """
+# st.markdown(hide_st_style, unsafe_allow_html=True)
+# st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
 currentDir = "https://raw.githubusercontent.com/WAKenney/NWAnalytics/main/"
 # currentDir = ''
@@ -126,10 +128,8 @@ def getData(fileName):
             
             df = pd.read_excel(fileName, sheet_name = "summary", header = 1)
 
-        # speciesFile = currentDir + 'NWspecies041121.csv'
-        # speciesTable = pd.read_csv(speciesFile)
-
-        speciesFile = currentDir + 'NWspecies050122.xlsx'
+        # speciesFile = currentDir + 'NWspecies050122.xlsx'
+        speciesFile = currentDir + 'NWspecies080122.xlsx'
         speciesTable = pd.read_excel(speciesFile,sheet_name = "species")
 
         speciesTable.head()
@@ -202,11 +202,11 @@ def getData(fileName):
 
         df.merge(speciesTable, how = 'left', on = 'species', sort = False )
 
-        df = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.longitude, df.latitude)).copy()
+        df = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.longitude, df.latitude)).copy() # save the data pandas dataframe to a geodataframe
 
         df = df.set_crs('epsg:4326') # set coordinate reference system to WGS84
-        # df['date'] = df['date'].dt.strftime('%Y-%m-%d %H:%M:%S')  #Save the inventory dates as a string.  Otherwise and error is thrown when mapping
-        df['date'] = df['date'].astype(str)
+        
+        df['date'] = df['date'].astype(str) # Save the inventory dates as a string.  Otherwise an error is thrown when mapping
 
         return df
 
@@ -253,8 +253,8 @@ def setupSidebar(df):
         showTable(select_df)
         
     if 'Map Trees' in selectFunction:
-        mapIt(select_df)
-        # mapItFolium(select_df)
+        # mapIt(select_df)
+        mapItFolium(select_df)
 
     if 'Tree Diversity' in selectFunction:
         diversity(select_df)    
@@ -488,8 +488,18 @@ def mapItFolium(mapData):
     #     min_width=300)).add_to(treeMap), 
     #     axis=1)
 
+    mapData.apply(lambda mapData:folium.CircleMarker(location=[mapData["latitude"], mapData["longitude"]], 
+        color=mapData['defectColour'], 
+        fill = True,
+        fill_color=mapData['defectColour'],
+        radius= pointSizeSlider,
+        popup = folium.Popup(mapData["description"], 
+        max_width=450, 
+        min_width=300)).add_to(treeMap), 
+        axis=1)
+
     # mapData.apply(lambda mapData:folium.CircleMarker(location=[mapData["latitude"], mapData["longitude"]], 
-    #     color=mapData['defectColour'], 
+    #     fill_color=mapData['defectColour'], 
     #     fill = True,
     #     radius= pointSizeSlider,
     #     popup = folium.Popup(mapData["description"], 
@@ -497,19 +507,13 @@ def mapItFolium(mapData):
     #     min_width=300)).add_to(treeMap), 
     #     axis=1)
 
-    mapData.apply(lambda mapData:folium.CircleMarker(location=[mapData["latitude"], mapData["longitude"]], 
-        fill_color=mapData['defectColour'], 
-        # fill = True,
-        radius= pointSizeSlider,
-        popup = folium.Popup(mapData["description"], 
-        max_width=450, 
-        min_width=300)).add_to(treeMap), 
-        axis=1)
+
+    treeMap.setOptions('HYBRID')
+
+    treeMap.setControlVisibility(layerControl=True, fullscreenControl=True)
 
 
-
-
-    folium.LayerControl().add_to(treeMap)
+    # folium.LayerControl().add_to(treeMap)
 
 
     mapCol1, mapCol2 = st.columns(2)
@@ -590,67 +594,7 @@ def mapIt(mapData):
         with mapCol2:
             pointSizeSlider = st.slider('Move the slider to adjust the point size', min_value = 2, max_value = 20, value =10)
             fig.update_traces(marker_size = pointSizeSlider)
-
-        with mapCol3:
-
-            st.subheader("An option to save the map to your hard drive as a static HTML is coming soon..... ")
-
-            # def download_link(object_to_download, download_filename, download_link_text):
-            #     """
-            #     Generates a link to download the given object_to_download.
-
-            #     object_to_download (str, pd.DataFrame):  The object to be downloaded.
-            #     download_filename (str): filename and extension of file. e.g. mydata.csv, some_txt_output.txt
-            #     download_link_text (str): Text to display for download link.
-
-            #     Examples:
-            #     download_link(YOUR_DF, 'YOUR_DF.csv', 'Click here to download data!')
-            #     download_link(YOUR_STRING, 'YOUR_STRING.txt', 'Click here to download your text!')
-
-            #     """
-            #     if isinstance(object_to_download,pd.DataFrame):
-            #         object_to_download = object_to_download.to_csv(index=False)
-
-            #     # some strings <-> bytes conversions necessary here
-            #     b64 = base64.b64encode(object_to_download.encode()).decode()
-
-            #     return f'<a href="data:file/txt;base64,{b64}" download="{download_filename}">{download_link_text}</a>'
-
-            # download_link()
-
-
-
-            # towrite = io.BytesIO()
-            # downloaded_file = data.to_excel(towrite, encoding='utf-8', index=False, header=True)
-            # towrite.seek(0)  # reset pointer
-            # b64 = base64.b64encode(towrite.read()).decode()  # some strings
-            # linko= f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="myfilename.xlsx">Download your data as an Excel file</a>'
-            # st.markdown(linko, unsafe_allow_html=True)
-
-        #     size_slider = st.slider('Select the size of the marker on the map', min_value = 5, max_value = 20, value = 10)
-        #     fig.update_traces(marker_size = size_slider)
-
-        # with mapCol3:
-
-        #     with st.form(key = 'saveMapFormKey', clear_on_submit=True):
-        #         mapName = st.text_input("To save the map, enter a file name and press submit. The map will be saved as an HTML.")
-        #         saveMapSubmit = st.form_submit_button('Submit')
-                
-        #         if saveMapSubmit:
-
-        #             if mapName == '':
-        #                 mapName = "map.html"
-        #             elif len(mapName) < 5:
-        #                 mapName = mapName + '.html'
-        #             elif mapName[-5] != '.html':
-        #                 mapName = mapName + '.html'
-
-        #             saveMapPath = os.path.join(st.session_state.pathNameKey, mapName)
-        #             saveMapPath = saveMapPath.replace('"', '')
-        #             st.write(saveMapPath)
-
-        #             plotly.offline.plot(fig, filename = saveMapPath)
-        
+ 
         st.markdown('___')
         
         st.plotly_chart(fig)
