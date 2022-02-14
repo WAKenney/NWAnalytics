@@ -9,6 +9,7 @@ import base64
 import io
 from logging import _STYLES
 from math import isnan
+from turtle import color
 # from types import GetSetDescriptorType
 import folium
 import geopandas as gpd
@@ -69,7 +70,6 @@ codes={'No major defects':"DarkGreen", 'Major health defect':'ForestGreen', 'Maj
 CondcolorOrder = {'defects' : ['No major defects', 'Major health defect', 'Major structural defect(s)',
                             'Major structural AND health defect(s)', 'Condition was not assessed']}# setup order for legend
 
-
 titleCol1, titleCol2, titleCol3 =st.columns((1,4,1))
 title = currentDir + 'NWAnalyticsTitle.jpg'
 # title = 'NWAnalyticsTitle.jpg'
@@ -129,7 +129,7 @@ def getData(fileName):
             df = pd.read_excel(fileName, sheet_name = "summary", header = 1)
 
         # speciesFile = currentDir + 'NWspecies050122.xlsx'
-        speciesFile = currentDir + 'NWspecies080122.xlsx'
+        speciesFile = currentDir + 'NWspecies060222.xlsx'
         speciesTable = pd.read_excel(speciesFile,sheet_name = "species")
 
         speciesTable.head()
@@ -197,6 +197,9 @@ def getData(fileName):
 
         df = pd.merge(df, speciesTable[['species', 'diversity_level', 'invasivity']], on="species", how="left", sort=False)
         df = pd.merge(df, speciesTable[['species', 'seRegion']], on="species", how="left", sort=False)
+
+        df = pd.merge(df, speciesTable[['species', 'color']], on="species", how="left", sort=False)
+
 
         df.loc[(df.invasivity =='invasive'), 'suitability'] = 'Very Poor'
 
@@ -386,6 +389,8 @@ def twoParameterFilter(data):
 ##################################################### Show data table ##########################################
 def showTable(data):
 
+    st.markdown('___')
+
     '''This function displays the data, either filtered or not filtered, as a Plotly table. The user can add columns to the default
     Description and Tree Name columns, and chnge the width of the columns using a Streamlit slider.  The user can also send the data, 
     as it is filtered (or not) to an Excel worksheet.  The exported worksheet will have ALL the columns regardless of which columns were added
@@ -445,6 +450,8 @@ def showTable(data):
     
 ##################################################################################################################################
 def mapItFolium(mapData):
+
+    st.markdown('___')
 
     '''Map the trees as points using folium.  MapData is the dataframee resulting from the filtering done on the original dataframe
     points are coloured according to theirdefect description
@@ -521,10 +528,12 @@ def mapItFolium(mapData):
     with mapCol1:
         folium_static(treeMap)
     
+    st.markdown('___')
     
 #####################################################
 def mapIt(mapData):
 
+    st.markdown('___')
 
     with st.spinner(text = 'Please wait while your map is set up...'):
 
@@ -601,15 +610,19 @@ def mapIt(mapData):
         
         return fig
 
+    st.markdown('___')
+
 # ########################################## Diversity ############################################
     
 def diversity(data):
+
+    st.markdown('___')
 
     data = data.loc[data['diversity_level'] != 'other']
    
     divLevel = st.radio('Select a level of diversity', ('species', 'genus', 'family'))
     
-    st.header('Tree Diversity Summary by ' + divLevel)
+    st.header('Tree diversity summary by ' + divLevel)
 
     with st.expander("Click here to read some comments and suggestions about diversity.", expanded=False):
         st.markdown("""
@@ -637,14 +650,16 @@ def diversity(data):
 
         """)
 
+    st.subheader('Diversity based on the number of trees (frequency)')
+
     if divLevel == 'species':
 
-        st.subheader('Remember, the diversity analysis at the species level will NOT include any trees identified only at the genus level (e.g. pinspp, mapspp,  etc.)')
+        st.write('Remember, the diversity analysis at the species level will NOT include any trees identified only at the genus level (e.g. pinspp, mapspp,  etc.)')
         data = data.loc[(data.diversity_level == divLevel)]
     else:
         # data = data[data.diversity_level != divLevel]
         data = data.loc[(data.diversity_level != 'other')]
-                   
+
     totalCount = len(data.index)
     topTenSpecies = data.loc[: , [divLevel, 'tree_name']]
     topTenSpeciesPT = pd.pivot_table(topTenSpecies, index=[divLevel], aggfunc='count')
@@ -660,18 +675,18 @@ def diversity(data):
     speciesPie.update_layout(showlegend=False)
     
     
-    TopTenTable = go.Figure(go.Table(
-    header=dict(values=list(topTenPlusOther.columns),
+    TopTenTable = go.Figure(go.Table(header=dict(values=list(topTenPlusOther.columns),
                 fill_color='paleturquoise',
-                align='left'),
-    cells=dict(values=[topTenPlusOther[divLevel], topTenPlusOther.frequency],
+                align='left'),cells=dict(values=[topTenPlusOther[divLevel], 
+                topTenPlusOther.frequency],
                 fill_color='lavender',
                 align='left')))
     
     
     sppTable, sppChart =st.columns ((2,2))
     
-    st.header('Tree Diversity Summary by Crown Projection Area')
+
+    st.subheader('Diversity based on crown projection area (CPA)')
     
     with sppTable:
         st.plotly_chart(TopTenTable)
@@ -695,13 +710,9 @@ def diversity(data):
     CpaPie.update_layout(showlegend=False)
     
     
-    TopTenCpaTable = go.Figure(go.Table(
-    header=dict(values=list(topTenCpaPlusOther.columns),
-                fill_color='paleturquoise',
-                align='left'),
-    cells=dict(values=[topTenCpaPlusOther[divLevel], topTenCpaPlusOther['Crown Projection Area']],
-                fill_color='lavender',
-                align='left')))
+    TopTenCpaTable = go.Figure(go.Table(header=dict(values=list(topTenCpaPlusOther.columns),fill_color='paleturquoise',
+                align='left'), cells=dict(values=[topTenCpaPlusOther[divLevel], topTenCpaPlusOther['Crown Projection Area']],
+                fill_color='lavender', align='left')))
     
     
     sppTable, sppChart =st.columns ((2,2))
@@ -711,6 +722,8 @@ def diversity(data):
     
     with sppChart:
         st.plotly_chart(CpaPie)
+
+    st.markdown('___')
  
 ########################### Species origin analysis ###########################
 
@@ -718,6 +731,32 @@ def speciesOrigin(data):
         
     data = data.loc[data['diversity_level'] != 'other']
     
+    st.markdown('___')
+
+    st.header('Tree Species Origin Summary')
+    
+    with st.expander("Click here to read an explanation of the Species Origin figure.", expanded=False):
+        
+            st.markdown('''These figures show the proportion of the trees that are native to your region versus those 
+                that have been introduced from outside the region.  This is based a series of maps documented in 
+                the "Atlas of United States Trees" by Elbert L. Little, Jr.
+                Digital versions of the maps for tree species that naturally occur in Ontario (according to Little) 
+                were downloaded.  These maps were overlaid (in a GIS) on digital maps of the Ecoregions of Ontario.  
+                Any species for which the map overlaid any given Ecoregion by more than 5% of the area of the Ecoregion 
+                was considered to be "native" to that Ecoregion. Otherwise, the species was considered to be introduced.
+                This approach is much more precise than simply stating if the species is native to Ontario, as is often done. [More information about Little's maps can be found here ](https://web.archive.org/web/20170127093428/https://gec.cr.usgs.gov/data/little/)
+                and [the Ecoregions map can be viewed here ](https://geohub.lio.gov.on.ca/datasets/ecoregion/explore?location=42.987702%2C-66.706064%2C8.53)
+                
+                '''
+            )
+    
+    st.write('Remember, the species origin analysis will NOT include any trees identified only at the genus level (e.g. pinspp, mapspp,  etc.)')
+    
+    # By frequency
+    st.markdown('___')
+
+    st.subheader("Origin by the number of trees (frequency)")
+
     originData = data.loc[: , ['seRegion', 'tree_name']]
     originPT = pd.pivot_table(originData, index='seRegion', aggfunc='count')
     originPT.reset_index(inplace=True)
@@ -729,49 +768,41 @@ def speciesOrigin(data):
     originPie.update_traces(insidetextorientation='radial', textinfo='label+percent') 
     originPie.update_layout(showlegend=False)
     
-    st.header('Tree Species Origin Summary')
-    
-    with st.expander("Click here to read an explanation of the Species Origin figure.", expanded=False):
-        
-            st.markdown('''This figure shows the proportion of the trees that are native to your region versus those 
-                that have been introduced from outside the region.  This is based on the Ontario Tree Atlas that can be found at:
-                https://www.ontario.ca/page/tree-atlas/.  This is more precise than simply stating if the species is native to 
-                Ontario as is often done. This link shows you a map of the region and some information about each of the species native to the region
-                '''
-            )
-    
-    st.subheader('Remember, the species origin analysis will NOT include any trees identified only at the genus level (e.g. pinspp, mapspp,  etc.)')
-    
     st.plotly_chart(originPie)
+
+    st.markdown('___')
+
+    # By CPA
+
+    st.subheader("Origin by crown projection area (cpa)")
+
+    originDataCPA = data.loc[: , ['seRegion', 'cpa']]
+
+    originPTCPA = pd.pivot_table(originDataCPA, index='seRegion', aggfunc='sum')
+       
+    originPTCPA.reset_index(inplace=True)
+    
+    originPTCPA.rename(columns = {'seRegion' : 'origin'},inplace = True)
+    
+    originPieCPA = px.pie(originPTCPA, values='cpa', names = 'origin')
+    
+    originPieCPA.update_traces(insidetextorientation='radial', textinfo='label+percent') 
+    originPieCPA.update_layout(showlegend=False)
+    
+    st.plotly_chart(originPieCPA)
     
     st.markdown('___')
 
 
-# def speciesOrigin(data):
-
-#     data = data.loc[data['diversity_level'] != 'other']
-    
-#     originData = data.loc[: , ['native', 'tree_name']]
-#     originPT = pd.pivot_table(originData, index='native', aggfunc='count')
-#     originPT.reset_index(inplace=True)
-    
-#     originPT.rename(columns = {'native' : 'origin' , 'tree_name': 'frequency'},inplace = True)
-    
-#     originPie = px.pie(originPT, values='frequency', names = 'origin')
-    
-#     originPie.update_traces(insidetextorientation='radial', textinfo='label+percent') 
-#     originPie.update_layout(showlegend=False)
-    
-#     st.header('Tree Species Origin Summary')
-#     st.subheader('Remember, the species origin analysis will NOT include any trees identified only at the genus level (e.g. pinspp, mapspp,  etc.)')
-    
-#     st.plotly_chart(originPie)
-    
-#     st.markdown('___')
 
 ########################### Tree condition analysis###########################
 
 def treeCondition(data):
+
+    st.markdown('___')
+
+    st.header('Tree Condition Summary')
+
     conditionData = data.loc[: , ['defects', 'tree_name']]
     conditionPT = pd.pivot_table(conditionData, index='defects', aggfunc='count')
     conditionPT.reset_index(inplace=True)
@@ -783,8 +814,27 @@ def treeCondition(data):
     conditionPie.update_traces(insidetextorientation='radial', textinfo='label+percent') 
     conditionPie.update_layout(showlegend=False)
     
-    st.header('Tree Condition Summary')
+    st.subheader("Condition by the number of trees (frequency)")
     st.plotly_chart(conditionPie)
+
+
+
+    conditionDataCPA = data.loc[: , ['defects', 'cpa']]
+    conditionPTCPA = pd.pivot_table(conditionDataCPA, index='defects', aggfunc='sum')
+    conditionPTCPA.reset_index(inplace=True)
+    
+
+    # conditionPTCPA.rename(columns = {'tree_name': 'frequency'},inplace = True)
+    
+    conditionPieCPA = px.pie(conditionPTCPA, values='cpa', names = 'defects')
+    
+    conditionPieCPA.update_traces(insidetextorientation='radial', textinfo='label+percent') 
+    conditionPieCPA.update_layout(showlegend=False)
+    
+    st.markdown('___')
+    st.subheader("Condition by Crown Projection Area (cpa)")
+    st.plotly_chart(conditionPieCPA)
+    
     
     st.markdown('___')
     
@@ -869,49 +919,96 @@ def relativeDBH(data):
 
 def speciesSuitablity(data):
     
-    try:
-        
-        data = data.loc[data['diversity_level'] != 'other']
-        suitabilityData = data.loc[: , ['suitability', 'tree_name']]
-        suitabilityPT = pd.pivot_table(suitabilityData, index='suitability', aggfunc='count')
-        suitabilityPT.reset_index(inplace=True)
-        suitabilityPT.rename(columns = {'tree_name': 'frequency'},inplace = True)
-        suitabilityPie = px.pie(suitabilityPT, values='frequency', names = 'suitability')
-        suitabilityPie.update_traces(insidetextorientation='radial', textinfo='label+percent') 
-        suitabilityPie.update_layout(showlegend=False)
-        
-        st.header('Tree Species Suitability Summary')
-        with st.expander("Click here to read about species suuitability", expanded=False):
-            st.markdown('''Tree species suitability is based on an expert opinion survey conducted by ISA Ontario during the development of
-            the Supplement to the Council of Tree and Landscape Appraiser's Guide to tree appraisal 10 edition.  The survey asked experts across Ontario 
-            to rate a list of commonly planted species on a series of criteria.  Each species was given a numerical score.  We converted these scores to categories of
-            Very Poor (score < 0.5), Poor (0.51 < 0.6), Good (0.61 to 0.7 and Excellent (>0.70)).  Unfortunately, the scoring process carried out by the expert
-            panel did NOT include the tendency for a species to be invasive.  We adapted our ranking so that any species considered to be invasive in Ontario 
-            would be considered to have a suitability of Very Poor.  See the section below for more details on invasivity. ''')
-
-        
-        
-        st.plotly_chart(suitabilityPie)
-
-        
-        invasivityData = data.loc[: , ['invasivity', 'tree_name']]
-        invasivityPT = pd.pivot_table(invasivityData, index='invasivity', aggfunc='count')
-        invasivityPT.reset_index(inplace=True)
-        invasivityPT.rename(columns = {'tree_name': 'frequency'},inplace = True)
-        invasivityPie = px.pie(invasivityPT, values='frequency', names = 'invasivity')
-        invasivityPie.update_traces(insidetextorientation='radial', textinfo='label+percent') 
-        invasivityPie.update_layout(showlegend=False)
-        
-        st.header('Tree Species Invasivity Summary')
-        
-        with st.expander("Click here to read about species invasivity", expanded=False):
-            st.markdown('''The tree species indicated as invasive are based on data shown in https://www.eddmaps.org/ontario/species/''')
-
-        st.plotly_chart(invasivityPie)
-
-    except ValueError:
-        st.warning("You must complete the selection in the filtering section of the sidebar.")    
     st.markdown('___')
+
+    st.header('Tree Species Suitability Summary')
+    
+    with st.expander("Click here to read about species suitability", expanded=False):
+    
+        st.markdown('''Tree species suitability is based on an expert opinion survey conducted by ISA Ontario during the development of
+        the Supplement to the Council of Tree and Landscape Appraiser's Guide to tree appraisal 10 edition.  The survey asked experts across Ontario 
+        to rate a list of commonly planted species on a series of criteria.  Each species was given a numerical score.  We converted these scores to categories of
+        Very Poor (score < 0.5), Poor (0.51 < 0.6), Good (0.61 to 0.7 and Excellent (>0.70)).  Unfortunately, the scoring process carried out by the expert
+        panel did NOT include the tendency for a species to be invasive.  We adapted our ranking so that any species considered to be invasive in Ontario 
+        would be considered to have a suitability of Very Poor.  See the section below for more details on invasivity. ''')
+    
+    st.subheader('Species suitability by number of trees (frequency)')
+
+    data = data.loc[data['diversity_level'] != 'other']
+    
+    suitabilityData = data.loc[: , ['suitability', 'tree_name']]
+    suitabilityPT = pd.pivot_table(suitabilityData, index='suitability', aggfunc='count')
+    suitabilityPT.reset_index(inplace=True)
+    suitabilityPT.rename(columns = {'tree_name': 'frequency'},inplace = True)
+
+    suitabilityPie = px.pie(suitabilityPT, values='frequency', names = 'suitability',
+        color = 'suitability',
+        color_discrete_map={'Excellent':'darkgreen',
+                                'Good':'springgreen',
+                                'Poor':'palegreen',
+                                'Very Poor':'yellow'})
+    suitabilityPie.update_traces(insidetextorientation='radial', textinfo='label+percent') 
+    suitabilityPie.update_layout(showlegend=False)
+    
+    st.subheader('Suitability by number of trees (frequency)')
+
+    st.plotly_chart(suitabilityPie)
+
+
+    st.subheader('Suitability by crown projection area (cpa)')
+
+    suitabilityDataCPA = data.loc[: , ['suitability', 'cpa']]
+    suitabilityPTCPA = pd.pivot_table(suitabilityDataCPA, index='suitability', aggfunc='sum')
+    suitabilityPTCPA.reset_index(inplace=True)
+    # suitabilityPTCPA.rename(columns = {'tree_name': 'frequency'},inplace = True)
+    
+    suitabilityPieCPA = px.pie(suitabilityPTCPA, values='cpa', names = 'suitability',
+        color = 'suitability',
+        color_discrete_map={'Excellent':'darkgreen',
+                                'Good':'springgreen',
+                                'Poor':'palegreen',
+                                'Very Poor':'yellow'})
+
+    suitabilityPieCPA.update_traces(insidetextorientation='radial', textinfo='label+percent') 
+    suitabilityPieCPA.update_layout(showlegend=False)
+
+    st.plotly_chart(suitabilityPieCPA)
+
+    st.markdown('___')
+    st.markdown('___')
+
+    st.header('Tree Species Invasivity Summary')
+    
+    with st.expander("Click here to read about species invasivity", expanded=False):
+        st.markdown('''The tree species indicated as invasive are based on data shown in https://www.eddmaps.org/ontario/species/''')
+
+    st.subheader('Invasivity by the number of trees (frequency)')
+
+    invasivityData = data.loc[: , ['invasivity', 'tree_name']]
+    invasivityPT = pd.pivot_table(invasivityData, index='invasivity', aggfunc='count')
+    invasivityPT.reset_index(inplace=True)
+    invasivityPT.rename(columns = {'tree_name': 'frequency'},inplace = True)
+    invasivityPie = px.pie(invasivityPT, values='frequency', names = 'invasivity')
+    invasivityPie.update_traces(insidetextorientation='radial', textinfo='label+percent') 
+    invasivityPie.update_layout(showlegend=False)
+    
+    st.plotly_chart(invasivityPie)
+
+    st.markdown('___')
+
+    st.subheader('Invasivity by crown projection area (cpa)')
+
+    invasivityDataCPA = data.loc[: , ['invasivity', 'cpa']]
+    invasivityPTCPA = pd.pivot_table(invasivityDataCPA, index='invasivity', aggfunc='sum')
+    invasivityPTCPA.reset_index(inplace=True)
+    # invasivityPT.rename(columns = {'tree_name': 'frequency'},inplace = True)
+    invasivityPieCPA = px.pie(invasivityPTCPA, values='cpa', names = 'invasivity')
+    invasivityPieCPA.update_traces(insidetextorientation='radial', textinfo='label+percent') 
+    invasivityPieCPA.update_layout(showlegend=False)
+    
+    st.plotly_chart(invasivityPieCPA)
+
+st.markdown('___')
 
 ######################################################################################
 if fileName is not None:
