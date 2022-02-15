@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Re-Created on November 28 202
+Re-Created on 15/02/20
 
 @author: W.A. Kenney
 """
@@ -12,6 +12,7 @@ from math import isnan
 # from turtle import color
 # from types import GetSetDescriptorType
 import folium
+import geemap
 import geopandas as gpd
 # import numpy as np
 import pandas as pd
@@ -26,8 +27,6 @@ from streamlit.state.session_state import SessionState
 from streamlit_folium import folium_static
 from typing_extensions import ParamSpec
 
-import ee
-import geehydro
 
 st.set_page_config(layout="wide")
 
@@ -931,7 +930,7 @@ def speciesSuitablity(data):
         panel did NOT include the tendency for a species to be invasive.  We adapted our ranking so that any species considered to be invasive in Ontario 
         would be considered to have a suitability of Very Poor.  See the section below for more details on invasivity. ''')
     
-    st.subheader('Species suitability by number of trees (frequency)')
+    st.subheader('Suitability by number of trees (frequency)')
 
     data = data.loc[data['diversity_level'] != 'other']
     
@@ -948,8 +947,6 @@ def speciesSuitablity(data):
                                 'Very Poor':'yellow'})
     suitabilityPie.update_traces(insidetextorientation='radial', textinfo='label+percent') 
     suitabilityPie.update_layout(showlegend=False)
-    
-    st.subheader('Suitability by number of trees (frequency)')
 
     st.plotly_chart(suitabilityPie)
 
@@ -987,7 +984,12 @@ def speciesSuitablity(data):
     invasivityPT = pd.pivot_table(invasivityData, index='invasivity', aggfunc='count')
     invasivityPT.reset_index(inplace=True)
     invasivityPT.rename(columns = {'tree_name': 'frequency'},inplace = True)
-    invasivityPie = px.pie(invasivityPT, values='frequency', names = 'invasivity')
+    
+    invasivityPie = px.pie(invasivityPT, values='frequency', names = 'invasivity',
+        color = 'invasivity',
+        color_discrete_map={'invasive':'yellow',
+                                'non-invasive':'darkgreen'})
+    
     invasivityPie.update_traces(insidetextorientation='radial', textinfo='label+percent') 
     invasivityPie.update_layout(showlegend=False)
     
@@ -1001,7 +1003,12 @@ def speciesSuitablity(data):
     invasivityPTCPA = pd.pivot_table(invasivityDataCPA, index='invasivity', aggfunc='sum')
     invasivityPTCPA.reset_index(inplace=True)
     # invasivityPT.rename(columns = {'tree_name': 'frequency'},inplace = True)
-    invasivityPieCPA = px.pie(invasivityPTCPA, values='cpa', names = 'invasivity')
+    
+    invasivityPieCPA = px.pie(invasivityPTCPA, values='cpa', names = 'invasivity',
+        color = 'invasivity',
+        color_discrete_map={'invasive':'yellow',
+                                'non-invasive':'darkgreen'})
+    
     invasivityPieCPA.update_traces(insidetextorientation='radial', textinfo='label+percent') 
     invasivityPieCPA.update_layout(showlegend=False)
     
