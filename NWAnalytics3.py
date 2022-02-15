@@ -28,7 +28,7 @@ from streamlit_folium import folium_static
 from typing_extensions import ParamSpec
 
 
-st.set_page_config(layout="wide")
+st.set_page_config(layout="centered")
 
 # hide_st_style = """
 #             <style>
@@ -41,7 +41,6 @@ st.set_page_config(layout="wide")
 # st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
 currentDir = "https://raw.githubusercontent.com/WAKenney/NWAnalytics/main/"
-# currentDir = ''
 
 colTitles=['tree_name', 'species', 'genus', 'family', 'street', 'address', 'location_code', 'ownership_code', 'number_of_stems', 'dbh',
     'hard_surface', 'crown_width', 'height_to_crown_base', 'total_height', 'reduced_crown', 'unbalanced_crown', 'defoliation',
@@ -102,6 +101,8 @@ with st.expander("Click here for help in getting started.", expanded=False):
             For support, contact Andy Kenney at:     a.kenney@utoronto.ca
 """)
 
+st.markdown("___")
+
 mainScreen =st.empty()
 filterResultHeader = st.empty()
 getFileScreen = st.sidebar.empty()
@@ -114,7 +115,6 @@ fileName = getFileScreen.file_uploader("Browse for or drag and drop the name of 
     type = "xlsm", 
     key ='fileNameKey')
 
-st.markdown('___')
 
 @st.experimental_memo(show_spinner=False)
 def getData(fileName):
@@ -387,15 +387,9 @@ def twoParameterFilter(data):
 ##################################################### Show data table ##########################################
 def showTable(data):
 
-    st.markdown('___')
+    st.header('Show the inventory data')
 
-    '''This function displays the data, either filtered or not filtered, as a Plotly table. The user can add columns to the default
-    Description and Tree Name columns, and chnge the width of the columns using a Streamlit slider.  The user can also send the data, 
-    as it is filtered (or not) to an Excel worksheet.  The exported worksheet will have ALL the columns regardless of which columns were added
-    to the Plotly table.  The original data included a defectsClour column, native column and the geometery column.  These are dropped
-    from the Data dataframe before sending to the xlsx file.
-                '''
-    
+
     with st.expander("Click here to read an explanation of the Show Data function.", expanded=False):
         
             st.markdown('''This function displays the Neighbourwoods inventory data, either filtered or not filtered, as a table. You can add columns to 
@@ -443,17 +437,11 @@ def showTable(data):
         b64 = base64.b64encode(towrite.read()).decode()  # some strings
         linko= f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="myfilename.xlsx">Download your data as an Excel file</a>'
         st.markdown(linko, unsafe_allow_html=True)
-            
-    st.markdown('___')
+
     
 ##################################################################################################################################
 def mapItFolium(mapData):
 
-    st.markdown('___')
-
-    '''Map the trees as points using folium.  MapData is the dataframee resulting from the filtering done on the original dataframe
-    points are coloured according to theirdefect description
-    '''
     mapCol1, mapCol2, mapCol3 = st.columns(3)
     pointSizeSlider = mapCol2.slider('Move the slider to adjust the point size', min_value = 2, max_value = 20, value =4)
         
@@ -526,12 +514,9 @@ def mapItFolium(mapData):
     with mapCol1:
         folium_static(treeMap)
     
-    st.markdown('___')
     
 #####################################################
 def mapIt(mapData):
-
-    st.markdown('___')
 
     with st.spinner(text = 'Please wait while your map is set up...'):
 
@@ -601,20 +586,14 @@ def mapIt(mapData):
         with mapCol2:
             pointSizeSlider = st.slider('Move the slider to adjust the point size', min_value = 2, max_value = 20, value =10)
             fig.update_traces(marker_size = pointSizeSlider)
- 
-        st.markdown('___')
         
         st.plotly_chart(fig)
         
         return fig
 
-    st.markdown('___')
-
 # ########################################## Diversity ############################################
     
 def diversity(data):
-
-    st.markdown('___')
 
     data = data.loc[data['diversity_level'] != 'other']
    
@@ -720,16 +699,12 @@ def diversity(data):
     
     with sppChart:
         st.plotly_chart(CpaPie)
-
-    st.markdown('___')
  
 ########################### Species origin analysis ###########################
 
 def speciesOrigin(data):
         
     data = data.loc[data['diversity_level'] != 'other']
-    
-    st.markdown('___')
 
     st.header('Tree Species Origin Summary')
     
@@ -751,7 +726,6 @@ def speciesOrigin(data):
     st.write('Remember, the species origin analysis will NOT include any trees identified only at the genus level (e.g. pinspp, mapspp,  etc.)')
     
     # By frequency
-    st.markdown('___')
 
     st.subheader("Origin by the number of trees (frequency)")
 
@@ -767,8 +741,6 @@ def speciesOrigin(data):
     originPie.update_layout(showlegend=False)
     
     st.plotly_chart(originPie)
-
-    st.markdown('___')
 
     # By CPA
 
@@ -789,15 +761,9 @@ def speciesOrigin(data):
     
     st.plotly_chart(originPieCPA)
     
-    st.markdown('___')
-
-
-
 ########################### Tree condition analysis###########################
 
 def treeCondition(data):
-
-    st.markdown('___')
 
     st.header('Tree Condition Summary')
 
@@ -829,18 +795,13 @@ def treeCondition(data):
     conditionPieCPA.update_traces(insidetextorientation='radial', textinfo='label+percent') 
     conditionPieCPA.update_layout(showlegend=False)
     
-    st.markdown('___')
     st.subheader("Condition by Crown Projection Area (cpa)")
     st.plotly_chart(conditionPieCPA)
     
-    
-    st.markdown('___')
-    
-
 ########################### Relative DBH Analysis  ###########################
 
 def relativeDBH(data):
-    # st.markdown('___')
+
     try:
         with st.expander("Click here to read some comments about the DBH and Relative DBH analysis.", expanded=False):
         
@@ -910,14 +871,10 @@ def relativeDBH(data):
     except ValueError:
         st.warning("Complete the filter and press enter")    
 
-    st.markdown('___')
-
 
 ########################### Species Suitability Analysis ###########################
 
 def speciesSuitablity(data):
-    
-    st.markdown('___')
 
     st.header('Tree Species Suitability Summary')
     
@@ -970,9 +927,6 @@ def speciesSuitablity(data):
 
     st.plotly_chart(suitabilityPieCPA)
 
-    st.markdown('___')
-    st.markdown('___')
-
     st.header('Tree Species Invasivity Summary')
     
     with st.expander("Click here to read about species invasivity", expanded=False):
@@ -995,8 +949,6 @@ def speciesSuitablity(data):
     
     st.plotly_chart(invasivityPie)
 
-    st.markdown('___')
-
     st.subheader('Invasivity by crown projection area (cpa)')
 
     invasivityDataCPA = data.loc[: , ['invasivity', 'cpa']]
@@ -1013,8 +965,6 @@ def speciesSuitablity(data):
     invasivityPieCPA.update_layout(showlegend=False)
     
     st.plotly_chart(invasivityPieCPA)
-
-st.markdown('___')
 
 ######################################################################################
 if fileName is not None:
