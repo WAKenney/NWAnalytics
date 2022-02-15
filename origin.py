@@ -16,8 +16,10 @@ st.header("Species Origin (Native vs Introduced)")
 ecod = gpd.read_file(r"C:\Users\HP\Documents\Data\Files\GIS\USDA Tree Maps\OntarioEcodistricts.gpkg")
 ecod = ecod.to_crs(3857)
 
-speciesFile = r"C:\Users\HP\OneDrive\Neighbourwoods\NWAnalytics\NWspecies080122.xlsx"
-speciesTable = pd.read_excel(speciesFile)
+# speciesFile = r"C:\Users\HP\OneDrive\Neighbourwoods\NWAnalytics\NWspecies080122.xlsx"
+speciesFile = r"C:\Users\HP\OneDrive\Neighbourwoods\NWAnalytics\NWOrigin.csv"
+
+speciesTable = pd.read_csv(speciesFile)
 
 speciesMaps = gpd.read_file(r"C:\Users\HP\Documents\Data\Files\GIS\USDA Tree Maps\OntarioLittleMaps epsg4269.gpkg")
 
@@ -32,23 +34,21 @@ def sppOrigin(spp, ecodistrict):
 
     if sciCode not in mapList:
         filt = (speciesTable['species_code'] == spp)
-        speciesTable.loc[filt, 'native'] = "No Map"
+        speciesTable.loc[filt, ecodistrict] = "introduced"
+
     else:
 
         latinCode = speciesTable.loc[speciesTable['species_code'] == spp, 'scientific_code'].iloc[0]
-
-        # ecodistrict = '5E-11'
 
         species = gpd.read_file(r"C:\Users\HP\Documents\Data\Files\GIS\USDA Tree Maps\OntarioLittleMaps epsg4269.gpkg",layer = latinCode).dissolve()
 
         species = species .to_crs(3857)
 
         filtEco = (ecod['ECODISTR_1']==ecodistrict)
-        eco = ecod.loc[filtEco]
+        
+        eco = ecod.loc[filtEco]  
 
         ecoArea = eco.area.iloc[0]
-
-        # speciesArea = species.area.iloc[0]
 
         over = species.overlay(eco, how='intersection', keep_geom_type=None, make_valid=True)
 
@@ -63,22 +63,22 @@ def sppOrigin(spp, ecodistrict):
             if coverage<5:
                 
                 filt = (speciesTable['species_code'] == spp)
-                speciesTable.loc[filt, 'native'] = "introduced (" + str(coverage) + '%)'
+                speciesTable.loc[filt, ecodistrict] = "introduced"
 
             else:
                 filt = (speciesTable['species_code'] == spp)
 
-                speciesTable.loc[filt, 'native'] = "native (" + str(coverage) + '%)'
+                speciesTable.loc[filt, ecodistrict] = "native"
 
         else:
             filt = (speciesTable['species_code'] == spp)
-            speciesTable.loc[filt, 'native'] = "introduced NO COVERAGE AT ALL"
+            speciesTable.loc[filt, ecodistrict] = "introduced"
 
     return speciesTable
 
 
 def showTable():
-    cols = ['species_code','scientific_code','scientific_name', 'native']
+    cols = ['species_code','scientific_code','scientific_name']
         
     tab = go.Figure(go.Table(
         
@@ -123,21 +123,14 @@ def mapIt():
 
     ecoDistFMap.save(r"C:\Users\HP\Desktop\ecoDistMap.html")
     webbrowser.open(r"C:\Users\HP\Desktop\ecoDistMap.html")
-    
-
-for spp in nwCodeList:
-    
-    df = sppOrigin(spp=spp, ecodistrict = '5E-11')
-    # filt = (speciesTable['species_code'] == spp)
-    # n = speciesTable.loc[filt, 'native']
-    st.write(spp)
-
 
 def mapAvailability():
     speciesMaps = gpd.read_file(r"C:\Users\HP\Documents\Data\Files\GIS\USDA Tree Maps\OntarioLittleMaps epsg4269.gpkg")
     nwCodeList = speciesTable.species_code.tolist()
     latinCodeList = speciesTable.scientific_code.tolist()
     mapList = fiona.listlayers(r"C:\Users\HP\Documents\Data\Files\GIS\USDA Tree Maps\OntarioLittleMaps epsg4269.gpkg")
+    
+    mapList = mapList.astype(str)
 
     for lcode in latinCodeList:
         filt = speciesTable.loc[speciesTable['scientific_code'] == lcode, 'diversity_level'].iloc[0]
@@ -151,10 +144,23 @@ def mapAvailability():
 
     speciesTable.to_csv(r"C:\Users\HP\Documents\Data\Files\Neighbourwoods\Master files\NWAalytics3\mapAvailability.csv")        
 
+for edist in ['6E-1', '6E-2','6E-4', '6E-5', '6E-6']:
+
+# edist = '6E-1',
+
+    for spp in nwCodeList:
+
+        df = sppOrigin(spp=spp, ecodistrict = edist)
+        # filt = (speciesTable['species_code'] == spp)
+        # n = speciesTable.loc[filt, 'native']
+        # st.write(spp)
+
+df.to_csv(r"C:\Users\HP\OneDrive\Neighbourwoods\NWAnalytics\LetsTryAgain.csv")
 
 
 
-showTable()
+if st.button("Show table?"):
+    showTable()
 
 if st.button("show the map?"):   
     mapIt()
