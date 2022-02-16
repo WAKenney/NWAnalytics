@@ -9,12 +9,9 @@ import base64
 import io
 from logging import _STYLES
 from math import isnan
-# from turtle import color
-# from types import GetSetDescriptorType
 import folium
 import geemap
 import geopandas as gpd
-# import numpy as np
 import pandas as pd
 import plotly
 import plotly.express as px
@@ -30,15 +27,15 @@ from typing_extensions import ParamSpec
 
 st.set_page_config(layout="centered")
 
-# hide_st_style = """
-#             <style>
-#             #MainMenu {visibility: hidden;}
-#             footer {visibility: hidden;}
-#             header {visibility: hidden;}
-#             </style>
-#             """
-# st.markdown(hide_st_style, unsafe_allow_html=True)
-# st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
+hide_st_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_st_style, unsafe_allow_html=True)
+st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
 currentDir = "https://raw.githubusercontent.com/WAKenney/NWAnalytics/main/"
 
