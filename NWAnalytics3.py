@@ -10,32 +10,32 @@ import io
 from logging import _STYLES
 from math import isnan
 import folium
-import geemap
+# import geemap
 import geopandas as gpd
 import pandas as pd
-import plotly
+# import plotly
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
-from branca.element import MacroElement, Template
-from folium.plugins import FloatImage
+# from branca.element import MacroElement, Template
+# from folium.plugins import FloatImage
 from PIL import Image
 from streamlit.state.session_state import SessionState
 from streamlit_folium import folium_static
-from typing_extensions import ParamSpec
+# from typing_extensions import ParamSpec
 
 
 st.set_page_config(layout="centered")
 
-hide_st_style = """
-            <style>
-            #MainMenu {visibility: hidden;}
-            footer {visibility: hidden;}
-            header {visibility: hidden;}
-            </style>
-            """
-st.markdown(hide_st_style, unsafe_allow_html=True)
-st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
+# hide_st_style = """
+#             <style>
+#             #MainMenu {visibility: hidden;}
+#             footer {visibility: hidden;}
+#             header {visibility: hidden;}
+#             </style>
+#             """
+# st.markdown(hide_st_style, unsafe_allow_html=True)
+# st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
 currentDir = "https://raw.githubusercontent.com/WAKenney/NWAnalytics/main/"
 
