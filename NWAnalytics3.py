@@ -254,8 +254,8 @@ def setupSidebar(df):
         showTable(select_df)
         
     if 'Map Trees' in selectFunction:
-        # mapIt(select_df)
-        mapItFolium(select_df)
+        mapIt(select_df)
+        # mapItFolium(select_df)
 
     if 'Tree Diversity' in selectFunction:
         diversity(select_df)    
