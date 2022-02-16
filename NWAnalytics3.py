@@ -27,15 +27,15 @@ from streamlit_folium import folium_static
 
 st.set_page_config(layout="centered")
 
-# hide_st_style = """
-#             <style>
-#             #MainMenu {visibility: hidden;}
-#             footer {visibility: hidden;}
-#             header {visibility: hidden;}
-#             </style>
-#             """
-# st.markdown(hide_st_style, unsafe_allow_html=True)
-# st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
+hide_st_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_st_style, unsafe_allow_html=True)
+st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
 currentDir = "https://raw.githubusercontent.com/WAKenney/NWAnalytics/main/"
 
@@ -120,7 +120,6 @@ def getData(fileName):
 
         if fileName is not None:
 
-            
             df = pd.read_excel(fileName, sheet_name = "summary", header = 1)
 
         # speciesFile = currentDir + 'NWspecies050122.xlsx'
