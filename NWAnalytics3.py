@@ -21,6 +21,7 @@ import plotly.graph_objects as go
 import streamlit as st
 # from branca.element import MacroElement, Template
 from folium.plugins import FloatImage
+from folium.plugins import Fullscreen
 from PIL import Image
 from streamlit.state.session_state import SessionState
 from streamlit_folium import folium_static
@@ -71,7 +72,7 @@ CondcolorOrder = {'defects' : ['No major defects', 'Major health defect', 'Major
 
 titleCol1, titleCol2, titleCol3 =st.columns((1,4,1))
 title = currentDir + 'NWAnalyticsTitle.jpg'
-# title = 'NWAnalyticsTitle.jpg'
+
 titleCol2.image(title, use_column_width=True)
 
 with st.expander("Click here for help in getting started.", expanded=False):
@@ -466,7 +467,7 @@ def mapItFolium(mapData):
     
     treeMap = folium.Map(location=[avLat, avLon],  
         zoom_start=5,
-        max_zoom=28, 
+        max_zoom=75, 
         min_zoom=1, 
         width ='100%', height = '100%', 
         prefer_canvas=True, 
@@ -478,7 +479,8 @@ def mapItFolium(mapData):
 
     mapData.apply(lambda mapData:folium.CircleMarker(location=[mapData["latitude"], mapData["longitude"]], 
         # color=mapData['defectColour'],
-        color='#000000', 
+        # color='#000000',
+        color='white', 
         stroke = True,
         weight = 2,
         fill = True,
@@ -502,6 +504,7 @@ def mapItFolium(mapData):
        ).add_to(treeMap)
 
     # treeMap.add_child(folium.ClickForMarker(popup="Waypoint"))
+    Fullscreen().add_to(treeMap)
 
     folium.LayerControl().add_to(treeMap)
    
