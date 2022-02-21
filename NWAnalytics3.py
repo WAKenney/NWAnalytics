@@ -9,6 +9,8 @@ import base64
 import io
 from logging import _STYLES
 from math import isnan
+from os import name
+from tokenize import Name
 import folium
 # import geemap
 import geopandas as gpd
@@ -18,11 +20,20 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 # from branca.element import MacroElement, Template
-# from folium.plugins import FloatImage
+from folium.plugins import FloatImage
 from PIL import Image
 from streamlit.state.session_state import SessionState
 from streamlit_folium import folium_static
 # from typing_extensions import ParamSpec
+import textwrap
+
+from geopandas import GeoDataFrame
+import ee  # Needed for satelite map
+import geehydro  # Needed for satelite map
+import webbrowser
+
+
+
 
 
 st.set_page_config(layout="centered")
@@ -250,8 +261,9 @@ def setupSidebar(df):
         showTable(select_df)
         
     if 'Map Trees' in selectFunction:
-        mapIt(select_df)
-        # mapItFolium(select_df)
+        # mapIt(select_df)
+        mapItFolium(select_df)
+        # mapIt2(select_df)
 
     if 'Tree Diversity' in selectFunction:
         diversity(select_df)    
@@ -434,18 +446,18 @@ def showTable(data):
         linko= f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="myfilename.xlsx">Download your data as an Excel file</a>'
         st.markdown(linko, unsafe_allow_html=True)
 
-    
-##################################################################################################################################
+
 def mapItFolium(mapData):
 
-    mapCol1, mapCol2, mapCol3 = st.columns(3)
-    pointSizeSlider = mapCol2.slider('Move the slider to adjust the point size', min_value = 2, max_value = 20, value =4)
+    # mapCol1, mapCol2, mapCol3 = st.columns(3)
+    pointSizeSlider = st.slider('Move the slider to adjust the point size', min_value = 2, max_value = 20, value =4)
         
-    
     if mapData.empty:
         st.warning("Be sure to finish selecting the filtering values in the sidebar to the left.")
 
     mapData = mapData[mapData['latitude'].notna()].copy()
+
+    mapData['crown_radius'] = mapData['crown_width']/2
 
     avLat = mapData['latitude'].mean()  #calculate the average Latitude value and average Longitude value to use to centre the map
     avLon = mapData['longitude'].mean()
@@ -456,62 +468,84 @@ def mapItFolium(mapData):
     minLat=mapData['latitude'].min()
     maxLon=mapData['longitude'].max()
     minLon=mapData['longitude'].min()
-
+    
     treeMap = folium.Map(location=[avLat, avLon],  
-        zoom_start=18,
+        zoom_start=5,
         max_zoom=28, 
         min_zoom=1, 
         width ='100%', height = '100%', 
         prefer_canvas=True, 
         control_scale=True,
-        tiles='OpenStreetMap',
-        attr='Mapbox Attribution')
+        tiles='OpenStreetMap'
+        )
 
     treeMap.fit_bounds([[minLat,minLon], [maxLat,maxLon]])
 
-      # mapData.apply(lambda mapData:folium.Circle(location=[mapData["latitude"], mapData["longitude"]], 
-    #     color=mapData['defectColour'], 
-    #     radius= (mapData['crown_width']/2), 
-    #     popup = folium.Popup(mapData["description"], 
-    #     max_width=450, 
-    #     min_width=300)).add_to(treeMap), 
-    #     axis=1)
-
     mapData.apply(lambda mapData:folium.CircleMarker(location=[mapData["latitude"], mapData["longitude"]], 
-        color=mapData['defectColour'], 
+        # color=mapData['defectColour'],
+        color='#000000', 
+        stroke = True,
+        weight = 2,
         fill = True,
         fill_color=mapData['defectColour'],
+        fill_opacity = 0.6,
+        line_color='#000000',
         radius= pointSizeSlider,
+        tooltip = mapData['tree_name'],
         popup = folium.Popup(mapData["description"], 
+        name = "Points",
         max_width=450, 
         min_width=300)).add_to(treeMap), 
         axis=1)
 
-    # mapData.apply(lambda mapData:folium.CircleMarker(location=[mapData["latitude"], mapData["longitude"]], 
-    #     fill_color=mapData['defectColour'], 
-    #     fill = True,
-    #     radius= pointSizeSlider,
-    #     popup = folium.Popup(mapData["description"], 
-    #     max_width=450, 
-    #     min_width=300)).add_to(treeMap), 
-    #     axis=1)
+    folium.TileLayer(
+        tiles = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        attr = 'Esri',
+        name = 'Esri Satellite',
+        overlay = False,
+        control = True
+       ).add_to(treeMap)
 
-
-    treeMap.setOptions('HYBRID')
-
-    treeMap.setControlVisibility(layerControl=True, fullscreenControl=True)
-
-
-    # folium.LayerControl().add_to(treeMap)
-
-
-    mapCol1, mapCol2 = st.columns(2)
-
-    with mapCol1:
-        folium_static(treeMap)
-    
+    folium.LayerControl().add_to(treeMap)
+   
+    folium_static(treeMap)
     
 #####################################################
+
+def mapIt2(df_trees):
+
+    def getEcodistricts():
+        gpd_ecodistricts = gpd.read_file(r"C:\Users\HP\Documents\Data\Files\GIS\USDA Tree Maps\OntarioEcodistricts.gpkg")
+        return gpd_ecodistricts
+    gpd_ecodistricts = getEcodistricts()
+
+    avlat = df_trees['latitude'].astype(float).mean()
+    avlon = df_trees['longitude'].astype(float).mean()
+
+    df_trees['crown_radius'] = df_trees['crown_width']/2
+
+    m = folium.Map(location=[avlat, avlon], zoom_start=12, tiles="Stamen Terrain")
+
+    st.write(df_trees['crown_radius'])
+
+    treesGeoJson = folium.GeoJson(df_trees,
+        marker =folium.CircleMarker(radius = df_trees['crown_radius'].iloc[0]),
+        name = 'Trees').add_to(m)
+
+
+    ecoDistGeojson = folium.GeoJson(gpd_ecodistricts, 
+                name="Ecodistricts").add_to(m)
+
+    folium.GeoJsonTooltip(fields=['ECODISTR_1']).add_to(ecoDistGeojson)
+
+    # folium.Marker([avlat, avlon]).add_to(m)
+
+    m.setOptions('HYBRID')
+    m.setControlVisibility(layerControl=True, fullscreenControl=True, latLngPopup=True)
+
+    folium_static(m)
+
+######################################################
 def mapIt(mapData):
 
     with st.spinner(text = 'Please wait while your map is set up...'):
@@ -525,14 +559,13 @@ def mapIt(mapData):
         mapData['condColor'] = mapData['defects'].map(codes) # create a column called conColor and map the color values based on 
                                                                     #the condition code in the dictionary called condColor
         
-        map_df = mapData[mapData['latitude'].notna()]
-
-        mapData['description'] = mapData['description'].str.wrap(10) 
-        
+        map_df = mapData[mapData['latitude'].notna()] # Drop entries with no latitude or longitude values entered
+        map_df = mapData[mapData['longitude'].notna()]
+                
         fig = px.scatter_mapbox(data_frame = map_df, lat="latitude", lon="longitude", 
                                 hover_name='tree_name',
                                 hover_data={"tree_name": False,
-                                            "description": False,
+                                            "description": True,
                                             'address': True,
                                             'location_code': False,
                                             'ownership_code': False,
@@ -586,6 +619,12 @@ def mapIt(mapData):
         st.plotly_chart(fig)
         
         return fig
+
+
+
+
+
+
 
 # ########################################## Diversity ############################################
     
