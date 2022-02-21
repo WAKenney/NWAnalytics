@@ -214,6 +214,7 @@ def getData(fileName):
 
 if fileName is not None:
     getFileScreen = st.empty()
+    # with st.spinner(text = 'Setting up your data, please wait...'):
     df = getData(fileName)
 
 def setupSidebar(df):
