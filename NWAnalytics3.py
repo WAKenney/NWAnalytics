@@ -24,17 +24,11 @@ from folium.plugins import FloatImage
 from PIL import Image
 from streamlit.state.session_state import SessionState
 from streamlit_folium import folium_static
-# from typing_extensions import ParamSpec
-import textwrap
 
 from geopandas import GeoDataFrame
-import ee  # Needed for satelite map
-import geehydro  # Needed for satelite map
-import webbrowser
-
-
-
-
+# import ee  # Needed for satelite map
+# import geehydro  # Needed for satelite map
+# import webbrowser
 
 st.set_page_config(layout="centered")
 
@@ -505,6 +499,8 @@ def mapItFolium(mapData):
         overlay = False,
         control = True
        ).add_to(treeMap)
+
+    treeMap.add_child(folium.ClickForMarker(popup="Waypoint"))
 
     folium.LayerControl().add_to(treeMap)
    

@@ -121,8 +121,10 @@ def mapIt():
     ecoDistFMap.setOptions('HYBRID')
     ecoDistFMap.setControlVisibility(layerControl=True, fullscreenControl=True, latLngPopup=True)
 
-    ecoDistFMap.save(r"C:\Users\HP\Desktop\ecoDistMap.html")
-    webbrowser.open(r"C:\Users\HP\Desktop\ecoDistMap.html")
+    ecoDistFMap.save(r"C:\Users\HP\OneDrive\Neighbourwoods\NWAnalytics\ecoDistMap.html")
+    webbrowser.open(r"C:\Users\HP\OneDrive\Neighbourwoods\NWAnalytics\ecoDistMap.html")
+
+    
 
 def mapAvailability():
     speciesMaps = gpd.read_file(r"C:\Users\HP\Documents\Data\Files\GIS\USDA Tree Maps\OntarioLittleMaps epsg4269.gpkg")
@@ -144,20 +146,21 @@ def mapAvailability():
 
     speciesTable.to_csv(r"C:\Users\HP\Documents\Data\Files\Neighbourwoods\Master files\NWAalytics3\mapAvailability.csv")        
 
-for edist in ['6E-1', '6E-2','6E-4', '6E-5', '6E-6']:
 
-# edist = '6E-1',
+if st.button('Generate origin table for all species and ecodistricts'):
 
-    for spp in nwCodeList:
+    for edist in ['6E-1', '6E-2','6E-4', '6E-5', '6E-6']:
 
-        df = sppOrigin(spp=spp, ecodistrict = edist)
-        # filt = (speciesTable['species_code'] == spp)
-        # n = speciesTable.loc[filt, 'native']
-        # st.write(spp)
+    # edist = '6E-1',
 
-df.to_csv(r"C:\Users\HP\OneDrive\Neighbourwoods\NWAnalytics\LetsTryAgain.csv")
+        for spp in nwCodeList:
 
+            df = sppOrigin(spp=spp, ecodistrict = edist)
+            # filt = (speciesTable['species_code'] == spp)
+            # n = speciesTable.loc[filt, 'native']
+            # st.write(spp)
 
+    df.to_csv(r"C:\Users\HP\OneDrive\Neighbourwoods\NWAnalytics\LetsTryAgain.csv")
 
 if st.button("Show table?"):
     showTable()
