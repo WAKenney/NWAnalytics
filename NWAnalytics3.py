@@ -500,46 +500,12 @@ def mapItFolium(mapData):
         control = True
        ).add_to(treeMap)
 
-    treeMap.add_child(folium.ClickForMarker(popup="Waypoint"))
+    # treeMap.add_child(folium.ClickForMarker(popup="Waypoint"))
 
     folium.LayerControl().add_to(treeMap)
    
     folium_static(treeMap)
     
-#####################################################
-
-def mapIt2(df_trees):
-
-    def getEcodistricts():
-        gpd_ecodistricts = gpd.read_file(r"C:\Users\HP\Documents\Data\Files\GIS\USDA Tree Maps\OntarioEcodistricts.gpkg")
-        return gpd_ecodistricts
-    gpd_ecodistricts = getEcodistricts()
-
-    avlat = df_trees['latitude'].astype(float).mean()
-    avlon = df_trees['longitude'].astype(float).mean()
-
-    df_trees['crown_radius'] = df_trees['crown_width']/2
-
-    m = folium.Map(location=[avlat, avlon], zoom_start=12, tiles="Stamen Terrain")
-
-    st.write(df_trees['crown_radius'])
-
-    treesGeoJson = folium.GeoJson(df_trees,
-        marker =folium.CircleMarker(radius = df_trees['crown_radius'].iloc[0]),
-        name = 'Trees').add_to(m)
-
-
-    ecoDistGeojson = folium.GeoJson(gpd_ecodistricts, 
-                name="Ecodistricts").add_to(m)
-
-    folium.GeoJsonTooltip(fields=['ECODISTR_1']).add_to(ecoDistGeojson)
-
-    # folium.Marker([avlat, avlon]).add_to(m)
-
-    m.setOptions('HYBRID')
-    m.setControlVisibility(layerControl=True, fullscreenControl=True, latLngPopup=True)
-
-    folium_static(m)
 
 ######################################################
 def mapIt(mapData):
