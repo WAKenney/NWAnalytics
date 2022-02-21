@@ -122,101 +122,100 @@ fileName = getFileScreen.file_uploader("Browse for or drag and drop the name of 
 @st.experimental_memo(show_spinner=False)
 def getData(fileName):
 
-    with st.spinner(text = 'Loading your Neighburwoods data, please wait...'):
+    
+    if fileName is not None:
 
-        if fileName is not None:
+        df = pd.read_excel(fileName, sheet_name = "summary", header = 1)
 
-            df = pd.read_excel(fileName, sheet_name = "summary", header = 1)
+    # speciesFile = currentDir + 'NWspecies050122.xlsx'
+    speciesFile = currentDir + 'NWspecies060222.xlsx'
+    speciesTable = pd.read_excel(speciesFile,sheet_name = "species")
 
-        # speciesFile = currentDir + 'NWspecies050122.xlsx'
-        speciesFile = currentDir + 'NWspecies060222.xlsx'
-        speciesTable = pd.read_excel(speciesFile,sheet_name = "species")
+    speciesTable.head()
 
-        speciesTable.head()
-
-        # Standardize column names to lower case and hyphenated (no spaces).
-        df=df.rename(columns = {'Tree Name':'tree_name','Description':'description','Longitude':'longitude',
-                                    'Latitude':'latitude','Date':'date','Block ID':'block','Tree Number':'tree_number',
-                                    'Species':'species','Genus':'genus','Family':'family','Street':'street',
-                                    'Address':'address','Location Code':'location_code','Ownership Code':'ownership_code',
-                                    'Crown Width':'crown_width','Number of Stems':'number_of_stems','DBH':'dbh',
-                                    'Hard Surface':'hard_surface','Ht to Crown Base':'height_to_crown_base',
-                                    'Total Height':'total_height','Reduced Crown':'reduced_crown','Unbalanced Crown':'unbalanced_crown',
-                                    'Defoliation':'defoliation','Weak or Yellowing Foliage':'weak_or_yellow_foliage',
-                                    'Dead or Broken Branch':'dead_or_broken_branch','Lean':'lean','Poor Branch Attachment':'poor_branch_attachment',
-                                    'Branch Scars':'branch_scars','Trunk Scars':'trunk_scars','Conks':'conks','Rot or Cavity - Branch':'branch_rot_or_cavity',
-                                    'Rot or Cavity - Trunk':'trunk_rot_or_cavity','Confined Space':'confined_space',
-                                    'Crack':'crack','Girdling Roots':'girdling_roots', 'Exposed Roots': 'exposed_roots', 'Recent Trenching':'recent_trenching',
-                                    'Cable or Brace':'cable_or_brace','Conflict with Wires':'wire_conflict',
-                                    'Conflict with Sidewalk':'sidewalk_conflict','Conflict with Structure':'structure_conflict',
-                                    'Conflict with Another Tree':'tree_conflict','Conflict with Traffic Sign':'sign_conflict',
-                                    'Comments':'comments', 'Total Demerits':'demerits','Simple Rating':'simple_rating',
-                                    'Crown Projection Area (CPA)':'cpa', 'Relative DBH':'rdbh','Relative DBH Class':'rdbh_class',
-                                    'DBH class':'dbh_class','Native':'native','Species Suitability':'suitability','Structural Defect':'structural', 
-                                    'Health Defect':'health'})
-                
-        
-        def defect_setup(df):
-            """
-            This def adds a column to the dataframe containing text descriptions for the level of defects based on the yes or no 
-            respones in the structural and health columns of the input data.
-            """
-        
-            if ((df['structural'] == 'no') & (df['health'] =='no')):
-                return 'No major defects'
-            elif ((df['structural'] == 'yes') & (df['health'] =='no')):
-                return 'Major structural defect(s)'
-            elif ((df['structural'] == 'no') & (df['health'] =='yes')):
-                return 'Major health defect(s)'
-            elif ((df['structural'] == 'yes') & (df['health'] =='yes')):
-                return 'Major structural AND health defect(s)'
-            else:
-                return 'Condition was not assessed'
-
-        df['defects'] = df.apply(defect_setup, axis = 1)
-        
-        def setDefectColour(df):
-            ''' sets a colour name in column defectColour based on the value in column defects'''
+    # Standardize column names to lower case and hyphenated (no spaces).
+    df=df.rename(columns = {'Tree Name':'tree_name','Description':'description','Longitude':'longitude',
+                                'Latitude':'latitude','Date':'date','Block ID':'block','Tree Number':'tree_number',
+                                'Species':'species','Genus':'genus','Family':'family','Street':'street',
+                                'Address':'address','Location Code':'location_code','Ownership Code':'ownership_code',
+                                'Crown Width':'crown_width','Number of Stems':'number_of_stems','DBH':'dbh',
+                                'Hard Surface':'hard_surface','Ht to Crown Base':'height_to_crown_base',
+                                'Total Height':'total_height','Reduced Crown':'reduced_crown','Unbalanced Crown':'unbalanced_crown',
+                                'Defoliation':'defoliation','Weak or Yellowing Foliage':'weak_or_yellow_foliage',
+                                'Dead or Broken Branch':'dead_or_broken_branch','Lean':'lean','Poor Branch Attachment':'poor_branch_attachment',
+                                'Branch Scars':'branch_scars','Trunk Scars':'trunk_scars','Conks':'conks','Rot or Cavity - Branch':'branch_rot_or_cavity',
+                                'Rot or Cavity - Trunk':'trunk_rot_or_cavity','Confined Space':'confined_space',
+                                'Crack':'crack','Girdling Roots':'girdling_roots', 'Exposed Roots': 'exposed_roots', 'Recent Trenching':'recent_trenching',
+                                'Cable or Brace':'cable_or_brace','Conflict with Wires':'wire_conflict',
+                                'Conflict with Sidewalk':'sidewalk_conflict','Conflict with Structure':'structure_conflict',
+                                'Conflict with Another Tree':'tree_conflict','Conflict with Traffic Sign':'sign_conflict',
+                                'Comments':'comments', 'Total Demerits':'demerits','Simple Rating':'simple_rating',
+                                'Crown Projection Area (CPA)':'cpa', 'Relative DBH':'rdbh','Relative DBH Class':'rdbh_class',
+                                'DBH class':'dbh_class','Native':'native','Species Suitability':'suitability','Structural Defect':'structural', 
+                                'Health Defect':'health'})
             
-            if df['defects'] == 'No major defects':
-                return 'darkgreen'
+    
+    def defect_setup(df):
+        """
+        This def adds a column to the dataframe containing text descriptions for the level of defects based on the yes or no 
+        respones in the structural and health columns of the input data.
+        """
+    
+        if ((df['structural'] == 'no') & (df['health'] =='no')):
+            return 'No major defects'
+        elif ((df['structural'] == 'yes') & (df['health'] =='no')):
+            return 'Major structural defect(s)'
+        elif ((df['structural'] == 'no') & (df['health'] =='yes')):
+            return 'Major health defect(s)'
+        elif ((df['structural'] == 'yes') & (df['health'] =='yes')):
+            return 'Major structural AND health defect(s)'
+        else:
+            return 'Condition was not assessed'
 
-            elif df['defects'] == 'Major structural defect(s)':
-                return 'yellow'
-            
-            elif df['defects'] == 'Major health defect(s)':
-                return 'greenyellow'
-
-            elif df['defects'] == 'Major structural AND health defect(s)':
-                return 'red'
-            
-            else:
-                return 'gray'
-
-        df['defectColour'] = df.apply(setDefectColour, axis = 1)
-
-        df = pd.merge(df, speciesTable[['species', 'diversity_level', 'invasivity']], on="species", how="left", sort=False)
-        df = pd.merge(df, speciesTable[['species', 'seRegion']], on="species", how="left", sort=False)
-
-        df = pd.merge(df, speciesTable[['species', 'color']], on="species", how="left", sort=False)
-
-
-        df.loc[(df.invasivity =='invasive'), 'suitability'] = 'Very Poor'
-
-        df.merge(speciesTable, how = 'left', on = 'species', sort = False )
-
-        df = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.longitude, df.latitude)).copy() # save the data pandas dataframe to a geodataframe
-
-        df = df.set_crs('epsg:4326') # set coordinate reference system to WGS84
+    df['defects'] = df.apply(defect_setup, axis = 1)
+    
+    def setDefectColour(df):
+        ''' sets a colour name in column defectColour based on the value in column defects'''
         
-        df['date'] = df['date'].astype(str) # Save the inventory dates as a string.  Otherwise an error is thrown when mapping
+        if df['defects'] == 'No major defects':
+            return 'darkgreen'
 
-        return df
+        elif df['defects'] == 'Major structural defect(s)':
+            return 'yellow'
+        
+        elif df['defects'] == 'Major health defect(s)':
+            return 'greenyellow'
+
+        elif df['defects'] == 'Major structural AND health defect(s)':
+            return 'red'
+        
+        else:
+            return 'gray'
+
+    df['defectColour'] = df.apply(setDefectColour, axis = 1)
+
+    df = pd.merge(df, speciesTable[['species', 'diversity_level', 'invasivity']], on="species", how="left", sort=False)
+    df = pd.merge(df, speciesTable[['species', 'seRegion']], on="species", how="left", sort=False)
+
+    df = pd.merge(df, speciesTable[['species', 'color']], on="species", how="left", sort=False)
+
+
+    df.loc[(df.invasivity =='invasive'), 'suitability'] = 'Very Poor'
+
+    df.merge(speciesTable, how = 'left', on = 'species', sort = False )
+
+    df = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.longitude, df.latitude)).copy() # save the data pandas dataframe to a geodataframe
+
+    df = df.set_crs('epsg:4326') # set coordinate reference system to WGS84
+    
+    df['date'] = df['date'].astype(str) # Save the inventory dates as a string.  Otherwise an error is thrown when mapping
+
+    return df
 
 if fileName is not None:
     getFileScreen = st.empty()
-    # with st.spinner(text = 'Setting up your data, please wait...'):
-    df = getData(fileName)
+    with st.spinner(text = 'Setting up your data, please wait...'):
+        df = getData(fileName)
 
 def setupSidebar(df):
     """
@@ -503,7 +502,6 @@ def mapItFolium(mapData):
         control = True
        ).add_to(treeMap)
 
-    # treeMap.add_child(folium.ClickForMarker(popup="Waypoint"))
     Fullscreen().add_to(treeMap)
 
     folium.LayerControl().add_to(treeMap)
