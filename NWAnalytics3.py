@@ -115,23 +115,23 @@ fileName ='empty'
 df = pd.DataFrame()
 
 fileName = getFileScreen.file_uploader("Browse for or drag and drop the name of your Neighburwoods MS excel workbook", 
-    type = "xlsm", 
+    type = ['xlsm', 'xlsx'], 
     key ='fileNameKey')
+
+# fileName = getFileScreen.file_uploader("Browse for or drag and drop the name of your Neighburwoods MS excel workbook", 
+#     type = "csv", 
+#     key ='fileNameKey')
 
 
 @st.experimental_memo(show_spinner=False)
 def getData(fileName):
 
-    
     if fileName is not None:
 
         df = pd.read_excel(fileName, sheet_name = "summary", header = 1)
-
-    # speciesFile = currentDir + 'NWspecies050122.xlsx'
+    
     speciesFile = currentDir + 'NWspecies060222.xlsx'
     speciesTable = pd.read_excel(speciesFile,sheet_name = "species")
-
-    speciesTable.head()
 
     # Standardize column names to lower case and hyphenated (no spaces).
     df=df.rename(columns = {'Tree Name':'tree_name','Description':'description','Longitude':'longitude',
@@ -153,8 +153,7 @@ def getData(fileName):
                                 'Crown Projection Area (CPA)':'cpa', 'Relative DBH':'rdbh','Relative DBH Class':'rdbh_class',
                                 'DBH class':'dbh_class','Native':'native','Species Suitability':'suitability','Structural Defect':'structural', 
                                 'Health Defect':'health'})
-            
-    
+
     def defect_setup(df):
         """
         This def adds a column to the dataframe containing text descriptions for the level of defects based on the yes or no 
@@ -195,16 +194,16 @@ def getData(fileName):
     df['defectColour'] = df.apply(setDefectColour, axis = 1)
 
     df = pd.merge(df, speciesTable[['species', 'diversity_level', 'invasivity']], on="species", how="left", sort=False)
+    
     df = pd.merge(df, speciesTable[['species', 'seRegion']], on="species", how="left", sort=False)
 
     df = pd.merge(df, speciesTable[['species', 'color']], on="species", how="left", sort=False)
-
 
     df.loc[(df.invasivity =='invasive'), 'suitability'] = 'Very Poor'
 
     df.merge(speciesTable, how = 'left', on = 'species', sort = False )
 
-    df = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.longitude, df.latitude)).copy() # save the data pandas dataframe to a geodataframe
+    df = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.longitude, df.latitude)).copy() # save the 'data' pandas dataframe to a geodataframe
 
     df = df.set_crs('epsg:4326') # set coordinate reference system to WGS84
     
@@ -216,6 +215,7 @@ if fileName is not None:
     getFileScreen = st.empty()
     with st.spinner(text = 'Setting up your data, please wait...'):
         df = getData(fileName)
+
 
 def setupSidebar(df):
     """
@@ -497,7 +497,7 @@ def mapItFolium(mapData):
     folium.TileLayer(
         tiles = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
         attr = 'Esri',
-        name = 'Esri Satellite',
+        name = 'Satellite',
         overlay = False,
         control = True
        ).add_to(treeMap)
@@ -585,11 +585,6 @@ def mapIt(mapData):
         return fig
 
 
-
-
-
-
-
 # ########################################## Diversity ############################################
     
 def diversity(data):
@@ -650,25 +645,25 @@ def diversity(data):
     speciesPie.update_traces(insidetextorientation='radial', textinfo='label+percent') 
     speciesPie.update_layout(showlegend=False)
     
+    st.plotly_chart(speciesPie)
     
-    TopTenTable = go.Figure(go.Table(header=dict(values=list(topTenPlusOther.columns),
-                fill_color='paleturquoise',
-                align='left'),cells=dict(values=[topTenPlusOther[divLevel], 
-                topTenPlusOther.frequency],
-                fill_color='lavender',
-                align='left')))
+    # TopTenTable = go.Figure(go.Table(header=dict(values=list(topTenPlusOther.columns),
+    #             fill_color='paleturquoise',
+    #             align='left'),cells=dict(values=[topTenPlusOther[divLevel], 
+    #             topTenPlusOther.frequency],
+    #             fill_color='lavender',
+    #             align='left')))
     
-    
-    sppTable, sppChart =st.columns ((2,2))
+    # sppTable, sppChart =st.columns ((2,2))
     
 
     st.subheader('Diversity based on crown projection area (CPA)')
     
-    with sppTable:
-        st.plotly_chart(TopTenTable)
+    # with sppTable:
+    #     st.plotly_chart(TopTenTable)
     
-    with sppChart:
-        st.plotly_chart(speciesPie)
+    # with sppChart:
+    #     st.plotly_chart(speciesPie)
     
     totalCpa = data['cpa'].sum()
     
@@ -685,19 +680,20 @@ def diversity(data):
     CpaPie.update_traces(insidetextorientation='radial', textinfo='label+percent') 
     CpaPie.update_layout(showlegend=False)
     
+    st.plotly_chart(CpaPie)
     
-    TopTenCpaTable = go.Figure(go.Table(header=dict(values=list(topTenCpaPlusOther.columns),fill_color='paleturquoise',
-                align='left'), cells=dict(values=[topTenCpaPlusOther[divLevel], topTenCpaPlusOther['Crown Projection Area']],
-                fill_color='lavender', align='left')))
+    # TopTenCpaTable = go.Figure(go.Table(header=dict(values=list(topTenCpaPlusOther.columns),fill_color='paleturquoise',
+    #             align='left'), cells=dict(values=[topTenCpaPlusOther[divLevel], topTenCpaPlusOther['Crown Projection Area']],
+    #             fill_color='lavender', align='left')))
     
     
-    sppTable, sppChart =st.columns ((2,2))
+    # sppTable, sppChart =st.columns ((2,2))
     
-    with sppTable:
-        st.plotly_chart(TopTenCpaTable)
+    # with sppTable:
+    #     st.plotly_chart(TopTenCpaTable)
     
-    with sppChart:
-        st.plotly_chart(CpaPie)
+    # with sppChart:
+    #     st.plotly_chart(CpaPie)
  
 ########################### Species origin analysis ###########################
 
