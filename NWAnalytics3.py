@@ -76,32 +76,32 @@ title = currentDir + 'NWAnalyticsTitle.jpg'
 titleCol2.image(title, use_column_width=True)
 
 with st.expander("Click here for help in getting started.", expanded=False):
-        st.markdown("""
-            Neighbour_woods_ is a community-based program to assist community groups in the stewardship of the urban forest in their neighbourhood.
-            Using NWAnalytics, you can map and analyze various aspects of the urban forest that will help you develop and implement stewardship strategies.
-            At present, you must first have your Neighbourwoods tree inventory data in a Neighbour_woods_ MS excel workbook (version 2.6 or greater).
+    st.markdown("""
+        Neighbour_woods_ is a community-based program to assist community groups in the stewardship of the urban forest in their neighbourhood.
+        Using NWAnalytics, you can map and analyze various aspects of the urban forest that will help you develop and implement stewardship strategies.
+        At present, you must first have your Neighbourwoods tree inventory data in a Neighbour_woods_ MS excel workbook (version 2.6 or greater).
 
-            To get started, select your Neighbour_woods_ MS excel workbook at the sidebar on the left. Once your data has been uploaded (this may take 
-            a few minutes if you have a big file, be patient) you will be asked to select the functions you want to display.  Select as many as you 
-            want from the dropdown list AND CLICK ON SUBMIT.  The selected analyses will be shown in the main frame.
+        To get started, select your Neighbour_woods_ MS excel workbook at the sidebar on the left. Once your data has been uploaded (this may take 
+        a few minutes if you have a big file, be patient) you will be asked to select the functions you want to display.  Select as many as you 
+        want from the dropdown list AND CLICK ON SUBMIT.  The selected analyses will be shown in the main frame.
 
-            You can conduct these analyses on all of the data, or you can filter the data for specific queries. The "Filter by List" option allows you
-            to select a parameter (e.g. species) and then within that parameter build a list of values (e.g. Norway Maple, White Spruce, White Birch). 
-            The selected functions or analyses will be carried out for those values in the list.  A more restrictive filter can be carried out with one parameter, 
-            for example you could select dbh as the parameter, then select a comparison method of > (greater than) and then a value of 50 cm. The selected functions would be carried out on all trees with dbh values of more than 50 cm.
+        You can conduct these analyses on all of the data, or you can filter the data for specific queries. The "Filter by List" option allows you
+        to select a parameter (e.g. species) and then within that parameter build a list of values (e.g. Norway Maple, White Spruce, White Birch). 
+        The selected functions or analyses will be carried out for those values in the list.  A more restrictive filter can be carried out with one parameter, 
+        for example you could select dbh as the parameter, then select a comparison method of > (greater than) and then a value of 50 cm. The selected functions would be carried out on all trees with dbh values of more than 50 cm.
 
-            But what if you wanted all the Silver Maples with a dbh > 50 cm?  This can be done using the Two Parameter Filter.  Select dbh > 50cm as before 
-            but now select AND from the logical operator dropdown list and then select the parameter, comparison methods and value as done before. In this case all of the selected functions will be performed on all the silver maple with a dbh greater than 50 cm.
+        But what if you wanted all the Silver Maples with a dbh > 50 cm?  This can be done using the Two Parameter Filter.  Select dbh > 50cm as before 
+        but now select AND from the logical operator dropdown list and then select the parameter, comparison methods and value as done before. In this case all of the selected functions will be performed on all the silver maple with a dbh greater than 50 cm.
 
-            You can select a value from the drop down box by scrolling up or down but you can also type the first few letters of the value you want and this should 
-            bring you close to the value in the list where you can click on a value to select it.
+        You can select a value from the drop down box by scrolling up or down but you can also type the first few letters of the value you want and this should 
+        bring you close to the value in the list where you can click on a value to select it.
 
-            In various places you will have opportunities to click on a box for more information, just as you are reading this text.  To close these boxes, 
-            simply click on the header button again.
+        In various places you will have opportunities to click on a box for more information, just as you are reading this text.  To close these boxes, 
+        simply click on the header button again.
 
-            Click on the following link to read more about Neighbourwoods: http://neighbourwoods.org/')
+        Click on the following link to read more about Neighbourwoods: http://neighbourwoods.org/')
 
-            For support, contact Andy Kenney at:     a.kenney@utoronto.ca
+        For support, contact Andy Kenney at:     a.kenney@utoronto.ca
 """)
 
 st.markdown("___")
