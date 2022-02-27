@@ -118,11 +118,6 @@ fileName = getFileScreen.file_uploader("Browse for or drag and drop the name of 
     type = ['xlsm', 'xlsx'], 
     key ='fileNameKey')
 
-# fileName = getFileScreen.file_uploader("Browse for or drag and drop the name of your Neighburwoods MS excel workbook", 
-#     type = "csv", 
-#     key ='fileNameKey')
-
-
 @st.experimental_memo(show_spinner=False)
 def getData(fileName):
 
@@ -628,7 +623,7 @@ def diversity(data):
         st.write('Remember, the diversity analysis at the species level will NOT include any trees identified only at the genus level (e.g. pinspp, mapspp,  etc.)')
         data = data.loc[(data.diversity_level == divLevel)]
     else:
-        # data = data[data.diversity_level != divLevel]
+
         data = data.loc[(data.diversity_level != 'other')]
 
     totalCount = len(data.index)
@@ -641,29 +636,20 @@ def diversity(data):
     topTenPlusOther = topTenSorted.append({divLevel:'Other', 'tree_name': otherTotal}, ignore_index =True)
     topTenPlusOther.rename(columns = {'tree_name': 'frequency'},inplace = True)
 
-    speciesPie = px.pie(topTenPlusOther, values='frequency', names = divLevel)
+    speciesPie = px.pie(topTenPlusOther, 
+        values='frequency', 
+        names = divLevel,
+        color= divLevel
+        )
+
     speciesPie.update_traces(insidetextorientation='radial', textinfo='label+percent') 
     speciesPie.update_layout(showlegend=False)
+    speciesPie.update_traces(textfont_size=15,
+                  marker=dict(line=dict(color='#000000', width=1)))
     
     st.plotly_chart(speciesPie)
     
-    # TopTenTable = go.Figure(go.Table(header=dict(values=list(topTenPlusOther.columns),
-    #             fill_color='paleturquoise',
-    #             align='left'),cells=dict(values=[topTenPlusOther[divLevel], 
-    #             topTenPlusOther.frequency],
-    #             fill_color='lavender',
-    #             align='left')))
-    
-    # sppTable, sppChart =st.columns ((2,2))
-    
-
     st.subheader('Diversity based on crown projection area (CPA)')
-    
-    # with sppTable:
-    #     st.plotly_chart(TopTenTable)
-    
-    # with sppChart:
-    #     st.plotly_chart(speciesPie)
     
     totalCpa = data['cpa'].sum()
     
@@ -679,22 +665,11 @@ def diversity(data):
     CpaPie = px.pie(topTenCpaPlusOther, values='Crown Projection Area', names = divLevel)
     CpaPie.update_traces(insidetextorientation='radial', textinfo='label+percent') 
     CpaPie.update_layout(showlegend=False)
+    CpaPie.update_traces(textfont_size=15,
+                  marker=dict(line=dict(color='#000000', width=1)))
     
     st.plotly_chart(CpaPie)
     
-    # TopTenCpaTable = go.Figure(go.Table(header=dict(values=list(topTenCpaPlusOther.columns),fill_color='paleturquoise',
-    #             align='left'), cells=dict(values=[topTenCpaPlusOther[divLevel], topTenCpaPlusOther['Crown Projection Area']],
-    #             fill_color='lavender', align='left')))
-    
-    
-    # sppTable, sppChart =st.columns ((2,2))
-    
-    # with sppTable:
-    #     st.plotly_chart(TopTenCpaTable)
-    
-    # with sppChart:
-    #     st.plotly_chart(CpaPie)
- 
 ########################### Species origin analysis ###########################
 
 def speciesOrigin(data):
@@ -734,6 +709,8 @@ def speciesOrigin(data):
     
     originPie.update_traces(insidetextorientation='radial', textinfo='label+percent') 
     originPie.update_layout(showlegend=False)
+    originPie.update_traces(textfont_size=15,
+                  marker=dict(line=dict(color='#000000', width=1)))
     
     st.plotly_chart(originPie)
 
@@ -753,6 +730,8 @@ def speciesOrigin(data):
     
     originPieCPA.update_traces(insidetextorientation='radial', textinfo='label+percent') 
     originPieCPA.update_layout(showlegend=False)
+    originPieCPA.update_traces(textfont_size=15,
+                  marker=dict(line=dict(color='#000000', width=1)))
     
     st.plotly_chart(originPieCPA)
     
@@ -772,6 +751,8 @@ def treeCondition(data):
     
     conditionPie.update_traces(insidetextorientation='radial', textinfo='label+percent') 
     conditionPie.update_layout(showlegend=False)
+    conditionPie.update_traces(textfont_size=15,
+                  marker=dict(line=dict(color='#000000', width=1)))
     
     st.subheader("Condition by the number of trees (frequency)")
     st.plotly_chart(conditionPie)
@@ -782,14 +763,16 @@ def treeCondition(data):
     conditionPTCPA = pd.pivot_table(conditionDataCPA, index='defects', aggfunc='sum')
     conditionPTCPA.reset_index(inplace=True)
     
-
     # conditionPTCPA.rename(columns = {'tree_name': 'frequency'},inplace = True)
     
     conditionPieCPA = px.pie(conditionPTCPA, values='cpa', names = 'defects')
     
     conditionPieCPA.update_traces(insidetextorientation='radial', textinfo='label+percent') 
     conditionPieCPA.update_layout(showlegend=False)
+    conditionPieCPA.update_traces(textfont_size=15,
+                  marker=dict(line=dict(color='#000000', width=1)))
     
+
     st.subheader("Condition by Crown Projection Area (cpa)")
     st.plotly_chart(conditionPieCPA)
     
@@ -899,6 +882,9 @@ def speciesSuitablity(data):
                                 'Very Poor':'yellow'})
     suitabilityPie.update_traces(insidetextorientation='radial', textinfo='label+percent') 
     suitabilityPie.update_layout(showlegend=False)
+    suitabilityPie.update_traces(textfont_size=15,
+                  marker=dict(line=dict(color='#000000', width=1)))
+    
 
     st.plotly_chart(suitabilityPie)
 
@@ -919,6 +905,9 @@ def speciesSuitablity(data):
 
     suitabilityPieCPA.update_traces(insidetextorientation='radial', textinfo='label+percent') 
     suitabilityPieCPA.update_layout(showlegend=False)
+    suitabilityPieCPA.update_traces(textfont_size=15,
+                  marker=dict(line=dict(color='#000000', width=1)))
+    
 
     st.plotly_chart(suitabilityPieCPA)
 
@@ -941,6 +930,9 @@ def speciesSuitablity(data):
     
     invasivityPie.update_traces(insidetextorientation='radial', textinfo='label+percent') 
     invasivityPie.update_layout(showlegend=False)
+    invasivityPie.update_traces(textfont_size=15,
+                  marker=dict(line=dict(color='#000000', width=1)))
+    
     
     st.plotly_chart(invasivityPie)
 
@@ -958,6 +950,9 @@ def speciesSuitablity(data):
     
     invasivityPieCPA.update_traces(insidetextorientation='radial', textinfo='label+percent') 
     invasivityPieCPA.update_layout(showlegend=False)
+    invasivityPieCPA.update_traces(textfont_size=15,
+                  marker=dict(line=dict(color='#000000', width=1)))
+    
     
     st.plotly_chart(invasivityPieCPA)
 
