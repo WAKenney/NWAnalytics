@@ -1,0 +1,7 @@
+import pandas as pd
+import streamlit as st
+sppColors = pd.read_excel(r"C:\Users\HP\Desktop\colorsTEMP.xlsx")
+
+sppC = sppColors.to_dict('records')
+
+st.write(sppColors)
