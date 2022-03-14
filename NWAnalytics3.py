@@ -12,7 +12,7 @@ from math import isnan
 from os import name
 from tokenize import Name
 import folium
-# import geemap
+
 import geopandas as gpd
 import pandas as pd
 # import plotly
@@ -80,24 +80,28 @@ titleCol2.image(title, use_column_width=True)
 
 with st.expander("Click here for help in getting started.", expanded=False):
     st.markdown("""
-        Neighbour_woods_ is a community-based program to assist community groups in the stewardship of the urban forest in their neighbourhood.
+        Neighbourwoods is a community-based program to assist community groups in the stewardship of the urban forest in their neighbourhood.
         Using NWAnalytics, you can map and analyze various aspects of the urban forest that will help you develop and implement stewardship strategies.
-        At present, you must first have your Neighbourwoods tree inventory data in a Neighbour_woods_ MS excel workbook (version 2.6 or greater).
+        At present, you must first have your Neighbourwoods tree inventory data in a Neighbourwoods MS excel workbook (version 2.6 or greater).
 
-        To get started, select your Neighbour_woods_ MS excel workbook at the sidebar on the left. Once your data has been uploaded (this may take 
+        To get started, select your Neighbourwoods MS excel workbook at the sidebar on the left. Once your data has been uploaded (this may take 
         a few minutes if you have a big file, be patient) you will be asked to select the functions you want to display.  Select as many as you 
         want from the dropdown list __AND CLICK ON CONTINUE__.  The selected analyses will be shown in the main frame.
 
-        You can conduct these analyses on all of the data, or you can filter the data for specific queries. The "Filter by List" option allows you
-        to select a parameter (e.g. species) and then within that parameter build a list of values (e.g. Norway Maple, White Spruce, White Birch). 
-        The selected functions or analyses will be carried out for those values in the list.  A more restrictive filter can be carried out with one parameter, 
-        for example you could select dbh as the parameter, then select a comparison method of > (greater than) and then a value of 50 cm. The selected functions would be carried out on all trees with dbh values of more than 50 cm.
+        You can conduct these analyses on all the data, or you can filter the data for specific queries. The table below shows your inventory data 
+        and can be filtered much as you would a Microsoft Excel worksheet.  Scroll across the columns and place your cursor on the header of the
+        column that you wish to filter.  As you do so, an icon of three lines will appear in the header, click on this icon.  The type of filter
+        will depend on the type of data in that column.  For text data, you will see a list of all the options in that column with a checkbox to the left of each line.  To filter 
+        out specific items first click on the check box beside _Select All_ to switch off all the items.  Now, click on the box(es) beside the items
+        you want in your filter.  Note that you can type in an item name to shorten the list.  Once you have selected everything you want in the
+        filter, you must click on the _Update_ button at the top left of the table.  Your filtered data will now be used in all the functions you select
+        from the sidebar at the left.  For numerical data you will have the option to filter using comparison types such as equal to, greater than, etc.
+        Remember to click on the _Update_ button to commit your filter to the analysis functions.
 
-        But what if you wanted all the Silver Maples with a dbh > 50 cm?  This can be done using the Two Parameter Filter.  Select dbh > 50cm as before 
-        but now select AND from the logical operator dropdown list and then select the parameter, comparison methods and value as done before. In this case all of the selected functions will be performed on all the silver maple with a dbh greater than 50 cm.
+        You must clear the filters manually by going to each column header with a filter and either click on _Select all_ or remove the values 
+        from the boxes in a numeric filter.  Columns with an active filter will have an icon that looks like a funnel in the header.
 
-        You can select a value from the drop down box by scrolling up or down but you can also type the first few letters of the value you want and this should 
-        bring you close to the value in the list where you can click on a value to select it.
+        Note that you can save your filtered data as an Excel workbook by clicking on the link at the bottom of the data table.
 
         In various places you will have opportunities to click on a box for more information, just as you are reading this text.  To close these boxes, 
         simply click on the header button again.
@@ -114,7 +118,7 @@ filterResultHeader = st.empty()
 getFileScreen = st.sidebar.empty()
 
 
-def agFilter(df):
+def aggFilter(df):
 
     gb = GridOptionsBuilder.from_dataframe(df)
     gb.configure_pagination(enabled=True)
@@ -161,7 +165,6 @@ def agFilter(df):
     st.markdown(linko, unsafe_allow_html=True)
 
     return gridReturn['data']
-
 
 fileName ='empty'
 
@@ -264,16 +267,14 @@ def getData(fileName):
     return [df, speciesTable, colorsTable]
 
 if fileName is not None:
-    # getFileScreen = st.empty()
+
     with st.spinner(text = 'Setting up your data, please wait...'):
         df = getData(fileName)[0]
         speciesTable = getData(fileName)[1]
         colorsTable = getData(fileName)[2]
         colorsDict = colorsTable.to_dict('dict')['color']
         
-        
-        select_df = agFilter(df)
-
+        select_df = aggFilter(df)
 
 
 def setupSidebar(df):
@@ -284,36 +285,36 @@ def setupSidebar(df):
 
     selectFunctionForm = st.sidebar.form(key = 'selectFunction')
     selectFunctionForm.header('Select the function(s) you want to display ')
-    selectFunction = selectFunctionForm.multiselect('',['Show Data', 'Map Trees', 'Tree Diversity', 'Species Origin', 'Tree Condition', 'Relative DBH', 'Suitability & Invasivity'])
+    selectFunction = selectFunctionForm.multiselect('',['Map Trees', 'Tree Diversity', 'Species Origin', 'Tree Condition', 'Relative DBH', 'Suitability & Invasivity'])
     selectFunctionForm.form_submit_button("Continue")
 
-    st.sidebar.header("Do you want to FILTER the tree data?")
-    filterMenu1 = st.sidebar.empty()
-    with filterMenu1:
+    # st.sidebar.header("Do you want to FILTER the tree data?")
+    # filterMenu1 = st.sidebar.empty()
+    # with filterMenu1:
         
-        filtYesOrNo = st.radio("", options =('No, use all the data', 'Yes, filter the data'))
+    #     filtYesOrNo = st.radio("", options =('No, use all the data', 'Yes, filter the data'))
 
-    if filtYesOrNo == 'Yes, filter the data':
+    # if filtYesOrNo == 'Yes, filter the data':
         
-        filterMenu2 = st.sidebar.empty()
+    #     filterMenu2 = st.sidebar.empty()
         
-        with filterMenu2:         
-            filterType = st.radio("Select the type of filter you want to use", options =('Filter by List?', 'One Parameter Filter?', 'Two Parameter Filter?'))
+    #     with filterMenu2:         
+    #         filterType = st.radio("Select the type of filter you want to use", options =('Filter by List?', 'One Parameter Filter?', 'Two Parameter Filter?'))
             
-        if filterType == 'Filter by List?':
-            select_df = simpleFilter(df)
+    #     if filterType == 'Filter by List?':
+    #         select_df = simpleFilter(df)
             
-        elif filterType == 'One Parameter Filter?':
-            select_df = oneParameterFilter(df, 0)
+    #     elif filterType == 'One Parameter Filter?':
+    #         select_df = oneParameterFilter(df, 0)
         
-        else:
-            select_df = twoParameterFilter(df)
+    #     else:
+    #         select_df = twoParameterFilter(df)
                     
-    else:  #Don't filter
-        select_df = df
+    # else:  #Don't filter
+    #     select_df = df
 
-    if 'Show Data' in selectFunction:
-        showTable(select_df)
+    # if 'Show Data' in selectFunction:
+    #     showTable(select_df)
         
     if 'Map Trees' in selectFunction:
         # mapIt(select_df)
