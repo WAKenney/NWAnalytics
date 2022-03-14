@@ -164,6 +164,11 @@ def aggFilter(df):
     linko= f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="NwAnalyticsData.xlsx">Click here to save your data as an Excel file</a>'
     st.markdown(linko, unsafe_allow_html=True)
 
+    originalSize = len(df.index)
+    filteredSize = len(gridReturn['data'].index)
+    if filteredSize<originalSize:
+        st.subheader("NOTE:  You are using filtered data")
+
     return gridReturn['data']
 
 fileName ='empty'
