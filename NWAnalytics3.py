@@ -167,7 +167,7 @@ def aggFilter(df):
     originalSize = len(df.index)
     filteredSize = len(gridReturn['data'].index)
     if filteredSize<originalSize:
-        st.subheader("NOTE:  You are using filtered data")
+        st.subheader("NOTE: You are using filtered data.")
 
     return gridReturn['data']
 
