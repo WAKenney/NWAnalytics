@@ -25,11 +25,14 @@ from folium.plugins import Fullscreen
 from PIL import Image
 from streamlit.state.session_state import SessionState
 from streamlit_folium import folium_static
-
 from geopandas import GeoDataFrame
-# import ee  # Needed for satelite map
-# import geehydro  # Needed for satelite map
-# import webbrowser
+
+from st_aggrid import AgGrid
+from st_aggrid.grid_options_builder import GridOptionsBuilder
+from st_aggrid.shared import JsCode
+from st_aggrid.shared import GridUpdateMode
+
+
 
 st.set_page_config(layout="centered")
 
@@ -109,6 +112,56 @@ st.markdown("___")
 mainScreen =st.empty()
 filterResultHeader = st.empty()
 getFileScreen = st.sidebar.empty()
+
+
+def agFilter(df):
+
+    gb = GridOptionsBuilder.from_dataframe(df)
+    gb.configure_pagination(enabled=True)
+    gb.configure_default_column(editable=True, filter=True)
+
+    gb.configure_column(field='tree_name', header_name='Tree Name')
+    gb.configure_column(field='description', header_name='Tree Description',
+        editable=False, filter = False, wrapText=True, autoHeight = True)
+    gb.configure_column(field='latitude', hide = True)
+    gb.configure_column(field='longitude', hide = True)
+    gb.configure_column(field='date', editable=True)
+    
+    gb.configure_column(field='species', editable=True)
+    gb.configure_column(field='street', editable=True)
+    gb.configure_column(field='geometry', hide = True)
+    gb.configure_column(field='defectColour', hide = True)
+    gb.configure_column(field='diversity_level', hide = True)
+    gb.configure_column(field='demerits', hide = True)
+    gb.configure_column(field='seRegion', header_name='Origin')
+    gb.configure_column(field='structural', header_name='Structural Defect(s)')
+    gb.configure_column(field='health', header_name='Health Defect(s)')
+    gb.configure_column(field='defects', header_name='Defect Summary')
+
+    gridOptions = gb.build()
+
+    gridReturn = AgGrid(df,
+        gridOptions=gridOptions,
+        allow_unsafe_jscode=True,
+        height = 500, 
+        theme = 'blue',
+        enable_enterprise_modules=True, # enables right click and fancy features - can add license key as another parameter (license_key='string') if you have one
+        key='select_grid', # stops grid from re-initialising every time the script is run
+        reload_data=True, # allows modifications to loaded_data to update this same grid entity
+        # update_mode=GridUpdateMode.FILTERING_CHANGED,
+        update_mode=GridUpdateMode.MANUAL,
+        data_return_mode="FILTERED_AND_SORTED")
+
+
+    towrite = io.BytesIO()
+    downloaded_file = gridReturn['data'].to_excel(towrite, encoding='utf-8', index=False, header=True)
+    towrite.seek(0)  # reset pointer
+    b64 = base64.b64encode(towrite.read()).decode()  # some strings
+    linko= f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="NwAnalyticsData.xlsx">Click here to save your data as an Excel file</a>'
+    st.markdown(linko, unsafe_allow_html=True)
+
+    return gridReturn['data']
+
 
 fileName ='empty'
 
@@ -217,6 +270,11 @@ if fileName is not None:
         speciesTable = getData(fileName)[1]
         colorsTable = getData(fileName)[2]
         colorsDict = colorsTable.to_dict('dict')['color']
+        
+        
+        select_df = agFilter(df)
+
+
 
 def setupSidebar(df):
     """
@@ -443,6 +501,7 @@ def showTable(data):
         linko= f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="myfilename.xlsx">Download your data as an Excel file</a>'
         st.markdown(linko, unsafe_allow_html=True)
 
+    
 
 def mapItFolium(mapData):
 
@@ -985,5 +1044,7 @@ def speciesSuitablity(data):
 ######################################################################################
 if fileName is not None:
     setupSidebar(df)
+
+    
 
 
