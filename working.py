@@ -1,10 +1,12 @@
 
 import base64
+from distutils.fancy_getopt import wrap_text
 import io
-from logging import _STYLES
 from math import isnan
 from os import name
+from tkinter import HIDDEN
 from tokenize import Name
+from attr import field
 import folium
 # import geemap
 import geopandas as gpd
@@ -21,21 +23,13 @@ from streamlit.state.session_state import SessionState
 from streamlit_folium import folium_static
 
 from geopandas import GeoDataFrame
-# import ee  # Needed for satelite map
-# import geehydro  # Needed for satelite map
-# import webbrowser
 
-st.set_page_config(layout="centered")
+from st_aggrid import AgGrid
+from st_aggrid.grid_options_builder import GridOptionsBuilder
+from st_aggrid.shared import JsCode
+from st_aggrid.shared import GridUpdateMode
 
-# hide_st_style = """
-#             <style>
-#             #MainMenu {visibility: hidden;}
-#             footer {visibility: hidden;}
-#             header {visibility: hidden;}
-#             </style>
-#             """
-# st.markdown(hide_st_style, unsafe_allow_html=True)
-# st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
+# st.set_page_config(layout="centered")
 
 currentDir = "https://raw.githubusercontent.com/WAKenney/NWAnalytics/main/"
 
@@ -69,37 +63,6 @@ title = currentDir + 'NWAnalyticsTitle.jpg'
 
 titleCol2.image(title, use_column_width=True)
 
-with st.expander("Click here for help in getting started.", expanded=False):
-    st.markdown("""
-        Neighbour_woods_ is a community-based program to assist community groups in the stewardship of the urban forest in their neighbourhood.
-        Using NWAnalytics, you can map and analyze various aspects of the urban forest that will help you develop and implement stewardship strategies.
-        At present, you must first have your Neighbourwoods tree inventory data in a Neighbour_woods_ MS excel workbook (version 2.6 or greater).
-
-        To get started, select your Neighbour_woods_ MS excel workbook at the sidebar on the left. Once your data has been uploaded (this may take 
-        a few minutes if you have a big file, be patient) you will be asked to select the functions you want to display.  Select as many as you 
-        want from the dropdown list __AND CLICK ON CONTINUE__.  The selected analyses will be shown in the main frame.
-
-        You can conduct these analyses on all of the data, or you can filter the data for specific queries. The "Filter by List" option allows you
-        to select a parameter (e.g. species) and then within that parameter build a list of values (e.g. Norway Maple, White Spruce, White Birch). 
-        The selected functions or analyses will be carried out for those values in the list.  A more restrictive filter can be carried out with one parameter, 
-        for example you could select dbh as the parameter, then select a comparison method of > (greater than) and then a value of 50 cm. The selected functions would be carried out on all trees with dbh values of more than 50 cm.
-
-        But what if you wanted all the Silver Maples with a dbh > 50 cm?  This can be done using the Two Parameter Filter.  Select dbh > 50cm as before 
-        but now select AND from the logical operator dropdown list and then select the parameter, comparison methods and value as done before. In this case all of the selected functions will be performed on all the silver maple with a dbh greater than 50 cm.
-
-        You can select a value from the drop down box by scrolling up or down but you can also type the first few letters of the value you want and this should 
-        bring you close to the value in the list where you can click on a value to select it.
-
-        In various places you will have opportunities to click on a box for more information, just as you are reading this text.  To close these boxes, 
-        simply click on the header button again.
-
-        Click on the following link to read more about Neighbourwoods: http://neighbourwoods.org/')
-
-        For support, contact Andy Kenney at:     a.kenney@utoronto.ca
-""")
-
-st.markdown("___")
-
 mainScreen =st.empty()
 filterResultHeader = st.empty()
 getFileScreen = st.sidebar.empty()
@@ -114,6 +77,11 @@ fileName = getFileScreen.file_uploader("Browse for or drag and drop the name of 
 
 @st.experimental_memo(show_spinner=False)
 def getData(fileName):
+
+    '''
+    Fetch the data using the fileName chosen above as well as the species table
+    
+    '''
 
     if fileName is not None:
 
@@ -204,6 +172,140 @@ def getData(fileName):
 
     return [df, speciesTable, colorsTable]
 
+
+def agFilter(df):
+    gb = GridOptionsBuilder.from_dataframe(df)
+    gb.configure_pagination(enabled=True)
+    gb.configure_default_column(editable=True, filter=True)
+
+    gb.configure_column(field='tree_name', header_name='Tree Name')
+    gb.configure_column(field='description', header_name='Tree Description',
+        editable=False, filter = False, wrapText=True, autoHeight = True)
+    gb.configure_column(field='latitude', hide = True)
+    gb.configure_column(field='longitude', hide = True)
+    gb.configure_column(field='date', editable=True)
+    gb.configure_column(field='block', header_name ='Block Code', editable=True)
+    gb.configure_column(field='tree_number', header_name ='Tree Number', editable=True)
+    gb.configure_column(field='species', header_name = 'Species', editable=True)
+    gb.configure_column(field='genus', header_name = 'Genus', editable=True)
+    gb.configure_column(field='family', header_name = 'Family', editable=True)
+    gb.configure_column(field='street', header_name='Street', editable=True)
+
+    gb.configure_column(field='reduced_crown', header_name='Reduced Crown', editable=True)
+    gb.configure_column(field='unbalanced_crown', header_name='Unbalanced Crown', editable=True)
+    gb.configure_column(field='defoliation', header_name='Defoliation', editable=True)
+    gb.configure_column(field='weak_or_yellow_foliage', header_name='Weak or Yellow Foliage', editable=True)
+    gb.configure_column(field='dead_or_broken_branch', header_name='Dead or Broken Branch', editable=True)
+    gb.configure_column(field='lean', header_name='Lean', editable=True)
+    gb.configure_column(field='poor_branch_attachment', header_name='Poor Branch Attachment', editable=True)
+    gb.configure_column(field='branch_scars', header_name='Branch Scars', editable=True)
+    gb.configure_column(field='trunk_scars', header_name='Trunk Scars', editable=True)
+    gb.configure_column(field='conks', header_name='Conks', editable=True)
+    gb.configure_column(field='branch_rot_or_cavity', header_name='Branch Rot or Cavity', editable=True)
+    gb.configure_column(field='trunk_rot_or_cavity', header_name='Trunk Rot or Cavity', editable=True)
+    gb.configure_column(field='confined_space', header_name='Confined Space', editable=True)
+
+    gb.configure_column(field='geometry', hide = True)
+    gb.configure_column(field='defectColour', hide = True)
+    gb.configure_column(field='diversity_level', hide = True)
+    gb.configure_column(field='demerits', hide = True)
+    gb.configure_column(field='seRegion', header_name='Origin')
+    gb.configure_column(field='structural', header_name='Structural Defect(s)')
+    gb.configure_column(field='health', header_name='Health Defect(s)')
+    gb.configure_column(field='defects', header_name='Defect Summary')
+
+    gridOptions = gb.build()
+
+    gridReturn = AgGrid(df,
+        gridOptions=gridOptions,
+        allow_unsafe_jscode=True,
+        height = 500, 
+        theme = 'blue',
+        enable_enterprise_modules=True, # enables right click and fancy features - can add license key as another parameter (license_key='string') if you have one
+        key='select_grid', # stops grid from re-initialising every time the script is run
+        reload_data=True, # allows modifications to loaded_data to update this same grid entity
+        # update_mode=GridUpdateMode.FILTERING_CHANGED,
+        update_mode=GridUpdateMode.MANUAL,
+        data_return_mode="FILTERED_AND_SORTED")
+
+
+    towrite = io.BytesIO()
+    downloaded_file = gridReturn['data'].to_excel(towrite, encoding='utf-8', index=False, header=True)
+    towrite.seek(0)  # reset pointer
+    b64 = base64.b64encode(towrite.read()).decode()  # some strings
+    linko= f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="NwAnalyticsData.xlsx">Click here to save your data as an Excel file</a>'
+    st.markdown(linko, unsafe_allow_html=True)
+
+    return gridReturn['data']
+    
+
+def mapItFolium(mapData):
+
+    if mapData.empty:
+        st.warning("Be sure to finish selecting the filtering values in the sidebar to the left.")
+
+    # mapData = mapData[mapData['latitude'].notna()].copy()
+    mapData = mapData[mapData['latitude'].notna()] # Drop entries with no latitude or longitude values entered
+    mapData = mapData[mapData['longitude'].notna()]
+
+    mapData['crown_radius'] = mapData['crown_width']/2
+
+    avLat = mapData['latitude'].mean()  #calculate the average Latitude value and average Longitude value to use to centre the map
+    avLon = mapData['longitude'].mean()
+    
+    avLat=mapData['latitude'].mean()
+    avLon=mapData['longitude'].mean()
+    maxLat=mapData['latitude'].max()
+    minLat=mapData['latitude'].min()
+    maxLon=mapData['longitude'].max()
+    minLon=mapData['longitude'].min()
+    
+    treeMap = folium.Map(location=[avLat, avLon],  
+        zoom_start=5,
+        max_zoom=75, 
+        min_zoom=1, 
+        width ='100%', height = '100%', 
+        prefer_canvas=True, 
+        control_scale=True,
+        tiles='OpenStreetMap'
+        )
+
+    treeMap.fit_bounds([[minLat,minLon], [maxLat,maxLon]])
+
+    mapData.apply(lambda mapData:folium.CircleMarker(location=[mapData["latitude"], mapData["longitude"]], 
+        # color=mapData['defectColour'],
+        # color='#000000',
+        color='white', 
+        stroke = True,
+        weight = 2,
+        fill = True,
+        fill_color=mapData['defectColour'],
+        fill_opacity = 0.6,
+        line_color='#000000',
+        radius= 5,
+        tooltip = mapData['tree_name'],
+        popup = folium.Popup(mapData["description"], 
+        name = "Points",
+        max_width=450, 
+        min_width=300)).add_to(treeMap), 
+        axis=1)
+
+    folium.TileLayer(
+        tiles = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        attr = 'Esri',
+        name = 'Satellite',
+        overlay = False,
+        control = True
+       ).add_to(treeMap)
+
+    Fullscreen().add_to(treeMap)
+
+    folium.LayerControl().add_to(treeMap)
+   
+    folium_static(treeMap)
+
+df = getData(fileName)
+
 if fileName is not None:
     # getFileScreen = st.empty()
     with st.spinner(text = 'Setting up your data, please wait...'):
@@ -211,3 +313,8 @@ if fileName is not None:
         speciesTable = getData(fileName)[1]
         colorsTable = getData(fileName)[2]
         colorsDict = colorsTable.to_dict('dict')['color']
+
+
+select_df = agFilter(df)
+
+mapItFolium(select_df)
