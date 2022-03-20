@@ -604,12 +604,17 @@ def relativeDBH(data):
     numberNan = data['dbh_class'].isnull().sum()
     
     if numberNan != 0:
-        st.write('There are ' + str(numberNan) + ' entries with no DBH Class recorded.  These will be omitted from this anlysis.')
+        if numberNan == 1:
+            st.write('There is 1 entry with no DBH Class recorded.  This will be omitted from this anlysis.')    
+        else:
+            st.write('There are ' + str(numberNan) + ' entries with no DBH Class recorded.  These will be omitted from this anlysis.')
 
     data = data.loc[data['diversity_level'] != 'other']
     data.dropna(subset=['dbh'], inplace = True)
     data.dropna(subset=['dbh_class'], inplace = True)
     data.dropna(subset=['rdbh_class'], inplace = True)
+
+    st.write(data['dbh_class'].isnull().sum())
     
     dbhData = data.loc[: , ['dbh_class', 'tree_name']]
     
