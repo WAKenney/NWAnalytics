@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Re-Created on 15/02/20
+Re-Created on 14/03/2022
 
 @author: W.A. Kenney
 """
@@ -12,14 +12,11 @@ from math import isnan
 from os import name
 from tokenize import Name
 import folium
-
 import geopandas as gpd
 import pandas as pd
-# import plotly
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
-# from branca.element import MacroElement, Template
 from folium.plugins import FloatImage
 from folium.plugins import Fullscreen
 from PIL import Image
@@ -31,8 +28,6 @@ from st_aggrid import AgGrid
 from st_aggrid.grid_options_builder import GridOptionsBuilder
 from st_aggrid.shared import JsCode
 from st_aggrid.shared import GridUpdateMode
-
-
 
 st.set_page_config(layout="centered")
 
@@ -113,8 +108,6 @@ with st.expander("Click here for help in getting started.", expanded=False):
 
 st.markdown("___")
 
-mainScreen =st.empty()
-filterResultHeader = st.empty()
 getFileScreen = st.sidebar.empty()
 
 
@@ -166,8 +159,9 @@ def aggFilter(df):
 
     originalSize = len(df.index)
     filteredSize = len(gridReturn['data'].index)
+            
     if filteredSize<originalSize:
-        st.subheader("NOTE: You are using filtered data.")
+        st.markdown(f"__NOTE__: You are using filtered data with {filteredSize} entries selected. Be sure to click the update button at the top left of the data table for the filtered data to be used in the functions.")
 
     return gridReturn['data']
 
@@ -275,57 +269,25 @@ if fileName is not None:
 
     with st.spinner(text = 'Setting up your data, please wait...'):
         df = getData(fileName)[0]
+
         speciesTable = getData(fileName)[1]
         colorsTable = getData(fileName)[2]
         colorsDict = colorsTable.to_dict('dict')['color']
         
         select_df = aggFilter(df)
 
-
 def setupSidebar(df):
     """
-    This def sets up the Streamlit sidebar
+    This def sets up the Streamlit sidebar which calls various functions using the selected dataframe (select_df)
     """ 
-    # getFileScreen.empty()
-
     selectFunctionForm = st.sidebar.form(key = 'selectFunction')
     selectFunctionForm.header('Select the function(s) you want to display ')
     selectFunction = selectFunctionForm.multiselect('',['Map Trees', 'Tree Diversity', 'Species Origin', 'Tree Condition', 'Relative DBH', 'Suitability & Invasivity'])
     selectFunctionForm.form_submit_button("Continue")
 
-    # st.sidebar.header("Do you want to FILTER the tree data?")
-    # filterMenu1 = st.sidebar.empty()
-    # with filterMenu1:
-        
-    #     filtYesOrNo = st.radio("", options =('No, use all the data', 'Yes, filter the data'))
-
-    # if filtYesOrNo == 'Yes, filter the data':
-        
-    #     filterMenu2 = st.sidebar.empty()
-        
-    #     with filterMenu2:         
-    #         filterType = st.radio("Select the type of filter you want to use", options =('Filter by List?', 'One Parameter Filter?', 'Two Parameter Filter?'))
-            
-    #     if filterType == 'Filter by List?':
-    #         select_df = simpleFilter(df)
-            
-    #     elif filterType == 'One Parameter Filter?':
-    #         select_df = oneParameterFilter(df, 0)
-        
-    #     else:
-    #         select_df = twoParameterFilter(df)
-                    
-    # else:  #Don't filter
-    #     select_df = df
-
-    # if 'Show Data' in selectFunction:
-    #     showTable(select_df)
-        
     if 'Map Trees' in selectFunction:
-        # mapIt(select_df)
         mapItFolium(select_df)
-        # mapIt2(select_df)
-
+    
     if 'Tree Diversity' in selectFunction:
         diversity(select_df)    
 
@@ -341,191 +303,26 @@ def setupSidebar(df):
     if 'Suitability & Invasivity' in selectFunction:
         speciesSuitablity(select_df)
 
-def simpleFilter(data):
-    
-    filterMenu3 =st.sidebar.empty()
-    with filterMenu3:
-        select_param = st.sidebar.selectbox('Select a parameter for filtering', colTitles, index = 1)
-        value_list = data[select_param]
-        value_list =pd.unique(value_list)    
-
-        select_value = st.sidebar.multiselect('Now, select a value for filtering within ' + select_param, value_list)
-    
-    select_df = data[data[select_param].isin(select_value)].copy()
-    
-    filterMenu4 =st.sidebar.empty()
-    with filterMenu4:
-        st.sidebar.subheader("Number of matches = " + str(select_df.shape[0]))
-        
-    with filterResultHeader:
-        st.subheader('The following is based on the data filtered by ' + select_param + ' in the list ' + str(select_value))
-
-    return select_df
-
-###########################
-
-def oneParameterFilter(data, keyCount):
-    
-    filterMenu3 =st.sidebar.empty()
-    with filterMenu3:
-        oneSelectParam = st.sidebar.selectbox('Select a parameter for filtering', options = colTitles, index = 2, key = 'oneSelectParam' + str(keyCount))            
-    
-    if oneSelectParam in stringColumns:
-        oneCompMethodOption = ['==', '!=']
-        filterMenu4 =st.sidebar.empty()
-        with filterMenu4:
-            oneCompMethod = st.sidebar.selectbox('Select a method of camparison', options = oneCompMethodOption, key = 'oneCompMethod' + str(keyCount))
-    
-    elif oneSelectParam in numericalColumns:
-        oneCompMethodOption = ['==', '!=', '<', '<=', '>', '>=']
-        filterMenu4 =st.sidebar.empty()
-        with filterMenu4:
-            oneCompMethod = st.sidebar.selectbox('Select a method of camparison', options = oneCompMethodOption, key = 'oneCompMethod' + str(keyCount))
-    
-    else:
-        oneCompMethodOption = ['==', '!=', '<', '<=', '>', '>=']
-        filterMenu4 =st.sidebar.empty()
-        with filterMenu4:
-            oneCompMethod = st.sidebar.selectbox('Select a method of camparison', options = oneCompMethodOption, key = 'oneCompMethod' + str(keyCount))
-        
-    value_list = data[oneSelectParam]
-    value_list =pd.unique(value_list)
-    value_list.sort()
-    
-    filterMenu5 =st.sidebar.empty()
-    with filterMenu5:
-        
-        if oneCompMethod in ['==', '!=']:
-            select_value = st.sidebar.selectbox('Now, select a value for filtering within ' + oneSelectParam, value_list, index = 0, key = 'select_value' + str(keyCount))
-        else:
-            minValue = int(data[oneSelectParam].min())
-            maxValue = int(data[oneSelectParam].max())
-            
-            if oneSelectParam in condColumns:
-                select_value = st.sidebar.slider('Now, select a value for filtering within ' + oneSelectParam, minValue, maxValue, step = 1, key = 'select_value' + str(keyCount))
-            else:
-                select_value = st.sidebar.slider('Now, select a value for filtering within ' + oneSelectParam, minValue, maxValue, key = 'select_value' + str(keyCount))
-        
-    if oneCompMethod == '==':
-        select_df = data.loc[(data[oneSelectParam] ==  select_value)]
-    elif oneCompMethod == '!=':
-        select_df = data.loc[(data[oneSelectParam] !=  select_value)]
-    elif oneCompMethod == '<':
-        select_df = data.loc[(data[oneSelectParam] <  select_value)]
-    elif oneCompMethod == '<=':
-        select_df = data.loc[(data[oneSelectParam] <=  select_value)]
-    elif oneCompMethod == '>':
-        select_df = data.loc[(data[oneSelectParam] >  select_value)]
-    else:
-        select_df = df.loc[(data[oneSelectParam] >=  select_value)]
-    
-    oneQstring =  oneSelectParam + oneCompMethod + str(select_value)
-
-    with filterResultHeader:
-        st.subheader('The results are based on the following search string: ' + oneQstring + ' with ' + str(select_df.shape[0]) + ' matches.'  )
-
-    return select_df
-        
-#############################################################################
-def twoParameterFilter(data):
-    
-    tempdf1 = oneParameterFilter(data, 0)
-    
-    filterMenu3 = st.sidebar.empty()
-    with filterMenu3:
-        logOperator = st.sidebar.selectbox('Now select a logical operator', options = ['AND', 'OR']) 
-    
-    if logOperator == 'AND':
-        
-        select_df = oneParameterFilter(tempdf1, 1)
-      
-    else:
-        tempdf2 = oneParameterFilter(data, 1)
-    
-        select_df = tempdf1.append(tempdf2, ignore_index = True)
-    
-    filterMenu4 = st.sidebar.empty()
-    with filterMenu4:
-        st.sidebar.subheader("The combined number of matches = " + str(select_df.shape[0]))
-    
-    with filterResultHeader: #This clears anything that is already in the filterResultsHeader
-        st.write("")    
-
-    return select_df
-    
-##################################################### Show data table ##########################################
-def showTable(data):
-
-    st.header('Show the inventory data')
-
-
-    with st.expander("Click here to read an explanation of the Show Data function.", expanded=False):
-        
-            st.markdown('''This function displays the Neighbourwoods inventory data, either filtered or not filtered, as a table. You can add columns to 
-            the default _Description_ and _Tree Name_ columns, and change the width of the columns using a slider.  You can also save the data as an Excel file which you can 
-            read and manipulate as you want in your favourite spreadsheet software.  The exported worksheet will have ALL the columns regardless of which 
-            columns were added to the NWAnalytics table.  If you have filtered the data in NWAnalytics, only the filtered data will be exported.
-                '''
-            )
-        
-    data_columns = data.columns.values.tolist()
-
-    data.drop(['defectColour', 'native', 'geometry'], axis =1, inplace = True)
-
-    tableCol1, tableCol2 =st.columns(2)
-
-    with tableCol1:   
-        selectedCols = st.multiselect('Select the ADDITIONAL columns to show in the table', data_columns)
-
-    cols = ['tree_name','description'] + selectedCols
-    
-    fig = go.Figure(go.Table(
-        
-        columnwidth = [20,80],
-        
-        header=dict(values=list(cols),
-                    fill_color='lightgreen',
-                    align='center'),
-        cells=dict(values=[data[col] for col in cols],
-                    fill_color='lavender',
-                    # line_color ='black',
-                    align='center')))
-         
-    tableWidth = st.slider('Set table width',min_value=500, max_value=1400, step = 100, value = 500)
-    fig.layout.width=tableWidth
-    fig.layout.height=800
-    fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
-    
-    st.plotly_chart(fig)
-
-    with tableCol2:
-
-        towrite = io.BytesIO()
-        downloaded_file = data.to_excel(towrite, encoding='utf-8', index=False, header=True)
-        towrite.seek(0)  # reset pointer
-        b64 = base64.b64encode(towrite.read()).decode()  # some strings
-        linko= f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="myfilename.xlsx">Download your data as an Excel file</a>'
-        st.markdown(linko, unsafe_allow_html=True)
-
-    
 
 def mapItFolium(mapData):
-
-    # mapCol1, mapCol2, mapCol3 = st.columns(3)
+    '''Generates a folium map using the selected dataframe
+    '''
     pointSizeSlider = st.slider('Move the slider to adjust the point size', min_value = 2, max_value = 20, value =4)
         
     if mapData.empty:
         st.warning("Be sure to finish selecting the filtering values in the sidebar to the left.")
 
-    # mapData = mapData[mapData['latitude'].notna()].copy()
-    mapData = mapData[mapData['latitude'].notna()] # Drop entries with no latitude or longitude values entered
+    # Drop entries with no latitude or longitude values entered
+    mapData = mapData[mapData['latitude'].notna()] 
     mapData = mapData[mapData['longitude'].notna()]
 
     mapData['crown_radius'] = mapData['crown_width']/2
 
-    avLat = mapData['latitude'].mean()  #calculate the average Latitude value and average Longitude value to use to centre the map
+    #calculate the average Latitude value and average Longitude value to use to centre the map
+    avLat = mapData['latitude'].mean()  
     avLon = mapData['longitude'].mean()
     
+    #calculate the avergae lat and lon for centering the map and the max and min values to set the bounds of the map
     avLat=mapData['latitude'].mean()
     avLon=mapData['longitude'].mean()
     maxLat=mapData['latitude'].max()
@@ -533,6 +330,7 @@ def mapItFolium(mapData):
     maxLon=mapData['longitude'].max()
     minLon=mapData['longitude'].min()
     
+    #setup the map
     treeMap = folium.Map(location=[avLat, avLon],  
         zoom_start=5,
         max_zoom=75, 
@@ -546,16 +344,14 @@ def mapItFolium(mapData):
     treeMap.fit_bounds([[minLat,minLon], [maxLat,maxLon]])
 
     mapData.apply(lambda mapData:folium.CircleMarker(location=[mapData["latitude"], mapData["longitude"]], 
-        # color=mapData['defectColour'],
-        # color='#000000',
-        color='white', 
+        color='white', # use a white border on the circle marker so it will show up on satellite image
         stroke = True,
         weight = 2,
         fill = True,
         fill_color=mapData['defectColour'],
         fill_opacity = 0.6,
         line_color='#000000',
-        radius= pointSizeSlider,
+        radius= pointSizeSlider, #setup a slide so the use can chage the size of the marker
         tooltip = mapData['tree_name'],
         popup = folium.Popup(mapData["description"], 
         name = "Points",
@@ -563,6 +359,7 @@ def mapItFolium(mapData):
         min_width=300)).add_to(treeMap), 
         axis=1)
 
+    #have an ESRI satellite image as an optional base map
     folium.TileLayer(
         tiles = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
         attr = 'Esri',
@@ -571,90 +368,15 @@ def mapItFolium(mapData):
         control = True
        ).add_to(treeMap)
 
+    # add a fullscreen option and layer control to the map
     Fullscreen().add_to(treeMap)
-
     folium.LayerControl().add_to(treeMap)
    
     folium_static(treeMap)
     
 
-######################################################
-def mapIt(mapData):
 
-    with st.spinner(text = 'Please wait while your map is set up...'):
-
-        if mapData.empty:
-            st.warning("Be sure to finish selecting the filtering values in the sidebar to the left.")
-            
-        avLat = mapData['latitude'].mean()  #calculate the average Latitude value and average Longitude value to use to centre the map
-        avLon = mapData['longitude'].mean()
-        
-        mapData['condColor'] = mapData['defects'].map(codes) # create a column called conColor and map the color values based on 
-                                                                    #the condition code in the dictionary called condColor
-        
-        map_df = mapData[mapData['latitude'].notna()] # Drop entries with no latitude or longitude values entered
-        map_df = mapData[mapData['longitude'].notna()]
-                
-        fig = px.scatter_mapbox(data_frame = map_df, lat="latitude", lon="longitude", 
-                                hover_name='tree_name',
-                                hover_data={"tree_name": False,
-                                            "description": True,
-                                            'address': True,
-                                            'location_code': False,
-                                            'ownership_code': False,
-                                            'species': True,
-                                            'dbh' : True,
-                                            'defects': True,
-                                            'latitude': False,
-                                            'longitude': False     
-                                            }, 
-                                color=map_df.defects,
-                                color_discrete_map  = codes,
-                                category_orders = CondcolorOrder,
-                                center=dict(lat=avLat, lon=avLon), 
-                                zoom=16, height=300,
-                                text =map_df['tree_name'],
-                                title = 'My Map')
-        
-        fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
-        fig.update_layout(autosize=False, width=1200, height=600)
-        
-        mapCol1, mapCol2, mapCol3 = st.columns(3)
-        
-        with mapCol1:
-
-            base_map_type = st.radio('Select the type of basemap', options= ['Map', 'Satellite Image'])
-            
-            if base_map_type == 'Map':       
-                fig.update_layout(mapbox_style = 'open-street-map')
-            else:
-                # useSatellite(fig)
-                st.write('To use Google satelite images you will need a free Google Maps API Key.  Go to https://elfsight.com/blog/2018/06/how-to-get-google-maps-api-key-guide/ ')
-                mapToken = st.text_input('Enter your Google Maps API Key')
-                try:
-                    fig.update_layout(mapbox_style = 'satellite', mapbox_accesstoken = mapToken )
-                except:
-                    st.warning('Enter your Google Maps token in the box  and press return.')
-                
-        fig.layout.width=1500
-        fig.layout.height=1500
-        
-        fig.update_layout(legend=dict(yanchor="top",
-                                    y=0.99,
-                                    xanchor="left",
-                                    x=0.01
-                                    ))
-        
-        with mapCol2:
-            pointSizeSlider = st.slider('Move the slider to adjust the point size', min_value = 2, max_value = 20, value =10)
-            fig.update_traces(marker_size = pointSizeSlider)
-        
-        st.plotly_chart(fig)
-        
-        return fig
-
-
-# ########################################## Diversity ############################################
+###### Diversity ####
     
 def diversity(data):
 
@@ -711,14 +433,9 @@ def diversity(data):
     otherTotal = totalCount - topTenTotal
     topTenPlusOther = topTenSorted.append({divLevel:'Other', 'tree_name': otherTotal}, ignore_index =True)
     topTenPlusOther.rename(columns = {'tree_name': 'frequency'},inplace = True)
-    # topTenPlusOther = pd.merge(topTenPlusOther, speciesTable[['species', 'color', 'species_code']], on="species", how="left", sort=False)
 
-    # topTenPlusOther.loc[topTenPlusOther['species'] == 'Other', 'color'] = 'gray'
-    
     speciesPie = px.pie(topTenPlusOther, 
         values='frequency', 
-        # names = 'species',
-        # color= 'species',
         names = divLevel,
         color = divLevel,
         color_discrete_map = colorsDict
@@ -743,12 +460,9 @@ def diversity(data):
     otherCpaTotal = totalCpa - topTenCpaTotal
     topTenCpaPlusOther = topTenCpaSorted.append({divLevel:'Other', 'cpa': otherCpaTotal}, ignore_index =True)
     topTenCpaPlusOther.rename(columns = {'cpa': 'Crown Projection Area'},inplace = True)
-    # topTenCpaPlusOther = pd.merge(topTenCpaPlusOther, speciesTable[['species', 'color', 'species_code']], on="species", how="left", sort=False)
     
     CpaPie = px.pie(topTenCpaPlusOther, 
         values='Crown Projection Area', 
-        # names = 'species',
-        # color='species',
         names = divLevel,
         color = divLevel,
         color_discrete_map = colorsDict
@@ -761,7 +475,7 @@ def diversity(data):
     
     st.plotly_chart(CpaPie)
     
-########################### Species origin analysis ###########################
+####### Species origin analysis ###############
 
 def speciesOrigin(data):
         
@@ -795,7 +509,7 @@ def speciesOrigin(data):
     originPT.reset_index(inplace=True)
     
     originPT.rename(columns = {'seRegion' : 'origin' , 'tree_name': 'frequency'},inplace = True)
-    
+
     originPie = px.pie(originPT, values='frequency', names = 'origin')
     
     originPie.update_traces(insidetextorientation='radial', textinfo='label+percent') 
@@ -826,7 +540,7 @@ def speciesOrigin(data):
     
     st.plotly_chart(originPieCPA)
     
-########################### Tree condition analysis###########################
+### Tree condition analysis########
 
 def treeCondition(data):
 
@@ -838,6 +552,8 @@ def treeCondition(data):
     
     conditionPT.rename(columns = {'tree_name': 'frequency'},inplace = True)
     
+    st.write(conditionPT)
+
     conditionPie = px.pie(conditionPT, values='frequency', names = 'defects')
     
     conditionPie.update_traces(insidetextorientation='radial', textinfo='label+percent') 
@@ -848,14 +564,10 @@ def treeCondition(data):
     st.subheader("Condition by the number of trees (frequency)")
     st.plotly_chart(conditionPie)
 
-
-
     conditionDataCPA = data.loc[: , ['defects', 'cpa']]
     conditionPTCPA = pd.pivot_table(conditionDataCPA, index='defects', aggfunc='sum')
     conditionPTCPA.reset_index(inplace=True)
-    
-    # conditionPTCPA.rename(columns = {'tree_name': 'frequency'},inplace = True)
-    
+      
     conditionPieCPA = px.pie(conditionPTCPA, values='cpa', names = 'defects')
     
     conditionPieCPA.update_traces(insidetextorientation='radial', textinfo='label+percent') 
@@ -867,81 +579,85 @@ def treeCondition(data):
     st.subheader("Condition by Crown Projection Area (cpa)")
     st.plotly_chart(conditionPieCPA)
     
-########################### Relative DBH Analysis  ###########################
+########## Relative DBH Analysis  ##########
 
 def relativeDBH(data):
 
-    try:
-        with st.expander("Click here to read some comments about the DBH and Relative DBH analysis.", expanded=False):
-        
-            st.markdown("""Simply looking at the distribution of diameters at breast height (DBH) fails to tell the whole story since the urban forest is usually
-                a mixture of species with large stature at maturity and those of small stature.  RDBH is derived by dividing each tree's DBH by the maximum DBH 
-                for that species at maturity. We have derived the latter from the literature, municipal inventories and from our database of well over 150,000 trees collected 
-                through Neighbour_woods_ inventories.
-                
-                __RDBH Class I__ represents all trees with a DBH 25% or less of the maximum DBH for the species (Target 40% );
+    with st.expander("Click here to read some comments about the DBH and Relative DBH analysis.", expanded=False):
+    
+        st.markdown("""Simply looking at the distribution of diameters at breast height (DBH) fails to tell the whole story since the urban forest is usually
+            a mixture of species with large stature at maturity and those of small stature.  RDBH is derived by dividing each tree's DBH by the maximum DBH 
+            for that species at maturity. We have derived the latter from the literature, municipal inventories and from our database of well over 150,000 trees collected 
+            through Neighbour_woods_ inventories.
+            
+            __RDBH Class I__ represents all trees with a DBH 25% or less of the maximum DBH for the species (Target 40% );
 
-                __RDBH Class II__ all trees with a DBH >25% or <50% of the maximum DBH for the species (Target 30%);
+            __RDBH Class II__ all trees with a DBH >25% or <50% of the maximum DBH for the species (Target 30%);
 
-                __RDBH Class III__ all trees with a DBH >50% or <75% of the maximum DBH for the species (Target 20%); and
+            __RDBH Class III__ all trees with a DBH >50% or <75% of the maximum DBH for the species (Target 20%); and
 
-                __RDBH Class IV__ all trees with a DBH 75% or more, of the maximum DBH for the species (Target 10%).
+            __RDBH Class IV__ all trees with a DBH 75% or more, of the maximum DBH for the species (Target 10%).
 
-                NOTE: This only includes trees that were identified to the species level and had a DBH recorded.  Not all species currently have a maximum DBH available.
+            NOTE: This only includes trees that were identified to the species level and had a DBH recorded.  Not all species currently have a maximum DBH available.
 
-                Targets are adapted from _Richards, N.A. 1983. Diversity and stability in a street tree population. Urban Ecology 7:159-171_.
-            """)
-        
-        data = data.loc[data['diversity_level'] != 'other']
-        data.dropna(subset=['dbh'], inplace = True)
-        
-        dbhData = data.loc[: , ['dbh_class', 'tree_name']]
-        
-        dbhPT = pd.pivot_table(dbhData, index='dbh_class', aggfunc='count')
-        dbhPT.reset_index(inplace=True)
-        dbhPT.rename(columns = {'dbh_class': 'DBH Class', 'tree_name': 'Frequency'},inplace = True)
-        
-        dbhNumberOfEntries = dbhPT['Frequency'].sum()
-        
-        dbhPT["Target"] = [dbhNumberOfEntries*0.4, dbhNumberOfEntries*0.3, dbhNumberOfEntries*0.2, dbhNumberOfEntries*0.1]
-        
-        dbhFig = go.Figure(data=[
-            go.Bar(name='Current', x= dbhPT['DBH Class'], y=dbhPT['Frequency']),
-            go.Bar(name='Target', x=dbhPT['DBH Class'], y=dbhPT['Target'])])
+            Targets are adapted from _Richards, N.A. 1983. Diversity and stability in a street tree population. Urban Ecology 7:159-171_.
+        """)
+    
+    numberNan = data['dbh_class'].isnull().sum()
+    
+    if numberNan != 0:
+        st.write('There are ' + str(numberNan) + ' entries with no DBH Class recorded.  These will be omitted from this anlysis.')
 
-        dbhFig.update_layout(barmode='group', xaxis=dict(title_text='DBH CLass'), yaxis = dict(title_text='Frequency'))
-        
-        st.header("DBH Class Frequency")
+    data = data.loc[data['diversity_level'] != 'other']
+    data.dropna(subset=['dbh'], inplace = True)
+    data.dropna(subset=['dbh_class'], inplace = True)
+    data.dropna(subset=['rdbh_class'], inplace = True)
+    
+    dbhData = data.loc[: , ['dbh_class', 'tree_name']]
+    
+    dbhPT = pd.pivot_table(dbhData, index='dbh_class', aggfunc='count')
+    dbhPT.reset_index(inplace=True)
+    dbhPT.rename(columns = {'dbh_class': 'DBH Class', 'tree_name': 'Frequency'},inplace = True)
 
-        st.plotly_chart(dbhFig)
+    st.write(dbhPT)
+    
+    dbhNumberOfEntries = dbhPT['Frequency'].sum()
+    
+    dbhPT["Target"] = [dbhNumberOfEntries*0.4, dbhNumberOfEntries*0.3, dbhNumberOfEntries*0.2, dbhNumberOfEntries*0.1]
+    
+    dbhFig = go.Figure(data=[
+        go.Bar(name='Current', x= dbhPT['DBH Class'], y=dbhPT['Frequency']),
+        go.Bar(name='Target', x=dbhPT['DBH Class'], y=dbhPT['Target'])])
 
+    dbhFig.update_layout(barmode='group', xaxis=dict(title_text='DBH CLass'), yaxis = dict(title_text='Frequency'))
+    
+    st.header("DBH Class Frequency")
 
-
-        realtiveDbhData = data.loc[: , ['rdbh_class', 'tree_name']]
-        
-        relativeDbhPT = pd.pivot_table(realtiveDbhData, index='rdbh_class', aggfunc='count')
-        relativeDbhPT.reset_index(inplace=True)
-        relativeDbhPT.rename(columns = {'rdbh_class': 'Relative DBH Class', 'tree_name': 'Frequency'},inplace = True)
-        
-        numberOfEntries = relativeDbhPT['Frequency'].sum()
-        
-        relativeDbhPT["Target"] = [numberOfEntries*0.4, numberOfEntries*0.3, numberOfEntries*0.2, numberOfEntries*0.1]
-        
-        rdbhFig = go.Figure(data=[
-            go.Bar(name='Current', x= relativeDbhPT['Relative DBH Class'], y=relativeDbhPT['Frequency']),
-            go.Bar(name='Target', x=relativeDbhPT['Relative DBH Class'], y=relativeDbhPT['Target'])])
-
-        rdbhFig.update_layout(barmode='group', xaxis=dict(title_text='Relative DBH CLass'), yaxis = dict(title_text='Frequency'))
-        
-        st.header("Relative DBH Class Frequency")
-
-        st.plotly_chart(rdbhFig)
-
-    except ValueError:
-        st.warning("Complete the filter and press enter")    
+    st.plotly_chart(dbhFig)
 
 
-########################### Species Suitability Analysis ###########################
+    realtiveDbhData = data.loc[: , ['rdbh_class', 'tree_name']]
+    
+    relativeDbhPT = pd.pivot_table(realtiveDbhData, index='rdbh_class', aggfunc='count')
+    relativeDbhPT.reset_index(inplace=True)
+    relativeDbhPT.rename(columns = {'rdbh_class': 'Relative DBH Class', 'tree_name': 'Frequency'},inplace = True)
+
+    numberOfEntries = relativeDbhPT['Frequency'].sum()
+    
+    relativeDbhPT["Target"] = [numberOfEntries*0.4, numberOfEntries*0.3, numberOfEntries*0.2, numberOfEntries*0.1]
+
+    rdbhFig = go.Figure(data=[
+        go.Bar(name='Current', x= relativeDbhPT['Relative DBH Class'], y=relativeDbhPT['Frequency']),
+        go.Bar(name='Target', x=relativeDbhPT['Relative DBH Class'], y=relativeDbhPT['Target'])])
+
+    rdbhFig.update_layout(barmode='group', xaxis=dict(title_text='Relative DBH CLass'), yaxis = dict(title_text='Frequency'))
+    
+    st.header("Relative DBH Class Frequency")
+
+    st.plotly_chart(rdbhFig)
+
+
+###### Species Suitability Analysis #########
 
 def speciesSuitablity(data):
 
@@ -985,7 +701,6 @@ def speciesSuitablity(data):
     suitabilityDataCPA = data.loc[: , ['suitability', 'cpa']]
     suitabilityPTCPA = pd.pivot_table(suitabilityDataCPA, index='suitability', aggfunc='sum')
     suitabilityPTCPA.reset_index(inplace=True)
-    # suitabilityPTCPA.rename(columns = {'tree_name': 'frequency'},inplace = True)
     
     suitabilityPieCPA = px.pie(suitabilityPTCPA, values='cpa', names = 'suitability',
         color = 'suitability',
