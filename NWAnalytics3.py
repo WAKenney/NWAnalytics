@@ -384,6 +384,7 @@ def diversity(data):
    
     divLevel = st.radio('Select a level of diversity', ('species', 'genus', 'family'))
     
+    st.markdown("___")
     st.header('Tree diversity summary by ' + divLevel)
 
     with st.expander("Click here to read some comments and suggestions about diversity.", expanded=False):
@@ -481,6 +482,7 @@ def speciesOrigin(data):
         
     data = data.loc[data['diversity_level'] != 'other']
 
+    st.markdown("___")
     st.header('Tree Species Origin Summary')
     
     with st.expander("Click here to read an explanation of the Species Origin figure.", expanded=False):
@@ -544,6 +546,7 @@ def speciesOrigin(data):
 
 def treeCondition(data):
 
+    st.markdown("___")
     st.header('Tree Condition Summary')
 
     conditionData = data.loc[: , ['defects', 'tree_name']]
@@ -613,8 +616,6 @@ def relativeDBH(data):
     data.dropna(subset=['dbh'], inplace = True)
     data.dropna(subset=['dbh_class'], inplace = True)
     data.dropna(subset=['rdbh_class'], inplace = True)
-
-    st.write(data['dbh_class'].isnull().sum())
     
     dbhData = data.loc[: , ['dbh_class', 'tree_name']]
     
@@ -631,6 +632,7 @@ def relativeDBH(data):
         go.Bar(name='Target', x=dbhPT['DBH Class'], y=dbhPT['Target'])])
 
     dbhFig.update_layout(barmode='group', xaxis=dict(title_text='DBH CLass'), yaxis = dict(title_text='Frequency'))
+    
     
     st.header("DBH Class Frequency")
 
@@ -662,6 +664,7 @@ def relativeDBH(data):
 
 def speciesSuitablity(data):
 
+    st.markdown("___")
     st.header('Tree Species Suitability Summary')
     
     with st.expander("Click here to read about species suitability", expanded=False):
@@ -718,6 +721,7 @@ def speciesSuitablity(data):
 
     st.plotly_chart(suitabilityPieCPA)
 
+    st.markdown("___")
     st.header('Tree Species Invasivity Summary')
     
     with st.expander("Click here to read about species invasivity", expanded=False):
