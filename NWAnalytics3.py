@@ -551,8 +551,6 @@ def treeCondition(data):
     conditionPT.reset_index(inplace=True)
     
     conditionPT.rename(columns = {'tree_name': 'frequency'},inplace = True)
-    
-    st.write(conditionPT)
 
     conditionPie = px.pie(conditionPT, values='frequency', names = 'defects')
     
@@ -619,8 +617,6 @@ def relativeDBH(data):
     dbhPT.reset_index(inplace=True)
     dbhPT.rename(columns = {'dbh_class': 'DBH Class', 'tree_name': 'Frequency'},inplace = True)
 
-    st.write(dbhPT)
-    
     dbhNumberOfEntries = dbhPT['Frequency'].sum()
     
     dbhPT["Target"] = [dbhNumberOfEntries*0.4, dbhNumberOfEntries*0.3, dbhNumberOfEntries*0.2, dbhNumberOfEntries*0.1]
