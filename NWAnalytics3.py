@@ -6,11 +6,15 @@ Re-Created on 14/03/2022
 """
 
 import base64
+from functools import cmp_to_key
 import io
+from itertools import count
 from logging import _STYLES
 from math import isnan
-from os import name
-from tokenize import Name
+from matplotlib.pyplot import margins
+# from os import name
+# from tokenize import Name
+import numpy as np
 import folium
 import geopandas as gpd
 import pandas as pd
@@ -282,11 +286,14 @@ def setupSidebar(df):
     """ 
     selectFunctionForm = st.sidebar.form(key = 'selectFunction')
     selectFunctionForm.header('Select the function(s) you want to display ')
-    selectFunction = selectFunctionForm.multiselect('',['Map Trees', 'Tree Diversity', 'Species Origin', 'Tree Condition', 'Relative DBH', 'Suitability & Invasivity'])
+    selectFunction = selectFunctionForm.multiselect('',['Map Trees', 'pTable', 'Tree Diversity', 'Species Origin', 'Tree Condition', 'Relative DBH', 'Suitability & Invasivity'])
     selectFunctionForm.form_submit_button("Continue")
 
     if 'Map Trees' in selectFunction:
         mapItFolium(select_df)
+
+    if 'pTable' in selectFunction:
+        pivTable(select_df)
     
     if 'Tree Diversity' in selectFunction:
         diversity(select_df)    
@@ -375,6 +382,60 @@ def mapItFolium(mapData):
     folium_static(treeMap)
     
 
+
+###### Crosstab ########
+def pivTable(ptab):
+
+    st.markdown("___")
+    st.header('Pivot Table Analysis')
+
+    numCols = st.radio('Single or Multiple Columns?', ('Single', 'Multiple'))
+
+    ptForm = st.form(key = 'ptFunction')
+    r = ptForm.selectbox('Select the row for your crosstab', options = ptab.columns)
+    
+    if numCols == 'Multiple':
+        c = ptForm.selectbox('Select the column for your crosstab', options = ptab.columns)
+    
+    v = ptForm.selectbox('Select the value for your crosstab', options = ptab.columns)
+    f = ptForm.selectbox('Select the value for your function', options = ['sum', 'mean', 'count' ])
+    showTotal = ptForm.radio('Show column total?', ('Yes', 'No'))
+
+    if showTotal =='Yes':
+        selectMargins=True
+        selectMargins_name = 'Total'
+    else:
+        selectMargins=False
+        selectMargins_name = 'Total'
+
+    if f == 'count':
+        f = pd.Series.nunique
+
+    ptSubmitButton = ptForm.form_submit_button("Continue")
+
+    if ptSubmitButton:
+
+        # try:
+
+        if numCols=='Multiple':
+
+            ptable = pd.pivot_table(ptab, 
+                index = [r], 
+                columns = [c], 
+                values = [v], 
+                aggfunc = [f],
+                margins=selectMargins,
+                margins_name=selectMargins_name)
+        else:
+
+            ptable = pd.pivot_table(ptab, 
+                index = [r], 
+                values = [v], 
+                aggfunc = [f],
+                margins=selectMargins,
+                margins_name=selectMargins_name)
+
+        st.dataframe(ptable)
 
 ###### Diversity ####
     
@@ -507,10 +568,14 @@ def speciesOrigin(data):
     st.subheader("Origin by the number of trees (frequency)")
 
     originData = data.loc[: , ['seRegion', 'tree_name']]
+
+    originData.fillna('not assessed')
+
     originPT = pd.pivot_table(originData, index='seRegion', aggfunc='count')
     originPT.reset_index(inplace=True)
     
     originPT.rename(columns = {'seRegion' : 'origin' , 'tree_name': 'frequency'},inplace = True)
+
 
     originPie = px.pie(originPT, values='frequency', names = 'origin')
     
@@ -583,6 +648,8 @@ def treeCondition(data):
 ########## Relative DBH Analysis  ##########
 
 def relativeDBH(data):
+
+    st.markdown("___")
 
     with st.expander("Click here to read some comments about the DBH and Relative DBH analysis.", expanded=False):
     
