@@ -6,15 +6,15 @@ Re-Created on 14/03/2022
 """
 
 import base64
-from functools import cmp_to_key
+# from functools import cmp_to_key
 import io
-from itertools import count
-from logging import _STYLES
-from math import isnan
-from matplotlib.pyplot import margins
+# from itertools import count
+# from logging import _STYLES
+# from math import isnan
+# from matplotlib.pyplot import margins
 # from os import name
 # from tokenize import Name
-import numpy as np
+# import numpy as np
 import folium
 import geopandas as gpd
 import pandas as pd
@@ -286,13 +286,13 @@ def setupSidebar(df):
     """ 
     selectFunctionForm = st.sidebar.form(key = 'selectFunction')
     selectFunctionForm.header('Select the function(s) you want to display ')
-    selectFunction = selectFunctionForm.multiselect('',['Map Trees', 'pTable', 'Tree Diversity', 'Species Origin', 'Tree Condition', 'Relative DBH', 'Suitability & Invasivity'])
+    selectFunction = selectFunctionForm.multiselect('',['Map Trees', 'Pivot Table', 'Tree Diversity', 'Species Origin', 'Tree Condition', 'Relative DBH', 'Suitability & Invasivity'])
     selectFunctionForm.form_submit_button("Continue")
 
     if 'Map Trees' in selectFunction:
         mapItFolium(select_df)
 
-    if 'pTable' in selectFunction:
+    if 'Pivot Table' in selectFunction:
         pivTable(select_df)
     
     if 'Tree Diversity' in selectFunction:
@@ -381,61 +381,74 @@ def mapItFolium(mapData):
    
     folium_static(treeMap)
     
-
-
-###### Crosstab ########
+###### Pivot Table ########
 def pivTable(ptab):
 
-    st.markdown("___")
-    st.header('Pivot Table Analysis')
+    try:
+        
+        st.markdown("___")
+        st.header('Pivot Table Analysis')
 
-    numCols = st.radio('Single or Multiple Columns?', ('Single', 'Multiple'))
+        numCols = st.radio('Single or Multiple Columns?', ('Single', 'Multiple'))
 
-    ptForm = st.form(key = 'ptFunction')
-    r = ptForm.selectbox('Select the row for your crosstab', options = ptab.columns)
-    
-    if numCols == 'Multiple':
-        c = ptForm.selectbox('Select the column for your crosstab', options = ptab.columns)
-    
-    v = ptForm.selectbox('Select the value for your crosstab', options = ptab.columns)
-    f = ptForm.selectbox('Select the value for your function', options = ['sum', 'mean', 'count' ])
-    showTotal = ptForm.radio('Show column total?', ('Yes', 'No'))
+        ptForm = st.form(key = 'ptFunction')
+        r = ptForm.selectbox('Select the row for your crosstab', options = ptab.columns)
+        
+        if numCols == 'Multiple':
+            c = ptForm.selectbox('Select the column for your crosstab', options = ptab.columns)
+        
+        v = ptForm.selectbox('Select the value for your crosstab', options = ptab.columns)
+        f = ptForm.selectbox('Select the value for your function', options = ['sum', 'mean', 'count' ])
+        showTotal = ptForm.radio('Show column total?', ('Yes', 'No'))
 
-    if showTotal =='Yes':
-        selectMargins=True
-        selectMargins_name = 'Total'
-    else:
-        selectMargins=False
-        selectMargins_name = 'Total'
-
-    if f == 'count':
-        f = pd.Series.nunique
-
-    ptSubmitButton = ptForm.form_submit_button("Continue")
-
-    if ptSubmitButton:
-
-        # try:
-
-        if numCols=='Multiple':
-
-            ptable = pd.pivot_table(ptab, 
-                index = [r], 
-                columns = [c], 
-                values = [v], 
-                aggfunc = [f],
-                margins=selectMargins,
-                margins_name=selectMargins_name)
+        if showTotal =='Yes':
+            selectMargins=True
+            selectMargins_name = 'Total'
         else:
+            selectMargins=False
+            selectMargins_name = 'Total'
 
-            ptable = pd.pivot_table(ptab, 
-                index = [r], 
-                values = [v], 
-                aggfunc = [f],
-                margins=selectMargins,
-                margins_name=selectMargins_name)
+        if f == 'count':
+            f = pd.Series.nunique
+            funcType = 'count'
 
-        st.dataframe(ptable)
+        else: funcType = f
+
+        ptSubmitButton = ptForm.form_submit_button("Continue")
+
+        if ptSubmitButton:
+
+            st.markdown('__*Results*__')
+            
+            if numCols=='Multiple':
+
+                ptable = pd.pivot_table(ptab, 
+                    index = r, 
+                    columns = c, 
+                    values = v, 
+                    aggfunc = f,
+                    margins=selectMargins,
+                    margins_name=selectMargins_name)
+
+                st.markdown(f'The {(funcType)} of {v} by {r} and {c}.')
+
+            else:
+
+                ptable = pd.pivot_table(ptab, 
+                    index = r, 
+                    values = v, 
+                    aggfunc = f,
+                    margins=selectMargins,
+                    margins_name=selectMargins_name)
+
+                st.markdown(f'The {(funcType)} of {v} by {r}.')
+
+            
+
+            st.dataframe(ptable)
+
+    except:
+        st.error("Oh no!  Something went wrong.  Check to make sure that your filters in the pivot tabel setup make sense.")
 
 ###### Diversity ####
     
