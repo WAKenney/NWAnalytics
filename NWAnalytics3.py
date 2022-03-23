@@ -405,7 +405,14 @@ def pivTable(ptab):
         
         v = ptForm.selectbox('Select the value for your table', options = ptab.columns)
         f = ptForm.selectbox('Select the value for your function', options = ['sum', 'mean', 'count' ])
-        showTotal = ptForm.radio('Show column total?', ('Yes', 'No'))
+        
+        ptForm.markdown('___')
+
+        ptCol1, ptCol2, ptCol3 = ptForm.columns(3)
+
+        showTotal = ptCol1.radio('Show column total?', ('Yes', 'No'))
+        decimalNumber = ptCol2.number_input('Enter the number of decimal places for all values in table.', value  = 1)
+        ptFontSize = ptCol3.slider('Move the slider to adjust the font size', min_value = 8, max_value = 25, value =12)
 
         if showTotal =='Yes':
             selectMargins=True
@@ -420,7 +427,7 @@ def pivTable(ptab):
 
         else: funcType = f
 
-        ptSubmitButton = ptForm.form_submit_button("Continue")
+        ptSubmitButton = ptForm.form_submit_button("Show Pivot Table")
 
         if ptSubmitButton:
 
@@ -450,43 +457,56 @@ def pivTable(ptab):
                 st.markdown(f'The {(funcType)} of {v} by {r}.')
 
             ptable.reset_index(inplace=True)
-
-            # st.dataframe(ptable)
-
-            # fig = go.Figure(data=[go.Table(
-            #     header=dict(values=list(ptable.columns),
-            #         fill_color='paleturquoise',
-            #         align='left'),
-            #     cells=dict(values =ptable.transpose().values.tolist(),
-            #         fill_color='lavender',
-            #         align='left'))])
-
-            # st.plotly_chart(fig)
+            ptable = ptable.round(decimals = decimalNumber)
 
 
-            gb = GridOptionsBuilder.from_dataframe(ptable)
-            gb.configure_pagination(enabled=True)
-            gb.configure_default_column(editable=False, filter=True, width = 50, type = 'numericColumn')
+###Plotly Table ###
 
+            pivotTable = go.Figure(data=[go.Table(
+                header=dict(
+                    values=list(ptable.columns),
+                    fill_color='paleturquoise',
+                    align='center',
+                    font_size=ptFontSize),
 
-# You can reset all filters by doing the following:
+                cells=dict(values =ptable.transpose().values.tolist(),
+                    fill_color='lavender',
+                    align='center',
+                    font_size = ptFontSize)
+                )])
 
-# gridOptions.api.setFilterModel(null);
+            # ptTitle = st.markdown(f'The {(funcType)} of {v} by {r} and {c}.')
 
-            gridOptions = gb.build()
+            # pivotTable.update_layout(title = (f'The {(funcType)} of {v} by {r} and {c}.'))
+            
+            st.plotly_chart(pivotTable)
 
-            gridReturn = AgGrid(ptable,
-                 fit_columns_on_grid_load=True,
-                gridOptions=gridOptions,
-                allow_unsafe_jscode=True,
-                height = 500, 
-                theme = 'streamlit',
-                enable_enterprise_modules=True, # enables right click and fancy features - can add license key as another parameter (license_key='string') if you have one
-                key='select_grid2', # stops grid from re-initialising every time the script is run
-                reload_data=True, # allows modifications to loaded_data to update this same grid entity
-                # update_mode=GridUpdateMode.FILTERING_CHANGED,
-                update_mode=GridUpdateMode.NO_UPDATE,
-                data_return_mode="FILTERED_AND_SORTED")
+### Aggrid Table ###
+
+#             gb = GridOptionsBuilder.from_dataframe(ptable)
+#             gb.configure_pagination(enabled=True)
+#             gb.configure_default_column(editable=False, filter=True, width = 50, type = 'numericColumn')
+
+# # You can reset all filters by doing the following:
+
+# # gridOptions.api.setFilterModel(null);
+
+#             gridOptions = gb.build()
+
+#             gridReturn = AgGrid(ptable,
+#                  fit_columns_on_grid_load=True,
+#                 gridOptions=gridOptions,
+#                 allow_unsafe_jscode=True,
+#                 height = 500, 
+#                 theme = 'streamlit',
+#                 enable_enterprise_modules=True, # enables right click and fancy features - can add license key as another parameter (license_key='string') if you have one
+#                 key='select_grid2', # stops grid from re-initialising every time the script is run
+#                 reload_data=True, # allows modifications to loaded_data to update this same grid entity
+#                 # update_mode=GridUpdateMode.FILTERING_CHANGED,
+#                 update_mode=GridUpdateMode.NO_UPDATE,
+#                 data_return_mode="FILTERED_AND_SORTED")
+            
+            
            
     except:
         st.error("Oh no!  Something went wrong.  Check to make sure that your filters in the pivot tabel setup make sense.")
