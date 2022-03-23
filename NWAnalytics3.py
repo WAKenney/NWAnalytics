@@ -208,6 +208,12 @@ def getData(fileName):
                                 'DBH class':'dbh_class','Native':'native','Species Suitability':'suitability','Structural Defect':'structural', 
                                 'Health Defect':'health'})
 
+    # df['location_code', 'ownership_code', 'cable_or_brace','wire_conflict','sidewalk_conflict',
+    #     'structure_conflict','tree_conflict','sign_conflict'].str.lower()
+
+    df['location_code'] = df['location_code'].str.lower()
+    df['ownership_code'] = df['ownership_code'].str.lower()
+
     def defect_setup(df):
         """
         This def adds a column to the dataframe containing text descriptions for the level of defects based on the yes or no 
@@ -392,12 +398,12 @@ def pivTable(ptab):
         numCols = st.radio('Single or Multiple Columns?', ('Single', 'Multiple'))
 
         ptForm = st.form(key = 'ptFunction')
-        r = ptForm.selectbox('Select the row for your crosstab', options = ptab.columns)
+        r = ptForm.selectbox('Select the row for your table', options = ptab.columns)
         
         if numCols == 'Multiple':
-            c = ptForm.selectbox('Select the column for your crosstab', options = ptab.columns)
+            c = ptForm.selectbox('Select the column for your table', options = ptab.columns)
         
-        v = ptForm.selectbox('Select the value for your crosstab', options = ptab.columns)
+        v = ptForm.selectbox('Select the value for your table', options = ptab.columns)
         f = ptForm.selectbox('Select the value for your function', options = ['sum', 'mean', 'count' ])
         showTotal = ptForm.radio('Show column total?', ('Yes', 'No'))
 
@@ -443,10 +449,45 @@ def pivTable(ptab):
 
                 st.markdown(f'The {(funcType)} of {v} by {r}.')
 
-            
+            ptable.reset_index(inplace=True)
 
-            st.dataframe(ptable)
+            # st.dataframe(ptable)
 
+            # fig = go.Figure(data=[go.Table(
+            #     header=dict(values=list(ptable.columns),
+            #         fill_color='paleturquoise',
+            #         align='left'),
+            #     cells=dict(values =ptable.transpose().values.tolist(),
+            #         fill_color='lavender',
+            #         align='left'))])
+
+            # st.plotly_chart(fig)
+
+
+            gb = GridOptionsBuilder.from_dataframe(ptable)
+            gb.configure_pagination(enabled=True)
+            gb.configure_default_column(editable=False, filter=True, width = 50, type = 'numericColumn')
+
+
+# You can reset all filters by doing the following:
+
+# gridOptions.api.setFilterModel(null);
+
+            gridOptions = gb.build()
+
+            gridReturn = AgGrid(ptable,
+                 fit_columns_on_grid_load=True,
+                gridOptions=gridOptions,
+                allow_unsafe_jscode=True,
+                height = 500, 
+                theme = 'streamlit',
+                enable_enterprise_modules=True, # enables right click and fancy features - can add license key as another parameter (license_key='string') if you have one
+                key='select_grid2', # stops grid from re-initialising every time the script is run
+                reload_data=True, # allows modifications to loaded_data to update this same grid entity
+                # update_mode=GridUpdateMode.FILTERING_CHANGED,
+                update_mode=GridUpdateMode.NO_UPDATE,
+                data_return_mode="FILTERED_AND_SORTED")
+           
     except:
         st.error("Oh no!  Something went wrong.  Check to make sure that your filters in the pivot tabel setup make sense.")
 
