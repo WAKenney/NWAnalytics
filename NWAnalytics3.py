@@ -408,11 +408,12 @@ def pivTable(ptab):
         
         ptForm.markdown('___')
 
-        ptCol1, ptCol2, ptCol3 = ptForm.columns(3)
+        ptCol1, ptCol2 = ptForm.columns(2)
 
         showTotal = ptCol1.radio('Show column total?', ('Yes', 'No'))
         decimalNumber = ptCol2.number_input('Enter the number of decimal places for all values in table.', value  = 1)
-        ptFontSize = ptCol3.slider('Move the slider to adjust the font size', min_value = 8, max_value = 25, value =12)
+        # ptFontSize = ptCol3.slider('Move the slider to adjust the font size', min_value = 8, max_value = 25, value =12)
+        # rowHeight = ptFontSize*2
 
         if showTotal =='Yes':
             selectMargins=True
@@ -430,8 +431,6 @@ def pivTable(ptab):
         ptSubmitButton = ptForm.form_submit_button("Show Pivot Table")
 
         if ptSubmitButton:
-
-            st.markdown('__*Results*__')
             
             if numCols=='Multiple':
 
@@ -443,7 +442,7 @@ def pivTable(ptab):
                     margins=selectMargins,
                     margins_name=selectMargins_name)
 
-                st.markdown(f'The {(funcType)} of {v} by {r} and {c}.')
+                st.subheader(f'The {(funcType)} of {v} by {r} and {c}.')
 
             else:
 
@@ -454,7 +453,7 @@ def pivTable(ptab):
                     margins=selectMargins,
                     margins_name=selectMargins_name)
 
-                st.markdown(f'The {(funcType)} of {v} by {r}.')
+                st.subheader(f'The {(funcType)} of {v} by {r}.')
 
             ptable.reset_index(inplace=True)
             ptable = ptable.round(decimals = decimalNumber)
@@ -462,51 +461,51 @@ def pivTable(ptab):
 
 ###Plotly Table ###
 
-            pivotTable = go.Figure(data=[go.Table(
-                header=dict(
-                    values=list(ptable.columns),
-                    fill_color='paleturquoise',
-                    align='center',
-                    font_size=ptFontSize),
+            # pivotTable = go.Figure(data=[go.Table(
+            #     header=dict(
+            #         values=list(ptable.columns),
+            #         fill_color='paleturquoise',
+            #         align='center',
+            #         height=rowHeight,
+            #         font_size=ptFontSize),
 
-                cells=dict(values =ptable.transpose().values.tolist(),
-                    fill_color='lavender',
-                    align='center',
-                    font_size = ptFontSize)
-                )])
+            #     cells=dict(values =ptable.transpose().values.tolist(),
+            #         fill_color='lavender',
+            #         align='center',
+            #         height =rowHeight,
+            #         font_size = ptFontSize)
+            #     )])
 
-            # ptTitle = st.markdown(f'The {(funcType)} of {v} by {r} and {c}.')
+            # pivotTable.update_layout(margin=dict(l=0,t=0,r=0,b=0), height=500)
 
-            # pivotTable.update_layout(title = (f'The {(funcType)} of {v} by {r} and {c}.'))
-            
-            st.plotly_chart(pivotTable)
+            # st.plotly_chart(pivotTable)
 
 ### Aggrid Table ###
 
-#             gb = GridOptionsBuilder.from_dataframe(ptable)
-#             gb.configure_pagination(enabled=True)
-#             gb.configure_default_column(editable=False, filter=True, width = 50, type = 'numericColumn')
+            gb = GridOptionsBuilder.from_dataframe(ptable)
+            gb.configure_pagination(enabled=True)
+            gb.configure_default_column(editable=False, filter=True, width = 50, type = 'numericColumn')
 
-# # You can reset all filters by doing the following:
+# You can reset all filters by doing the following:
 
-# # gridOptions.api.setFilterModel(null);
+# gridOptions.api.setFilterModel(null);
 
-#             gridOptions = gb.build()
+            gridOptions = gb.build()
 
-#             gridReturn = AgGrid(ptable,
-#                  fit_columns_on_grid_load=True,
-#                 gridOptions=gridOptions,
-#                 allow_unsafe_jscode=True,
-#                 height = 500, 
-#                 theme = 'streamlit',
-#                 enable_enterprise_modules=True, # enables right click and fancy features - can add license key as another parameter (license_key='string') if you have one
-#                 key='select_grid2', # stops grid from re-initialising every time the script is run
-#                 reload_data=True, # allows modifications to loaded_data to update this same grid entity
-#                 # update_mode=GridUpdateMode.FILTERING_CHANGED,
-#                 update_mode=GridUpdateMode.NO_UPDATE,
-#                 data_return_mode="FILTERED_AND_SORTED")
+            AgGrid(ptable,
+                fit_columns_on_grid_load=True,
+                gridOptions=gridOptions,
+                allow_unsafe_jscode=True,
+                height = 500, 
+                theme = 'streamlit',
+                enable_enterprise_modules=True, # enables right click and fancy features - can add license key as another parameter (license_key='string') if you have one
+                key='select_grid2', # stops grid from re-initialising every time the script is run
+                reload_data=True, # allows modifications to loaded_data to update this same grid entity
+                # update_mode=GridUpdateMode.FILTERING_CHANGED,
+                update_mode=GridUpdateMode.NO_UPDATE,
+                data_return_mode="FILTERED_AND_SORTED")
             
-            
+            # gridReturn
            
     except:
         st.error("Oh no!  Something went wrong.  Check to make sure that your filters in the pivot tabel setup make sense.")
