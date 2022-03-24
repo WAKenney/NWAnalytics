@@ -14,7 +14,7 @@ import io
 # from matplotlib.pyplot import margins
 # from os import name
 # from tokenize import Name
-# import numpy as np
+import numpy as np
 import folium
 import geopandas as gpd
 import pandas as pd
@@ -60,7 +60,7 @@ stringColumns=['tree_name','description', 'species', 'genus', 'family', 'street'
     'tree_conflict', 'sign_conflict', 'comments', 'simple_rating', 'rdbh_class',
     'dbh_class', 'native','suitability', 'defects', 'invasivity', 'seRegion']
 
-numericalColumns = ['number_of_stems', 'dbh', 'hard_surface', 'crown_width', 'height_to_crown_base', 'total_height', 'demerits','cpa', 'rdbh']
+numericalColumns = ['number_of_stems', 'dbh', 'hard_surface', 'crown_width', 'height_to_crown_base', 'total_height', 'cpa', 'rdbh']
 
 condColumns = ['reduced_crown', 'unbalanced_crown', 'defoliation', 'weak_or_yellow_foliage', 'dead_or_broken_branch', 'lean',
     'poor_branch_attachment', 'branch_scars', 'trunk_scars', 'conks', 'branch_rot_or_cavity', 'trunk_rot_or_cavity', 'confined_space',
@@ -127,7 +127,6 @@ def aggFilter(df):
     gb.configure_column(field='latitude', hide = True)
     gb.configure_column(field='longitude', hide = True)
     gb.configure_column(field='date', editable=True)
-    
     gb.configure_column(field='species', editable=True)
     gb.configure_column(field='street', editable=True)
     gb.configure_column(field='geometry', hide = True)
@@ -138,6 +137,7 @@ def aggFilter(df):
     gb.configure_column(field='structural', header_name='Structural Defect(s)')
     gb.configure_column(field='health', header_name='Health Defect(s)')
     gb.configure_column(field='defects', header_name='Defect Summary')
+    gb.configure_column(field='color', hide = True)
 
     gridOptions = gb.build()
 
@@ -149,9 +149,10 @@ def aggFilter(df):
         enable_enterprise_modules=True, # enables right click and fancy features - can add license key as another parameter (license_key='string') if you have one
         key='select_grid', # stops grid from re-initialising every time the script is run
         reload_data=True, # allows modifications to loaded_data to update this same grid entity
-        # update_mode=GridUpdateMode.FILTERING_CHANGED,
         update_mode=GridUpdateMode.MANUAL,
         data_return_mode="FILTERED_AND_SORTED")
+
+    gridReturnData = gridReturn['data']
 
 
     towrite = io.BytesIO()
@@ -165,9 +166,15 @@ def aggFilter(df):
     filteredSize = len(gridReturn['data'].index)
             
     if filteredSize<originalSize:
-        st.markdown(f"__NOTE__: You are using filtered data with {filteredSize} entries selected. Be sure to click the update button at the top left of the data table for the filtered data to be used in the functions.")
+        st.markdown(f"__NOTE__: You are using filtered data with {filteredSize} entries selected.  All functions will now operate on this filtered data. Be sure to remove ALL filters when you want to use the full (unfiltered) dataset.")
 
-    return gridReturn['data']
+    with st.expander("Click on the button to generate a statistical summary of the data.", expanded=False):
+    
+        # statsButton = st.button("Show statistical summary")
+        # if statsButton:
+        st.write(gridReturnData[numericalColumns].describe(percentiles=None))
+
+    return gridReturnData
 
 fileName ='empty'
 
@@ -346,7 +353,7 @@ def mapItFolium(mapData):
     #setup the map
     treeMap = folium.Map(location=[avLat, avLon],  
         zoom_start=5,
-        max_zoom=75, 
+        max_zoom=100, 
         min_zoom=1, 
         width ='100%', height = '100%', 
         prefer_canvas=True, 
@@ -408,12 +415,10 @@ def pivTable(ptab):
         
         ptForm.markdown('___')
 
-        ptCol1, ptCol2 = ptForm.columns(2)
+        ptCol1, ptCol2, ptCol3, ptCol4 = ptForm.columns(4)
 
         showTotal = ptCol1.radio('Show column total?', ('Yes', 'No'))
         decimalNumber = ptCol2.number_input('Enter the number of decimal places for all values in table.', value  = 1)
-        # ptFontSize = ptCol3.slider('Move the slider to adjust the font size', min_value = 8, max_value = 25, value =12)
-        # rowHeight = ptFontSize*2
 
         if showTotal =='Yes':
             selectMargins=True
@@ -458,37 +463,11 @@ def pivTable(ptab):
             ptable.reset_index(inplace=True)
             ptable = ptable.round(decimals = decimalNumber)
 
-
-###Plotly Table ###
-
-            # pivotTable = go.Figure(data=[go.Table(
-            #     header=dict(
-            #         values=list(ptable.columns),
-            #         fill_color='paleturquoise',
-            #         align='center',
-            #         height=rowHeight,
-            #         font_size=ptFontSize),
-
-            #     cells=dict(values =ptable.transpose().values.tolist(),
-            #         fill_color='lavender',
-            #         align='center',
-            #         height =rowHeight,
-            #         font_size = ptFontSize)
-            #     )])
-
-            # pivotTable.update_layout(margin=dict(l=0,t=0,r=0,b=0), height=500)
-
-            # st.plotly_chart(pivotTable)
-
-### Aggrid Table ###
+            ### Aggrid Table ###
 
             gb = GridOptionsBuilder.from_dataframe(ptable)
             gb.configure_pagination(enabled=True)
             gb.configure_default_column(editable=False, filter=True, width = 50, type = 'numericColumn')
-
-# You can reset all filters by doing the following:
-
-# gridOptions.api.setFilterModel(null);
 
             gridOptions = gb.build()
 
@@ -504,11 +483,10 @@ def pivTable(ptab):
                 # update_mode=GridUpdateMode.FILTERING_CHANGED,
                 update_mode=GridUpdateMode.NO_UPDATE,
                 data_return_mode="FILTERED_AND_SORTED")
-            
-            # gridReturn
            
     except:
         st.error("Oh no!  Something went wrong.  Check to make sure that your filters in the pivot tabel setup make sense.")
+
 
 ###### Diversity ####
     
@@ -753,6 +731,9 @@ def relativeDBH(data):
             st.write('There are ' + str(numberNan) + ' entries with no DBH Class recorded.  These will be omitted from this anlysis.')
 
     data = data.loc[data['diversity_level'] != 'other']
+
+    # data = data.dropna(subset=['dbh', 'dbh_class', 'rdbh_class'], inplace = True)
+
     data.dropna(subset=['dbh'], inplace = True)
     data.dropna(subset=['dbh_class'], inplace = True)
     data.dropna(subset=['rdbh_class'], inplace = True)
