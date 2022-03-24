@@ -168,10 +168,8 @@ def aggFilter(df):
     if filteredSize<originalSize:
         st.markdown(f"__NOTE__: You are using filtered data with {filteredSize} entries selected.  All functions will now operate on this filtered data. Be sure to remove ALL filters when you want to use the full (unfiltered) dataset.")
 
-    with st.expander("Click on the button to generate a statistical summary of the data.", expanded=False):
+    with st.expander("Click here tosee a statistical summary of the data.", expanded=False):
     
-        # statsButton = st.button("Show statistical summary")
-        # if statsButton:
         st.write(gridReturnData[numericalColumns].describe(percentiles=None))
 
     return gridReturnData
