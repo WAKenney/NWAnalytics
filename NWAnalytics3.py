@@ -5,7 +5,9 @@ Re-Created on 14/03/2022
 @author: W.A. Kenney
 """
 
+from ast import NotIn
 import base64
+from dataclasses import dataclass
 # from functools import cmp_to_key
 import io
 # from itertools import count
@@ -20,6 +22,7 @@ import geopandas as gpd
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import plotly.figure_factory as ff
 import streamlit as st
 from folium.plugins import FloatImage
 from folium.plugins import Fullscreen
@@ -182,7 +185,7 @@ fileName = getFileScreen.file_uploader("Browse for or drag and drop the name of 
     type = ['xlsm', 'xlsx'], 
     key ='fileNameKey')
 
-@st.experimental_memo(show_spinner=False)
+@st.experimental_memo(show_spinner=True)
 def getData(fileName):
 
     if fileName is not None:
@@ -662,6 +665,29 @@ def treeCondition(data):
 
     st.markdown("___")
     st.header('Tree Condition Summary')
+    
+    cols = ['0', '1', '2', '3']
+
+    df = pd.DataFrame(index = condColumns, columns = cols)
+
+    for cond in condColumns:
+
+        myValues = data[cond].value_counts(bins = 4)
+        
+        df.at[cond,'0'] = myValues.iloc[0]
+        df.at[cond,'1'] = myValues.iloc[1]
+        df.at[cond,'2'] = myValues.iloc[2]
+        df.at[cond,'3'] = myValues.iloc[3]
+
+    df.reset_index(inplace=True)
+    df = df.rename(columns = {'index':'Condition Attribute'})
+    
+    with st.expander("Click here to show Data Summary by Condition Attribute and Score", expanded=False):
+
+        condTable = ff.create_table(df)
+        st.plotly_chart(condTable)
+
+
 
     conditionData = data.loc[: , ['defects', 'tree_name']]
     conditionPT = pd.pivot_table(conditionData, index='defects', aggfunc='count')
