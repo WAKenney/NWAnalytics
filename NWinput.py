@@ -1,7 +1,8 @@
 import pandas as pd
 import geopandas as gpd
 import streamlit as st
-
+import io
+import base64
 from st_aggrid import AgGrid
 from st_aggrid.grid_options_builder import GridOptionsBuilder
 from st_aggrid.shared import JsCode
@@ -40,8 +41,6 @@ df_trees=df_trees.rename(columns = {'Tree name':'tree_name','Date':'date','Block
                                     'Conflict with another tree':'tree_conflict','Conflict with Traffic Sign':'sign_conflict'})
 
 
-
-
 def aggFilter(df):
     '''
     Sets up the data in a table for viewing and filtering
@@ -69,6 +68,8 @@ def aggFilter(df):
         data_return_mode="FILTERED_AND_SORTED")
 
     gridReturnData = gridReturn['data']
+
+    return gridReturnData
 
 
 # st.subheader('Data')
@@ -303,6 +304,18 @@ df_trees=df_trees[['Tree Name',	'Description',	'Longitude',	'Latitude',	'Date',
     'Species Suitability',	'Structural Defect',	'Health Defect'
     ]]
 
+# aggFilter(df_trees)
 
-st.write(df_trees.columns)
-aggFilter(df_trees)
+mainTable = aggFilter(df_trees)
+
+# saveDataButton = st.button('Save data as Excel', key='saveData')
+
+# if st.button('Save data as Excel', key='saveData'):
+
+towrite = io.BytesIO()
+downloaded_file = mainTable.to_excel(towrite, encoding='utf-8', index=False, header=True)
+towrite.seek(0)  # reset pointer
+b64 = base64.b64encode(towrite.read()).decode()  # some strings
+linko= f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="NwinputData.xlsx">Click here to save your data as an Excel file</a>'
+st.markdown(linko, unsafe_allow_html=True) 
+
