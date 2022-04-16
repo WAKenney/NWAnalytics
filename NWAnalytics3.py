@@ -8,14 +8,7 @@ Re-Created on 14/03/2022
 from ast import NotIn
 import base64
 from dataclasses import dataclass
-# from functools import cmp_to_key
 import io
-# from itertools import count
-# from logging import _STYLES
-# from math import isnan
-# from matplotlib.pyplot import margins
-# from os import name
-# from tokenize import Name
 import numpy as np
 import folium
 import geopandas as gpd
@@ -35,6 +28,15 @@ from st_aggrid import AgGrid
 from st_aggrid.grid_options_builder import GridOptionsBuilder
 from st_aggrid.shared import JsCode
 from st_aggrid.shared import GridUpdateMode
+
+# from functools import cmp_to_key
+# from itertools import count
+# from logging import _STYLES
+# from math import isnan
+# from matplotlib.pyplot import margins
+# from os import name
+# from tokenize import Name
+
 
 st.set_page_config(layout="centered")
 
@@ -421,12 +423,20 @@ def pivTable(ptab):
         showTotal = ptCol1.radio('Show column total?', ('Yes', 'No'))
         decimalNumber = ptCol2.number_input('Enter the number of decimal places for all values in table.', value  = 1)
 
-        if showTotal =='Yes':
-            selectMargins=True
-            selectMargins_name = 'Total'
+        
+        if f != 'mean':
+
+            if showTotal =='Yes':
+                selectMargins=True
+                selectMargins_name = 'Total'
+            else:
+                selectMargins=False
+                selectMargins_name = 'Total'
+
         else:
+
             selectMargins=False
-            selectMargins_name = 'Total'
+            selectMargins_name = ''
 
         if f == 'count':
             f = pd.Series.nunique
@@ -472,19 +482,28 @@ def pivTable(ptab):
 
             gridOptions = gb.build()
 
-            AgGrid(ptable,
+            pivotReturn = AgGrid(ptable,
                 fit_columns_on_grid_load=True,
                 gridOptions=gridOptions,
                 allow_unsafe_jscode=True,
                 height = 500, 
                 theme = 'streamlit',
                 enable_enterprise_modules=True, # enables right click and fancy features - can add license key as another parameter (license_key='string') if you have one
-                key='select_grid2', # stops grid from re-initialising every time the script is run
+                key='pivotGrid', # stops grid from re-initialising every time the script is run
                 reload_data=True, # allows modifications to loaded_data to update this same grid entity
                 # update_mode=GridUpdateMode.FILTERING_CHANGED,
                 update_mode=GridUpdateMode.NO_UPDATE,
                 data_return_mode="FILTERED_AND_SORTED")
-           
+
+            privotReturnData = pivotReturn['data']
+
+            towrite = io.BytesIO()
+            downloaded_file = pivotReturn['data'].to_excel(towrite, encoding='utf-8', index=False, header=True)
+            towrite.seek(0)  # reset pointer
+            b64 = base64.b64encode(towrite.read()).decode()  # some strings
+            linko= f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="NwAnalyticsPivot.xlsx">Click here to save your data as an Excel file</a>'
+            st.markdown(linko, unsafe_allow_html=True) 
+                
     except:
         st.error("Oh no!  Something went wrong.  Check to make sure that your filters in the pivot tabel setup make sense.")
 
