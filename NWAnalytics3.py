@@ -5,7 +5,7 @@ Re-Created on 14/03/2022
 @author: W.A. Kenney
 """
 
-from ast import NotIn
+from ast import Break, NotIn
 import base64
 from dataclasses import dataclass
 import io
@@ -29,6 +29,8 @@ from st_aggrid.grid_options_builder import GridOptionsBuilder
 from st_aggrid.shared import JsCode
 from st_aggrid.shared import GridUpdateMode
 
+from branca.element import Element
+
 # from functools import cmp_to_key
 # from itertools import count
 # from logging import _STYLES
@@ -49,6 +51,7 @@ st.set_page_config(layout="centered")
 #             """
 # st.markdown(hide_st_style, unsafe_allow_html=True)
 # st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
+
 
 currentDir = "https://raw.githubusercontent.com/WAKenney/NWAnalytics/main/"
 
@@ -92,23 +95,10 @@ with st.expander("Click here for help in getting started.", expanded=False):
         a few minutes if you have a big file, be patient) you will be asked to select the functions you want to display.  Select as many as you 
         want from the dropdown list __AND CLICK ON CONTINUE__.  The selected analyses will be shown in the main frame.
 
-        You can conduct these analyses on all the data, or you can filter the data for specific queries. The table below shows your inventory data 
-        and can be filtered much as you would a Microsoft Excel worksheet.  Scroll across the columns and place your cursor on the header of the
-        column that you wish to filter.  As you do so, an icon of three lines will appear in the header, click on this icon.  The type of filter
-        will depend on the type of data in that column.  For text data, you will see a list of all the options in that column with a checkbox to the left of each line.  To filter 
-        out specific items first click on the check box beside _Select All_ to switch off all the items.  Now, click on the box(es) beside the items
-        you want in your filter.  Note that you can type in an item name to shorten the list.  Once you have selected everything you want in the
-        filter, you must click on the _Update_ button at the top left of the table.  Your filtered data will now be used in all the functions you select
-        from the sidebar at the left.  For numerical data you will have the option to filter using comparison types such as equal to, greater than, etc.
-        Remember to click on the _Update_ button to commit your filter to the analysis functions.
+        You can conduct these analyses on all the data, or you can filter the data for specific queries. For hints on filtering your data, click on the button below.
 
-        You must clear the filters manually by going to each column header with a filter and either click on _Select all_ or remove the values 
-        from the boxes in a numeric filter.  Columns with an active filter will have an icon that looks like a funnel in the header.
-
-        Note that you can save your filtered data as an Excel workbook by clicking on the link at the bottom of the data table.
-
-        In various places you will have opportunities to click on a box for more information, just as you are reading this text.  To close these boxes, 
-        simply click on the header button again.
+        In various places you will have opportunities to click on a box 
+        for more information, just as you are reading this text.  To close these boxes, simply click on the header button again.
 
         Click on the following link to read more about Neighbourwoods: http://neighbourwoods.org/')
 
@@ -161,7 +151,7 @@ def aggFilter(df):
 
 
     towrite = io.BytesIO()
-    downloaded_file = gridReturn['data'].to_excel(towrite, encoding='utf-8', index=False, header=True)
+    downloaded_file = gridReturn['data'].to_excel(towrite, encoding='utf-8', index=False, header=True, sheet_name = 'summary')
     towrite.seek(0)  # reset pointer
     b64 = base64.b64encode(towrite.read()).decode()  # some strings
     linko= f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="NwAnalyticsData.xlsx">Click here to save your data as an Excel file</a>'
@@ -173,9 +163,8 @@ def aggFilter(df):
     if filteredSize<originalSize:
         st.markdown(f"__NOTE__: You are using filtered data with {filteredSize} entries selected.  All functions will now operate on this filtered data. Be sure to remove ALL filters when you want to use the full (unfiltered) dataset.")
 
-    with st.expander("Click here to see a statistical summary of the data.", expanded=False):
-    
-        st.write(gridReturnData[numericalColumns].describe(percentiles=None))
+    # with st.expander("Click here to see a statistical summary of the data.", expanded=False):
+    #     st.write(gridReturnData[numericalColumns].describe(percentiles=None))
 
     return gridReturnData
 
@@ -187,7 +176,7 @@ fileName = getFileScreen.file_uploader("Browse for or drag and drop the name of 
     type = ['xlsm', 'xlsx'], 
     key ='fileNameKey')
 
-@st.experimental_memo(show_spinner=True)
+@st.experimental_memo(show_spinner=False)
 def getData(fileName):
 
     if fileName is not None:
@@ -285,6 +274,7 @@ def getData(fileName):
 
     return [df, speciesTable, colorsTable]
 
+
 if fileName is not None:
 
     with st.spinner(text = 'Setting up your data, please wait...'):
@@ -293,8 +283,196 @@ if fileName is not None:
         speciesTable = getData(fileName)[1]
         colorsTable = getData(fileName)[2]
         colorsDict = colorsTable.to_dict('dict')['color']
+
+        with st.expander("Click here for hints on filtering your data", expanded=False):
+            st.markdown("""The table below shows your inventory data 
+        and can be filtered much as you would a Microsoft Excel worksheet.  Scroll across the columns and place your cursor on the header of the
+        column that you wish to filter.  As you do so, an icon of three lines will appear in the header, click on this icon.  The type of filter
+        will depend on the type of data in that column.  For text data, you will see a list of all the options in that column with a checkbox to the left of each line.  To filter 
+        out specific items first click on the check box beside _Select All_ to switch off all the items.  Now, click on the box(es) beside the items
+        you want in your filter.  Note that you can type in an item name to shorten the list.  ***Once you have selected everything you want in the
+        filter, you must click on the Update button at the top left of the table***.  Your filtered data will now be used in all the functions you select
+        from the sidebar at the left.  
+        For numerical data you will have the option to filter using comparison types such as equal to, greater than, etc.
+        Remember to click on the _Update_ button to commit your filter to the analysis functions. 
+        You must clear the filters manually by going to each column header with a filter and either click on _Select all_ or remove 
+        the values from the boxes in a numeric filter.  Columns with an active filter will have an icon that looks like a funnel in the header. 
+        Note that you can save your filtered data as an Excel workbook by clicking on the link at the bottom of the data table.""")
         
         select_df = aggFilter(df)
+
+
+def checkData(df):
+
+    with st.spinner(text = 'Checking your data, please wait...'):
+
+        cols = ['tree_name','latitude', 'longitude', 'block', 'species', 'street', 'address', 'location_code', 'ownership_code', 'number_of_stems', 'dbh',
+        'hard_surface', 'crown_width', 'height_to_crown_base', 'total_height', 'reduced_crown', 'unbalanced_crown', 'defoliation',
+        'weak_or_yellow_foliage', 'dead_or_broken_branch', 'lean', 'poor_branch_attachment', 'branch_scars', 'trunk_scars', 'conks',
+        'branch_rot_or_cavity', 'trunk_rot_or_cavity', 'confined_space','crack', 'girdling_roots', 'exposed_roots', 'recent_trenching', 'cable_or_brace',
+        'wire_conflict', 'sidewalk_conflict', 'structure_conflict', 'tree_conflict', 'sign_conflict']
+
+        conditionColsNoConks = ['reduced_crown', 'unbalanced_crown', 'defoliation', 'weak_or_yellow_foliage', 'dead_or_broken_branch', 'lean',
+                    'poor_branch_attachment', 'branch_scars', 'trunk_scars', 'branch_rot_or_cavity', 'trunk_rot_or_cavity', 'confined_space',
+                    'crack', 'girdling_roots', 'exposed_roots', 'recent_trenching']
+
+        nonTrees = ['dead tree', 'forest', 'hedge','plantable spot', 'snag', 'stump']
+
+        trees = df['tree_name']
+
+        df.drop(['genus', 'family','cpa', 'rdbh', 'rdbh_class', 'dbh_class', 'native', 'color', 'health','structural', 'defects', 'defectColour', 'diversity_level', 'invasivity',
+            'comments', 'demerits', 'simple_rating', 'suitability', 'seRegion', 'description', 'geometry'], 
+            axis=1, inplace=True) #don't need these columnns since they are derived values
+        
+        df.set_index('tree_name', drop = False,  inplace = True) # Make the index tree_name so the df.at function can be used later on
+        df['error'] = 'ok' # add a column to df called error and fill all with ok.  The ok is replaced by error message later on
+        df['warning'] = 'ok' # add a column to df called warning and fill all with ok.  The ok is replaced by warning message later on
+
+
+    # Check if there is a missing value in all columns except for dead, plantable spots etc.  Message is added to the column warnng in df
+
+        # tNames = df['tree_name'] 
+
+        dupTest = df['tree_name'].duplicated(keep = 'first')
+        
+        dup = dupTest[dupTest].index
+
+        if dupTest.values.sum() >= 1:
+
+            st.error('''Uh Oh!  The following tree(s) have duplicate names.  Exit this app, 
+            correct any errors in your data input file then re-start this app, re-load the corrected file and proceed.''')
+            
+            st.write(dup)
+
+        else:
+            
+            for tree in trees:
+
+                sppName = df.at[tree, 'species']
+
+                if  df.at[tree, 'species'] not in nonTrees:
+
+                    for col in cols:
+                        
+                        wMessage = df.at[tree, 'warning']
+
+                        if pd.isna(df.at[tree, col]):
+
+                            if df.at[tree, 'warning'] == 'ok':
+
+                                df.at[tree, 'warning'] = 'missing ' + col
+
+                            else:
+                                
+                                df.at[tree, 'warning'] = wMessage + '; missing ' + col
+
+
+        # Check for invalide codes in the tree condition columns.  Must be either 0, 1, 2, or 3
+            
+                for col in conditionColsNoConks:
+                        
+                    wMessage = df.at[tree, 'error']
+
+                    if df.at[tree, col] not in [0, 1, 2, 3]:
+
+                        if df.at[tree, 'error'] == 'ok':
+
+                            df.at[tree, 'error'] = 'invalide code in ' + col
+
+                        else:
+                            
+                            df.at[tree, 'error'] = wMessage + '; invalide code in ' + col
+
+                    
+        #check for invalide codes for conks.  This done separately because conks only have codes of 0 or 1
+                            
+                wMessage = df.at[tree, 'error']
+
+                if df.at[tree, 'conks'] not in [0, 1]:
+
+                    if df.at[tree, 'error'] == 'ok':
+
+                        df.at[tree, 'error'] = 'Invalide code in conks'
+
+                    else:
+                        
+                        df.at[tree, 'error'] = wMessage + '; invalide code in conks'
+
+        # Error if invalide species codes
+            
+                wMessage = df.at[tree, 'error']
+
+                if df.at[tree, 'species'] not in speciesTable['species'].tolist():
+
+                    if df.at[tree, 'error'] == 'ok':
+
+                        df.at[tree, 'error'] = 'Invalide species code'
+
+                    else:
+                        
+                        df.at[tree, 'error'] = wMessage + '; invalide species code'
+
+        # Warn if identified only to genus
+                    
+                wMessage = df.at[tree, 'warning']
+
+                if pd.notna(sppName):
+
+                    if 'species' in sppName: # Entries identified only to genus will have the word species in the name like Maple Species.  If this happens, record a warning
+
+                        if wMessage == 'ok':
+
+                            df.at[tree, 'warning'] = 'Only genus identified'
+
+                        else:
+                            
+                            df.at[tree, 'warning'] = wMessage + '; only genus identified'
+
+        
+        # remove rows in the output table (df) that have ok in both the warning and error columns in otherwords there are no problems
+
+            for tree in trees:
+
+                df = df[(df["warning"].str.contains("ok") & df["error"].str.contains("ok")) == False]
+
+            st.markdown('---')
+            st.subheader('Errors and Warnings')
+            st.markdown('''The following table shows entries with errors and warnings.  Scroll to the right to view the messages in the final two columns. 
+                            Warnings highlight issues that may result in some lost information whereas **errors _may_ result in the app crashing.  You should 
+                            correct errors before proceeding.**
+                            You can filter the columns just as you would in the main table.
+            ''')
+                
+            gb = GridOptionsBuilder.from_dataframe(df)
+            gb.configure_pagination(enabled=True)
+            gb.configure_default_column(editable=True, filter=True, fit_columns_on_grid_load = True,)
+            
+            gb.configure_column(field='error',editable=False, filter = True, wrapText=True, autoHeight = True)
+            gb.configure_column(field='warning',editable=False, filter = True, wrapText=True, autoHeight = True)
+                
+            gridOptions = gb.build()
+
+            gridReturn = AgGrid(df,
+                gridOptions=gridOptions,
+                allow_unsafe_jscode=True,
+                height = 500, 
+                theme = 'fresh',
+                enable_enterprise_modules=True, # enables right click and fancy features - can add license key as another parameter (license_key='string') if you have one
+                key='check_grid', # stops grid from re-initialising every time the script is run
+                reload_data=True, # allows modifications to loaded_data to update this same grid entity
+                update_mode=GridUpdateMode.NO_UPDATE,
+                data_return_mode="FILTERED_AND_SORTED")
+
+            gridReturnData = gridReturn['data']
+
+
+            towrite = io.BytesIO()
+            downloaded_file = gridReturn['data'].to_excel(towrite, encoding='utf-8', index=False, header=True, sheet_name = 'summary')
+            towrite.seek(0)  # reset pointer
+            b64 = base64.b64encode(towrite.read()).decode()  # some strings
+            linko= f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="NwCheckData.xlsx">Click here to save your data as an Excel file</a>'
+            st.markdown(linko, unsafe_allow_html=True)
+
 
 def setupSidebar(df):
     """
@@ -302,8 +480,11 @@ def setupSidebar(df):
     """ 
     selectFunctionForm = st.sidebar.form(key = 'selectFunction')
     selectFunctionForm.header('Select the function(s) you want to display ')
-    selectFunction = selectFunctionForm.multiselect('',['Map Trees', 'Pivot Table', 'Tree Diversity', 'Species Origin', 'Tree Condition', 'Relative DBH', 'Suitability & Invasivity'])
+    selectFunction = selectFunctionForm.multiselect('',['Check Data', 'Map Trees', 'Pivot Table', 'Tree Diversity', 'Species Origin', 'Tree Condition', 'Relative DBH', 'Suitability & Invasivity'])
     selectFunctionForm.form_submit_button("Continue")
+
+    if 'Check Data' in selectFunction:
+        checkData(select_df)
 
     if 'Map Trees' in selectFunction:
         mapItFolium(select_df)
@@ -391,9 +572,26 @@ def mapItFolium(mapData):
         control = True
        ).add_to(treeMap)
 
+
+    # add a title to the map
+
+    # treeMap.get_root().html.add_child(folium.Element("""
+    #     <div style="position: fixed; 
+    #         top: 50px; left: 70px; width: 150px; height: 70px; 
+    #         background-color:orange; border:2px solid grey;z-index: 900;">
+    #         <h5>Hello World!!!</h5>
+    #         <button>Test Button</button>
+    #     </div>
+    #     """))
+    
+
     # add a fullscreen option and layer control to the map
     Fullscreen().add_to(treeMap)
     folium.LayerControl().add_to(treeMap)
+
+    # treeMapLegend = r"C:\Users\HP\OneDrive\Neighbourwoods\NWAnalytics\mapLegend.png"
+
+    # FloatImage(treeMapLegend, bottom=5, left=5).add_to(treeMap)
    
     folium_static(treeMap)
     
@@ -579,6 +777,11 @@ def diversity(data):
     speciesPie.update_traces(textfont_size=15,
                   marker=dict(line=dict(color='#000000', width=1)))
     
+
+    with st.expander("Click to view tabular data.", expanded=False):
+        divTable = ff.create_table(topTenPlusOther.round(decimals = 0))
+        st.plotly_chart(divTable)
+
     st.plotly_chart(speciesPie)
     
     st.subheader('Diversity based on crown projection area (CPA)')
@@ -685,60 +888,69 @@ def treeCondition(data):
     st.markdown("___")
     st.header('Tree Condition Summary')
     
-    cols = ['0', '1', '2', '3']
+    try:
+        cols = ['0', '1', '2', '3']
 
-    df = pd.DataFrame(index = condColumns, columns = cols)
+        df = pd.DataFrame(index = condColumns, columns = cols)
 
-    for cond in condColumns:
+        for cond in condColumns:
+            # myValues = data[cond].value_counts(bins = 4)
+            myValues = pd.to_numeric(data[cond]).value_counts(bins = 4)
+            
+            df.at[cond,'0'] = myValues.iloc[0]
+            df.at[cond,'1'] = myValues.iloc[1]
+            df.at[cond,'2'] = myValues.iloc[2]
+            df.at[cond,'3'] = myValues.iloc[3]
 
-        myValues = data[cond].value_counts(bins = 4)
+        df.reset_index(inplace=True)
+        df = df.rename(columns = {'index':'Condition Attribute'})
         
-        df.at[cond,'0'] = myValues.iloc[0]
-        df.at[cond,'1'] = myValues.iloc[1]
-        df.at[cond,'2'] = myValues.iloc[2]
-        df.at[cond,'3'] = myValues.iloc[3]
+        with st.expander("Click here to show Data Summary by Condition Attribute and Score", expanded=False):
 
-    df.reset_index(inplace=True)
-    df = df.rename(columns = {'index':'Condition Attribute'})
-    
-    with st.expander("Click here to show Data Summary by Condition Attribute and Score", expanded=False):
-
-        condTable = ff.create_table(df)
-        st.plotly_chart(condTable)
+            condTable = ff.create_table(df)
+            st.plotly_chart(condTable)
 
 
+        conditionData = data.loc[: , ['defects', 'tree_name']]
+        conditionPT = pd.pivot_table(conditionData, index='defects', aggfunc='count')
+        conditionPT.reset_index(inplace=True)
+        
+        conditionPT.rename(columns = {'tree_name': 'frequency'},inplace = True)
 
-    conditionData = data.loc[: , ['defects', 'tree_name']]
-    conditionPT = pd.pivot_table(conditionData, index='defects', aggfunc='count')
-    conditionPT.reset_index(inplace=True)
-    
-    conditionPT.rename(columns = {'tree_name': 'frequency'},inplace = True)
+        conditionPie = px.pie(conditionPT, values='frequency', names = 'defects')
+        
+        conditionPie.update_traces(insidetextorientation='radial', textinfo='label+percent') 
+        conditionPie.update_layout(showlegend=False)
+        conditionPie.update_traces(textfont_size=15,
+                    marker=dict(line=dict(color='#000000', width=1)))
+        
+        st.subheader("Condition by the number of trees (frequency)")
+        st.plotly_chart(conditionPie)
 
-    conditionPie = px.pie(conditionPT, values='frequency', names = 'defects')
-    
-    conditionPie.update_traces(insidetextorientation='radial', textinfo='label+percent') 
-    conditionPie.update_layout(showlegend=False)
-    conditionPie.update_traces(textfont_size=15,
-                  marker=dict(line=dict(color='#000000', width=1)))
-    
-    st.subheader("Condition by the number of trees (frequency)")
-    st.plotly_chart(conditionPie)
+        conditionDataCPA = data.loc[: , ['defects', 'cpa']]
+        conditionPTCPA = pd.pivot_table(conditionDataCPA, index='defects', aggfunc='sum')
+        conditionPTCPA.reset_index(inplace=True)
+        
+        conditionPieCPA = px.pie(conditionPTCPA, values='cpa', names = 'defects')
+        
+        conditionPieCPA.update_traces(insidetextorientation='radial', textinfo='label+percent') 
+        conditionPieCPA.update_layout(showlegend=False)
+        conditionPieCPA.update_traces(textfont_size=15,
+                    marker=dict(line=dict(color='#000000', width=1)))
+        
 
-    conditionDataCPA = data.loc[: , ['defects', 'cpa']]
-    conditionPTCPA = pd.pivot_table(conditionDataCPA, index='defects', aggfunc='sum')
-    conditionPTCPA.reset_index(inplace=True)
-      
-    conditionPieCPA = px.pie(conditionPTCPA, values='cpa', names = 'defects')
-    
-    conditionPieCPA.update_traces(insidetextorientation='radial', textinfo='label+percent') 
-    conditionPieCPA.update_layout(showlegend=False)
-    conditionPieCPA.update_traces(textfont_size=15,
-                  marker=dict(line=dict(color='#000000', width=1)))
-    
+        st.subheader("Condition by Crown Projection Area (cpa)")
+        st.plotly_chart(conditionPieCPA)
 
-    st.subheader("Condition by Crown Projection Area (cpa)")
-    st.plotly_chart(conditionPieCPA)
-    
+    except ValueError:
+
+        st.warning('''Oh oh!  There may be a problem with your data.  Run the "Check Data" function (in the sidebar) 
+        and look for errors in the column at the right of the table that is generated.  You can filter the error column
+        in the table just as you would in the main table to find everything that isn't "ok".  Correct any errors in your data input file
+        then re-start this app, re-load the corrected file and proceed. Only 0, 1, 2 or 3 (0 or 1 for conks) are valid entries in any of the 
+        condition columns (reduced_crown to recent_trenching). Any other value, including a blank, in these columns will 
+        cause NWAnalytics3 to stop working!''')
+        
 ########## Relative DBH Analysis  ##########
 
 def relativeDBH(data):
@@ -800,6 +1012,13 @@ def relativeDBH(data):
     
     st.header("DBH Class Frequency")
 
+    with st.expander("Click here to show DBH class by Frequency and Target ", expanded=False):
+        
+
+        rdbhTable = ff.create_table(dbhPT.round(decimals = 0))
+        
+        st.plotly_chart(rdbhTable)
+    
     st.plotly_chart(dbhFig)
 
 
@@ -860,7 +1079,10 @@ def speciesSuitablity(data):
     suitabilityPie.update_traces(textfont_size=15,
                   marker=dict(line=dict(color='#000000', width=1)))
     
-
+    with st.expander("Click to view tabular data.", expanded=False):
+        suitabilityTable = ff.create_table(suitabilityPT.round(decimals = 0))
+        st.plotly_chart(suitabilityTable)
+        
     st.plotly_chart(suitabilityPie)
 
 
@@ -893,7 +1115,8 @@ def speciesSuitablity(data):
 
     st.subheader('Invasivity by the number of trees (frequency)')
 
-    invasivityData = data.loc[: , ['invasivity', 'tree_name']]
+    invasivityData = data.loc[: , ['species', 'invasivity', 'tree_name']]
+
     invasivityPT = pd.pivot_table(invasivityData, index='invasivity', aggfunc='count')
     invasivityPT.reset_index(inplace=True)
     invasivityPT.rename(columns = {'tree_name': 'frequency'},inplace = True)
@@ -907,6 +1130,24 @@ def speciesSuitablity(data):
     invasivityPie.update_layout(showlegend=False)
     invasivityPie.update_traces(textfont_size=15,
                   marker=dict(line=dict(color='#000000', width=1)))
+    
+    with st.expander("Click to view invasive vs. non-invasive summary data.", expanded=False):
+
+        invasivityTable = invasivityPT.drop('species', axis=1, inplace=True)
+
+        invasivityTable = ff.create_table(invasivityPT.round(decimals = 0))
+        st.plotly_chart(invasivityTable)
+
+    # invasiveSpecies = data.loc[data['invasivity'] == 'invasive', 'species']
+    
+    with st.expander("Click to view a list of invasive tree species in your data set.", expanded=False):
+   
+        invasiveSpeciesOnly = invasivityData.loc[invasivityData['invasivity']=='invasive']     
+        invasiveSpeciesOnly.rename(columns = {'tree_name': 'frequency'},inplace = True)
+        invasivitySpeciesTable = pd.pivot_table(invasiveSpeciesOnly, index='species', values = 'frequency', aggfunc='count')
+        invasivitySpeciesTable.reset_index(inplace=True)
+        invasivitySpeciesTable = ff.create_table(invasivitySpeciesTable)
+        st.plotly_chart(invasivitySpeciesTable)
     
     
     st.plotly_chart(invasivityPie)
@@ -928,7 +1169,10 @@ def speciesSuitablity(data):
     invasivityPieCPA.update_traces(textfont_size=15,
                   marker=dict(line=dict(color='#000000', width=1)))
     
-    
+    # with st.expander("Click to view tabular data.", expanded=False):
+    #     invasivityCPATable = ff.create_table(invasivityPTCPA.round(decimals = 0))
+    #     st.plotly_chart(invasivityCPATable)
+
     st.plotly_chart(invasivityPieCPA)
 
 ######################################################################################
@@ -938,3 +1182,5 @@ if fileName is not None:
     
 
 
+
+# %%
