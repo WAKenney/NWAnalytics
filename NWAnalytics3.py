@@ -26,19 +26,10 @@ from geopandas import GeoDataFrame
 
 from st_aggrid import AgGrid
 from st_aggrid.grid_options_builder import GridOptionsBuilder
-from st_aggrid.shared import JsCode
+# from st_aggrid.shared import JsCode
 from st_aggrid.shared import GridUpdateMode
 
-from branca.element import Element
-
-# from functools import cmp_to_key
-# from itertools import count
-# from logging import _STYLES
-# from math import isnan
-# from matplotlib.pyplot import margins
-# from os import name
-# from tokenize import Name
-
+# from branca.element import Element
 
 st.set_page_config(layout="centered")
 
@@ -248,7 +239,7 @@ def getData(fileName):
             return 'red'
         
         else:
-            return 'gray'
+            return 'black'
 
     df['defectColour'] = df.apply(setDefectColour, axis = 1)
 
@@ -264,7 +255,6 @@ def getData(fileName):
 
     df = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.longitude, df.latitude)).copy() # save the 'data' pandas dataframe to a geodataframe
 
-    df = df.set_crs('epsg:4326') # set coordinate reference system to WGS84
     
     df['date'] = df['date'].astype(str) # Save the inventory dates as a string.  Otherwise an error is thrown when mapping
 
@@ -458,7 +448,7 @@ def checkData(df):
                 height = 500, 
                 theme = 'fresh',
                 enable_enterprise_modules=True, # enables right click and fancy features - can add license key as another parameter (license_key='string') if you have one
-                key='check_grid', # stops grid from re-initialising every time the script is run
+                key='check_grid', 
                 reload_data=True, # allows modifications to loaded_data to update this same grid entity
                 update_mode=GridUpdateMode.NO_UPDATE,
                 data_return_mode="FILTERED_AND_SORTED")
@@ -534,6 +524,7 @@ def mapItFolium(mapData):
     maxLon=mapData['longitude'].max()
     minLon=mapData['longitude'].min()
     
+
     #setup the map
     treeMap = folium.Map(location=[avLat, avLon],  
         zoom_start=5,
@@ -572,6 +563,9 @@ def mapItFolium(mapData):
         control = True
        ).add_to(treeMap)
 
+    # mapLegend = currentDir + 'mapLegend.png'
+    # st.image(mapLegend)
+
 
     # add a title to the map
 
@@ -594,6 +588,7 @@ def mapItFolium(mapData):
     # FloatImage(treeMapLegend, bottom=5, left=5).add_to(treeMap)
    
     folium_static(treeMap)
+
     
 ###### Pivot Table ########
 def pivTable(ptab):
@@ -977,6 +972,9 @@ def relativeDBH(data):
             Targets are adapted from _Richards, N.A. 1983. Diversity and stability in a street tree population. Urban Ecology 7:159-171_.
         """)
     
+    # numberGenus = data.loc[data['diversity_level'] == 'genus'].sum()
+    # st.write('There are these many trees identified to the genus level: ', numberGenus)
+    
     numberNan = data['dbh_class'].isnull().sum()
     
     if numberNan != 0:
@@ -985,13 +983,15 @@ def relativeDBH(data):
         else:
             st.write('There are ' + str(numberNan) + ' entries with no DBH Class recorded.  These will be omitted from this anlysis.')
 
-    data = data.loc[data['diversity_level'] != 'other']
-
-    # data = data.dropna(subset=['dbh', 'dbh_class', 'rdbh_class'], inplace = True)
+    data = data.loc[data['diversity_level'] == 'species']
 
     data.dropna(subset=['dbh'], inplace = True)
     data.dropna(subset=['dbh_class'], inplace = True)
     data.dropna(subset=['rdbh_class'], inplace = True)
+
+    # data = data.dropna(subset=['dbh'])
+    # data = data.dropna(subset=['dbh_class'])
+    # data = data.dropna(subset=['rdbh_class'])
     
     dbhData = data.loc[: , ['dbh_class', 'tree_name']]
     
@@ -1021,15 +1021,16 @@ def relativeDBH(data):
     
     st.plotly_chart(dbhFig)
 
-
     realtiveDbhData = data.loc[: , ['rdbh_class', 'tree_name']]
     
     relativeDbhPT = pd.pivot_table(realtiveDbhData, index='rdbh_class', aggfunc='count')
     relativeDbhPT.reset_index(inplace=True)
     relativeDbhPT.rename(columns = {'rdbh_class': 'Relative DBH Class', 'tree_name': 'Frequency'},inplace = True)
 
+    relativeDbhPT = relativeDbhPT.head(4)
+
     numberOfEntries = relativeDbhPT['Frequency'].sum()
-    
+
     relativeDbhPT["Target"] = [numberOfEntries*0.4, numberOfEntries*0.3, numberOfEntries*0.2, numberOfEntries*0.1]
 
     rdbhFig = go.Figure(data=[
