@@ -7,7 +7,7 @@ Re-Created on 14/03/2022
 NWAnalytics5
 """
 
-# from ast import Break, NotIn
+from ast import Break, NotIn
 from st_aggrid import AgGrid
 from st_aggrid.grid_options_builder import GridOptionsBuilder
 from st_aggrid.shared import JsCode
@@ -16,20 +16,20 @@ from st_aggrid.shared import GridUpdateMode
 import base64
 from dataclasses import dataclass
 import io
-# import numpy as np
+import numpy as np
 import folium
 import geopandas as gpd
-# import os
+import os
 import pandas as pd
-# from PIL import Image
+from PIL import Image
 import plotly.express as px
 import plotly.graph_objects as go
 import plotly.figure_factory as ff
 import streamlit as st
-# from datetime import date
-# from folium.plugins import FloatImage
+from datetime import date
+from folium.plugins import FloatImage
 from folium.plugins import Fullscreen
-# from PIL import Image
+from PIL import Image
 # from streamlit.state.session_state import SessionState
 from streamlit_folium import folium_static
 from geopandas import GeoDataFrame
@@ -202,6 +202,7 @@ def getData(fileName):
     if fileName is not None:
         df = pd.read_excel(fileName, sheet_name = "summary", header = 0)
 
+
     #read the species table from the current directory which should be Github repo
     speciesFile = currentDir + 'NWspecies220522.xlsx' 
     speciesTable = pd.read_excel(speciesFile,sheet_name = "species")
@@ -227,6 +228,7 @@ def getData(fileName):
                                 'Invasivity':'invasivity', 'Diversity Level':'diversity_level',
                                 'DBH Class':'dbh_class','Native':'native','Species Suitability':'suitability','Structural Defect':'structural', 
                                 'Health Defect':'health'})
+    
 
     def defect_setup(df):
         """
@@ -280,7 +282,7 @@ def getData(fileName):
 
     # save the 'data' pandas dataframe as a geodataframe
     df = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.longitude, df.latitude)).copy() 
-    
+ 
     # Save the inventory dates as a string.  Otherwise an error is thrown when mapping
     df['date'] = df['date'].astype(str)
 
@@ -316,9 +318,10 @@ if fileName is not None:
         To clear all filters and return to the full data set, click on the Update button.
         Note: that you can save your filtered data as an Excel workbook by clicking on the link at the bottom of the FILTERED data table.""")
         
-        # display the selected data (select_df) using AgGrid
-        select_df = aggFilter(df)
         
+        # display the selected data (select_df) using AgGrid
+        
+        select_df = aggFilter(df)
         
 def checkData(chkData):
 
