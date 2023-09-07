@@ -1,0 +1,12 @@
+Fiona==1.8.22
+folium
+geopandas
+numpy
+pandas
+pillow
+plotly
+Shapely==1.8.5.post1
+streamlit==1.25.0
+streamlit_folium
+XlsxWriter
+streamlit-aggrid==0.2.3.post2
