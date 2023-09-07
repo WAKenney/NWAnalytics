@@ -65,7 +65,7 @@ condColumns = ['reduced_crown', 'unbalanced_crown', 'defoliation', 'weak_or_yell
 titleCol1, titleCol2, titleCol3 =st.columns((1,4,1))
 title = currentDir + 'NWAnalyticsTitle.jpg'
 titleCol2.image(title, use_column_width=True)
-titleCol1.write("Sept 4 2023")
+titleCol1.write("Sept 7 2023")
 
 with st.expander("Click here for help in getting started.", expanded=False):
     st.markdown("""
@@ -318,7 +318,7 @@ if fileName is not None:
         To clear all filters and return to the full data set, click on the Update button.
         Note: that you can save your filtered data as an Excel workbook by clicking on the link at the bottom of the FILTERED data table.""")
         
-        
+
         # display the selected data (select_df) using AgGrid
         
         select_df = aggFilter(df)
