@@ -531,7 +531,7 @@ def checkData(chkData):
             gridOptions=gridOptions,
             allow_unsafe_jscode=True,
             height = 500, 
-            theme = 'fresh',
+            theme = 'streamlit',
             enable_enterprise_modules=True, # enables right click and fancy features - can add license key as another parameter (license_key='string') if you have one
             key='check_grid', 
             reload_data=True, # allows modifications to loaded_data to update this same grid entity
