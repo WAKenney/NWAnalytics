@@ -103,22 +103,22 @@ def aggFilter(agData):
     gb.configure_default_column(editable=True, filter=True)
 
     # gb.configure_column(field='tree_name', header_name='Tree Name')
-    gb.configure_column(field='description', header_name='Tree Description',
-        editable=False, filter = False, wrapText=True, autoHeight = True)
-    gb.configure_column(field='latitude', hide = True)
-    gb.configure_column(field='longitude', hide = True)
-    gb.configure_column(field='date', editable=True)
-    gb.configure_column(field='species', editable=True)
-    gb.configure_column(field='street', editable=True)
-    gb.configure_column(field='geometry', hide = True)
-    gb.configure_column(field='defectColour', hide = True)
-    gb.configure_column(field='diversity_level', hide = True)
-    # gb.configure_column(field='demerits', hide = True)
-    gb.configure_column(field='seRegion', header_name='Origin')
-    gb.configure_column(field='structural', header_name='Structural Defect(s)')
-    gb.configure_column(field='health', header_name='Health Defect(s)')
-    gb.configure_column(field='defects', header_name='Defect Summary')
-    gb.configure_column(field='color', hide = True)
+    # gb.configure_column(field='description', header_name='Tree Description',
+    #     editable=False, filter = False, wrapText=True, autoHeight = True)
+    # gb.configure_column(field='latitude', hide = True)
+    # gb.configure_column(field='longitude', hide = True)
+    # gb.configure_column(field='date', editable=True)
+    # gb.configure_column(field='species', editable=True)
+    # gb.configure_column(field='street', editable=True)
+    # gb.configure_column(field='geometry', hide = True)
+    # gb.configure_column(field='defectColour', hide = True)
+    # gb.configure_column(field='diversity_level', hide = True)
+    # # gb.configure_column(field='demerits', hide = True)
+    # gb.configure_column(field='seRegion', header_name='Origin')
+    # gb.configure_column(field='structural', header_name='Structural Defect(s)')
+    # gb.configure_column(field='health', header_name='Health Defect(s)')
+    # gb.configure_column(field='defects', header_name='Defect Summary')
+    # gb.configure_column(field='color', hide = True)
 
     gridOptions = gb.build()
 
@@ -320,7 +320,7 @@ if fileName is not None:
         
 
         # display the selected data (select_df) using AgGrid
-    
+       
         select_df = aggFilter(df)
 
         
