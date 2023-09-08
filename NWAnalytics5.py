@@ -336,7 +336,7 @@ data_matrix = [['Country', 'Year', 'Population'],
                ['Canada', 2010, 34000000]]
 
 fig = ff.create_table(data_matrix)
-fig.show()
+st.write(fig.show())
 
 
 
