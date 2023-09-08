@@ -320,16 +320,16 @@ if fileName is not None:
         
 
         # display the selected data (select_df) using AgGrid
-        
-        
-        
-        
-        
-        
     
         select_df = aggFilter(df)
         # select_df = df
-        # st.data_editor(select_df),
+        # st.data_editor(select_df)
+
+        fig = go.Figure(data=[go.Table(header=dict(values=['A Scores', 'B Scores']),
+                 cells=dict(values=[[100, 90, 80, 90], [95, 85, 75, 95]]))
+                     ])
+        
+        fig.show()
 
 
 
