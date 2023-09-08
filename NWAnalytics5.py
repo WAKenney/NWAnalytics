@@ -329,7 +329,7 @@ if fileName is not None:
     
         # select_df = aggFilter(df)
         select_df = df
-        select_df
+        st.dataframe(select_df)
 
 
 
