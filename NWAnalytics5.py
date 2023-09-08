@@ -148,6 +148,7 @@ def aggFilter(agData):
 
     # Test to see if working with full dataset (originalSize) or a filtered subset (filteredSize)
     filteredData = gridReturnData.copy()
+    
     filteredData.drop(['defectColour', 'color', 'geometry'], axis =1, inplace = True)
     
     originalSize = len(df.index)
@@ -280,9 +281,13 @@ def getData(fileName):
 
     df.merge(speciesTable, how = 'left', on = 'species', sort = False )
 
+
+
     # save the 'data' pandas dataframe as a geodataframe
     df = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.longitude, df.latitude)).copy() 
- 
+
+
+
     # Save the inventory dates as a string.  Otherwise an error is thrown when mapping
     df['date'] = df['date'].astype(str)
 
@@ -321,7 +326,19 @@ if fileName is not None:
 
         # display the selected data (select_df) using AgGrid
        
-        select_df = aggFilter(df)
+        
+        
+        
+        
+        # TEMPORARY FIX FOR PROBLEM WITH AGGRID IN ST CLOUD
+        # select_df = aggFilter(df)
+        select_df = df
+        st.dataframe(df)
+
+
+
+
+
 
         
 def checkData(chkData):
@@ -597,8 +614,7 @@ def mapItFolium(mapData):
     '''
     
     st.markdown("___")
-    
-    
+        
     pointSizeSlider = st.slider('Move the slider to adjust the point size', min_value = 2, max_value = 20, value =4)
         
     if mapData.empty:
