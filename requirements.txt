@@ -10,4 +10,4 @@ streamlit==1.22.0
 streamlit_folium==0.6.10
 XlsxWriter==3.1.1
 openpyxl
-streamlit-aggrid==0.3.4.post3
+streamlit_aggrid==0.3.4.post3
