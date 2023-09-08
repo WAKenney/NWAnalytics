@@ -65,7 +65,7 @@ condColumns = ['reduced_crown', 'unbalanced_crown', 'defoliation', 'weak_or_yell
 titleCol1, titleCol2, titleCol3 =st.columns((1,4,1))
 title = currentDir + 'NWAnalyticsTitle.jpg'
 titleCol2.image(title, use_column_width=True)
-titleCol1.write("Sept 7 2023")
+titleCol1.write("Sept 8 2023")
 
 with st.expander("Click here for help in getting started.", expanded=False):
     st.markdown("""
