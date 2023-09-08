@@ -36,7 +36,6 @@ from geopandas import GeoDataFrame
 
 
 st.set_page_config(layout="centered")
-config.dataFrameSerialization = "arrow"
 
 # hide_st_style = """
 #             <style>
@@ -330,7 +329,7 @@ if fileName is not None:
     
         # select_df = aggFilter(df)
         select_df = df
-        st.dataframe(select_df)
+        st.data_editor(select_df),
 
 
 
