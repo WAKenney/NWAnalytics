@@ -36,6 +36,7 @@ from geopandas import GeoDataFrame
 
 
 st.set_page_config(layout="centered")
+config.dataFrameSerialization = "arrow"
 
 # hide_st_style = """
 #             <style>
