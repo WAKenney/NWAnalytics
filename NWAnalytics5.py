@@ -333,7 +333,7 @@ if fileName is not None:
         # TEMPORARY FIX FOR PROBLEM WITH AGGRID IN ST CLOUD
         # select_df = aggFilter(df)
         select_df = df
-        st.dataframe(df)
+        st.write(select_df)
 
 
 
