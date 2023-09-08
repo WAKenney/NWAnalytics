@@ -321,7 +321,20 @@ if fileName is not None:
 
         # display the selected data (select_df) using AgGrid
         
-        select_df = aggFilter(df)
+        
+        
+        
+        
+        
+    
+        # select_df = aggFilter(df)
+        select_df = df
+
+
+
+
+
+
         
 def checkData(chkData):
 
